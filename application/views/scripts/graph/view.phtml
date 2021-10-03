@@ -1,0 +1,46 @@
+<?php
+if (!$this->compact) {
+	?>
+	<div class="controls">
+		<?php
+		echo $tabs;
+		?>
+	</div>
+	<?php
+}
+?>
+<div class="content">
+	<?php
+	if ($params['host'] != ".pnp-internal") {
+		echo $this->translate("Host") . ":";
+		?>
+		<strong><a href="<?php echo $this->href("monitoring/host/show", array("host" => $params['host'])); ?>" data-base-target="col1"><?php echo $params['host']; ?></a></strong><br/>
+		<?php
+		if (!empty($params['service'])) {
+			echo $this->translate("Service") . ":";
+			?>
+			<strong><a href="<?php echo $this->href("monitoring/service/show", array("host" => $params['host'], "service" => $params['service'])); ?>" data-base-target="col1"><?php echo $params['service']; ?></a></strong><br/>
+			<?php
+		}
+	}
+	?>
+	<br/>
+	<form id="customRange">
+		<input type="datetime-local" id="start" data-use-datetime-picker step="1" value="<?php echo date("Y-m-d H:i:s", $start); ?>"/> - <input type="datetime-local" id="end" data-use-datetime-picker step="1" value="<?php echo date("Y-m-d H:i:s", $end); ?>"/>&nbsp; &nbsp;<input type="submit">
+	</form>
+	<br/><br/>
+	<?php
+	foreach ($defs as $id => $def) {
+		?>
+		<fieldset>
+			<legend><?php echo $this->translate("Datasource") . ": " . (!empty($ds_name[$id]) ? $ds_name[$id] : $id); ?></legend>
+			<div class="graph-container">
+				<div class="graph" data-range="<?php echo $params['range']; ?>" data-start="<?php echo $start; ?>" data-end="<?php echo $end; ?>"></div>
+				<img src="<?php echo $this->href("rrdtool/graph?image", $params) . "&amp;datasource=" . $id; ?>" alt=""/>
+			</div>
+		</fieldset>
+		<br/>
+		<?php
+	}
+	?>
+</div>
