@@ -12,8 +12,7 @@ class DetailviewExtension extends DetailviewExtensionHook {
 		$config = Config::module("rrdtool");
 		$host = $object->type == MonitoredObject::TYPE_HOST ? $object->host : $object->host->getName();
 		$service = $object->type == MonitoredObject::TYPE_SERVICE ? $object->service_display_name : "_HOST_";
-		$service = str_replace(array("/", " "), "_", $service);
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . $service . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 		if (file_exists($xml)) {
 			$view = $this->getView();
 			$params = array("host" => $host);
