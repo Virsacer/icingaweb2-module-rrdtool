@@ -32,10 +32,10 @@ $template = str_replace("check_check_", "check_", "check_" . $data->TEMPLATE);
 
 ob_start();
 if (file_exists($this->Module()->getBaseDir() . "/templates/" . $template . ".php")) {
-	require_once($this->Module()->getBaseDir() . "/templates/" . $template . ".php");
+	require($this->Module()->getBaseDir() . "/templates/" . $template . ".php");
 } elseif (file_exists($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/" . $template . ".php")) {
-	require_once($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/" . $template . ".php");
+	require($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/" . $template . ".php");
 } elseif ($host == ".pnp-internal") {
-	require_once($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/pnp-runtime.php");
-} else require_once($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/default.php");
+	require($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/pnp-runtime.php");
+} else require($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/default.php");
 ob_end_clean();
