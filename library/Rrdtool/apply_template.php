@@ -25,17 +25,17 @@ $this->MACRO = array(
 	"TIMET" => $xml->NAGIOS_TIMET,
 );
 
-require_once($this->Module()->getBaseDir() . "/library/Rrdtool/rrd.php");
-require_once($this->Module()->getBaseDir() . "/library/Rrdtool/pnp.php");
+require_once(SYSPATH . "/library/Rrdtool/Kohana_Exception.php");
+require_once(SYSPATH . "/library/Rrdtool/rrd.php");
+require_once(SYSPATH . "/library/Rrdtool/pnp.php");
 
 $template = str_replace("check_check_", "check_", "check_" . $data->TEMPLATE);
+if ($host == ".pnp-internal") $template = "pnp-runtime";
 
 ob_start();
-if (file_exists($this->Module()->getBaseDir() . "/templates/" . $template . ".php")) {
-	require($this->Module()->getBaseDir() . "/templates/" . $template . ".php");
-} elseif (file_exists($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/" . $template . ".php")) {
-	require($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/" . $template . ".php");
-} elseif ($host == ".pnp-internal") {
-	require($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/pnp-runtime.php");
-} else require($this->Module()->getBaseDir() . "/library/vendor/pnp4nagios/templates/default.php");
+if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
+	require(SYSPATH . "/templates/" . $template . ".php");
+} elseif (file_exists(SYSPATH . "/library/vendor/pnp4nagios/templates/" . $template . ".php")) {
+	require(SYSPATH . "/library/vendor/pnp4nagios/templates/" . $template . ".php");
+} else require(SYSPATH . "/library/vendor/pnp4nagios/templates/default.php");
 ob_end_clean();
