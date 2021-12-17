@@ -2,7 +2,7 @@
 
 $ds_name = array();
 $this->DS = array();
-$xml = simplexml_load_file($xml);
+if (is_string($xml)) $xml = simplexml_load_file($xml);
 
 $i = 1;
 foreach ($xml->DATASOURCE as $data) {
