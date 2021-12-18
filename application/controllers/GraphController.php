@@ -85,9 +85,14 @@ class GraphController extends Controller {
 
 	public function getTabs() {
 		$tabs = parent::getTabs();
-		$params = "rrdtool/graph/view?host=" . $this->params->get("host", "");
+		$host = $this->params->get("host", "");
 		$service = $this->params->get("service", "");
+		$params = "rrdtool/graph/view?host=" . $host;
 		if ($service) $params .= "&service=" . $service;
+		if ($host == ".pnp-internal" && $this->hasPermission("config/modules")) {
+			$tabs->add("Module: rrdtool", array("label" => $this->translate("Module: rrdtool"), "url" => "config/module?name=rrdtool"));
+			$tabs->add("settings", array("title" => $this->translate("Configure rrdtool"), "label" => $this->translate("Settings"), "url" => "rrdtool/config/settings"));
+		}
 		$tabs->add("year", array("title" => "1 " . $this->translate("Year"), "url" => $params . "&range=year"));
 		$tabs->add("month", array("title" => "1 " . $this->translate("Month"), "url" => $params . "&range=month"));
 		$tabs->add("week", array("title" => "1 " . $this->translate("Week"), "url" => $params . "&range=week"));

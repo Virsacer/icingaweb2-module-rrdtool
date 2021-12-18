@@ -6,10 +6,12 @@ $this->provideConfigTab("settings", array(
 	"url" => "config/settings"
 ));
 
-$this->provideConfigTab("stats", array(
-	"title" => $this->translate("Stats"),
-	"label" => $this->translate("Stats"),
-	"url" => "graph/view?host=.pnp-internal&range=week"
-));
+if (file_exists(rtrim($this->getConfig()->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/.pnp-internal/runtime.xml")) {
+	$this->provideConfigTab("stats", array(
+		"title" => $this->translate("Show Statistics"),
+		"label" => $this->translate("Stats"),
+		"url" => "graph/view?host=.pnp-internal&range=week"
+	));
+}
 
 $this->provideJsFile("vendor/jquery.imgareaselect.min.js");
