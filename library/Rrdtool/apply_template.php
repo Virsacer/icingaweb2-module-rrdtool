@@ -8,7 +8,7 @@ $i = 1;
 foreach ($xml->DATASOURCE as $data) {
 	$data->RRDFILE = str_replace(dirname($data->RRDFILE), rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host, $data->RRDFILE);
 	foreach ($data as $key => $val) {
-		$this->DS[$i][$key] = (string) $val;
+		$this->DS[$i - 1][$key] = (string) $val;
 		$key = strtoupper($key);
 		$$key[$i] = (string) $val;
 	}
