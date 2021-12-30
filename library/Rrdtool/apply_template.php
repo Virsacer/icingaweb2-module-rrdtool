@@ -37,5 +37,7 @@ if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
 	require(SYSPATH . "/templates/" . $template . ".php");
 } elseif (file_exists(SYSPATH . "/library/vendor/pnp4nagios/templates/" . $template . ".php")) {
 	require(SYSPATH . "/library/vendor/pnp4nagios/templates/" . $template . ".php");
+} elseif (file_exists(SYSPATH . "/templates/default.php")) {
+	require(SYSPATH . "/templates/default.php");
 } else require(SYSPATH . "/library/vendor/pnp4nagios/templates/default.php");
 ob_end_clean();
