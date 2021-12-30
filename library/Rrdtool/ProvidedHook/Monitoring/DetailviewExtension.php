@@ -18,25 +18,23 @@ class DetailviewExtension extends DetailviewExtensionHook {
 			$params = array("host" => $host);
 			if ($service != "_HOST_") $params['service'] = $service;
 
-			$thumbnails = 1;
+			$xml = simplexml_load_file($xml);
+			require(dirname(__FILE__) . "/../../apply_template.php");
 			$overrides = json_decode("{" . $config->get("rrdtool", "thumbnails", '"nrpe_check_disk":3') . "}", TRUE);
-			if (is_array($overrides)) {
-				$xml = simplexml_load_file($xml);
-				if (in_array($xml->NAGIOS_CHECK_COMMAND, array_keys($overrides))) {
-					require(dirname(__FILE__) . "/../../apply_template.php");
-					$thumbnails = min(count($def), $overrides[(string) $xml->NAGIOS_CHECK_COMMAND]);
-				}
-			}
+			if (is_array($overrides) && array_key_exists((string) $xml->NAGIOS_CHECK_COMMAND, $overrides)) {
+				$thumbnails = min(count($def), $overrides[(string) $xml->NAGIOS_CHECK_COMMAND]);
+			} else $thumbnails = 1;
+			$datasource = array_key_first($def);
 
 			ob_start();
-			for ($i = 1; $i <= $thumbnails; $i++) {
-				if ($i == 1) echo "<h2>" . $view->translate("Graphs") . "</h2>";
+			for ($i = 0; $i < $thumbnails; $i++) {
+				if ($i == 0) echo "<h2>" . $view->translate("Graphs") . "</h2>";
 				?>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=year" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $i; ?>&amp;range=year" alt=""/></a><figcaption>1 <?php echo $view->translate("Year"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=month" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $i; ?>&amp;range=month" alt=""/></a><figcaption>1 <?php echo $view->translate("Month"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=week" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $i; ?>&amp;range=week" alt=""/></a><figcaption>1 <?php echo $view->translate("Week"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=day" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $i; ?>&amp;range=day" alt=""/></a><figcaption>1 <?php echo $view->translate("Day"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=hours" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $i; ?>&amp;range=hours" alt=""/></a><figcaption>4 <?php echo $view->translate("Hours"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=year" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $datasource + $i; ?>&amp;range=year" alt=""/></a><figcaption>1 <?php echo $view->translate("Year"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=month" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $datasource + $i; ?>&amp;range=month" alt=""/></a><figcaption>1 <?php echo $view->translate("Month"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=week" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $datasource + $i; ?>&amp;range=week" alt=""/></a><figcaption>1 <?php echo $view->translate("Week"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=day" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $datasource + $i; ?>&amp;range=day" alt=""/></a><figcaption>1 <?php echo $view->translate("Day"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=hours" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params); ?>&amp;datasource=<?php echo $datasource + $i; ?>&amp;range=hours" alt=""/></a><figcaption>4 <?php echo $view->translate("Hours"); ?></figcaption></figure>
 				<br/>
 				<?php
 			}
