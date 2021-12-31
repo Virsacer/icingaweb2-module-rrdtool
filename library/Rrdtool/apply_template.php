@@ -7,12 +7,14 @@ if (is_string($xml)) $xml = simplexml_load_file($xml);
 $i = 1;
 foreach ($xml->DATASOURCE as $data) {
 	$data->RRDFILE = str_replace(dirname($data->RRDFILE), rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host, $data->RRDFILE);
+	if (strlen($data->NAME) == 3 && substr($data->NAME, 1) == "__") $data->NAME = $data->LABEL;
 	foreach ($data as $key => $val) {
-		$this->DS[$i - 1][$key] = (string) $val;
+		$val = addslashes($val);
+		$this->DS[$i - 1][$key] = $val;
 		$key = strtoupper($key);
-		$$key[$i] = (string) $val;
+		$$key[$i] = $val;
 	}
-	$ds_name[$i] = $data->NAME;
+	if (count($xml->DATASOURCE) == 1) $ds_name[$i] = $data->LABEL;
 	$i++;
 }
 
@@ -41,3 +43,9 @@ if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
 	require(SYSPATH . "/templates/default.php");
 } else require(SYSPATH . "/library/vendor/pnp4nagios/templates/default.php");
 ob_end_clean();
+
+if (is_string($params)) {
+	foreach ($def as &$data) $data = addcslashes($data, ":");
+} else {
+	foreach ($ds_name as &$data) $data = stripslashes($data);
+}
