@@ -31,7 +31,7 @@ class GraphController extends Controller {
 
 				$sourcename = array_search($this->params->get("sourcename", ""), $ds_name);
 				$datasource = $sourcename !== FALSE ? $sourcename : $this->params->get("datasource", array_key_first($def));
-				if (!preg_match_all("/(-l|--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
+				if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
 
 				ob_start();
 				passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
