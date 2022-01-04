@@ -7,7 +7,7 @@ if (is_string($xml)) $xml = simplexml_load_file($xml);
 $i = 1;
 foreach ($xml->DATASOURCE as $data) {
 	$data->RRDFILE = str_replace(dirname($data->RRDFILE), rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host, $data->RRDFILE);
-	if (strlen($data->NAME) == 3 && substr($data->NAME, 1) == "__") $data->NAME = $data->LABEL;
+	if (preg_match("/^[A-Z]__(_used)?$/", $data->NAME)) $data->NAME = str_replace(" used", "", $data->LABEL);
 	foreach ($data as $key => $val) {
 		$val = addslashes($val);
 		$this->DS[$i - 1][$key] = $val;
