@@ -15,9 +15,9 @@ class pnp {
 			$matches[2] = "";
 		}
 		$value = $matches[1] * $base ** array_search($matches[2], $symbols);
-		$exponent = floor(log($value) / log($base));
+		$exponent = intval(floor(log($value) / log($base)));
 		$value /= $base ** $exponent;
-		$divisor = $matches[1] / $value;
+		$divisor = $value ? $matches[1] / $value : 1;
 		if ($matches[0][0] == "-") $value *= -1;
 		$value = sprintf($format, $value);
 		return array($value . " " . $symbols[$exponent] . $matches[3], trim($value), $symbols[$exponent] . $matches[3], $divisor);
