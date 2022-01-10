@@ -18,7 +18,6 @@ foreach ($xml->DATASOURCE as $data) {
 	$i++;
 }
 
-$rrdfile = $data->RRDFILE;
 $hostname = $xml->NAGIOS_DISP_HOSTNAME;
 $servicedesc = $xml->NAGIOS_DISP_SERVICEDESC;
 $this->MACRO = array(
@@ -35,6 +34,10 @@ $template = str_replace("check_check_", "check_", "check_" . $data->TEMPLATE);
 if ($host == ".pnp-internal") $template = "pnp-runtime";
 
 ob_start();
+if (version_compare(PHP_VERSION, "8.0.0", "<")) {
+	$oldlocale = setlocale(LC_ALL, 0);
+	setlocale(LC_NUMERIC, "C", "en_US", "en_US.utf8", "en_US.UTF-8");
+}
 if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
 	require(SYSPATH . "/templates/" . $template . ".php");
 } elseif (file_exists(SYSPATH . "/library/vendor/pnp4nagios/templates/" . $template . ".php")) {
@@ -42,6 +45,7 @@ if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
 } elseif (file_exists(SYSPATH . "/templates/default.php")) {
 	require(SYSPATH . "/templates/default.php");
 } else require(SYSPATH . "/library/vendor/pnp4nagios/templates/default.php");
+if (version_compare(PHP_VERSION, "8.0.0", "<")) setlocale(LC_ALL, $oldlocale);
 ob_end_clean();
 
 if (is_string($params)) {
