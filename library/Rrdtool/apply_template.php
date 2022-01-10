@@ -45,7 +45,7 @@ if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
 } elseif (file_exists(SYSPATH . "/templates/default.php")) {
 	require(SYSPATH . "/templates/default.php");
 } else require(SYSPATH . "/library/vendor/pnp4nagios/templates/default.php");
-if (version_compare(PHP_VERSION, "8.0.0", "<")) setlocale(LC_ALL, $oldlocale);
+if (version_compare(PHP_VERSION, "8.0.0", "<")) setlocale(LC_NUMERIC, $oldlocale);
 ob_end_clean();
 
 if (is_string($params)) {
