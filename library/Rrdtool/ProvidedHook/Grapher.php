@@ -1,14 +1,16 @@
 <?php
 
-namespace Icinga\Module\Rrdtool\ProvidedHook\Monitoring;
+namespace Icinga\Module\Rrdtool\ProvidedHook;
 
 use Icinga\Application\Config;
-use Icinga\Module\Monitoring\Hook\DetailviewExtensionHook;
+use Icinga\Application\Hook\GrapherHook;
 use Icinga\Module\Monitoring\Object\MonitoredObject;
 
-class DetailviewExtension extends DetailviewExtensionHook {
+class Grapher extends GrapherHook {
 
-	public function getHtmlForObject(MonitoredObject $object) {
+	protected $hasPreviews = TRUE;
+
+	public function getPreviewHtml(MonitoredObject $object) {
 		$config = Config::module("rrdtool");
 		$host = $object->getType() == MonitoredObject::TYPE_HOST ? $object->getName() : $object->getHost()->getName();
 		$service = $object->getType() == MonitoredObject::TYPE_SERVICE ? $object->getName() : "_HOST_";
@@ -23,7 +25,7 @@ class DetailviewExtension extends DetailviewExtensionHook {
 			if (is_array($overrides)) {
 				$xml = simplexml_load_file($xml);
 				if (array_key_exists((string) $xml->NAGIOS_CHECK_COMMAND, $overrides)) {
-					require(dirname(__FILE__) . "/../../apply_template.php");
+					require(SYSPATH . "/library/Rrdtool/apply_template.php");
 					$thumbnails = min(count($def), $overrides[(string) $xml->NAGIOS_CHECK_COMMAND]);
 				}
 			}
@@ -31,7 +33,7 @@ class DetailviewExtension extends DetailviewExtensionHook {
 			ob_start();
 			$datasource = "";
 			for ($i = 0; $i < $thumbnails; $i++) {
-				if ($i == 0) echo "<h2>" . $view->translate("Graphs") . "</h2>";
+				if ($i == 0) echo "<div class=\"icinga-module module-rrdtool\"><h2>" . $view->translate("Graphs") . "</h2>";
 				if ($thumbnails > 1) $datasource = "&amp;datasource=" . array_keys($def)[$i];
 				?>
 				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=year" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=year" alt=""/></a><figcaption>1 <?php echo $view->translate("Year"); ?></figcaption></figure>
@@ -42,8 +44,17 @@ class DetailviewExtension extends DetailviewExtensionHook {
 				<br/>
 				<?php
 			}
+			if ($i) echo "</div>";
 			return ob_get_clean();
 		}
+	}
+
+	public function has(MonitoredObject $object) {
+		$config = Config::module("rrdtool");
+		$host = $object->getType() == MonitoredObject::TYPE_HOST ? $object->getName() : $object->getHost()->getName();
+		$service = $object->getType() == MonitoredObject::TYPE_SERVICE ? $object->getName() : "_HOST_";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
+		return file_exists($xml);
 	}
 
 }
