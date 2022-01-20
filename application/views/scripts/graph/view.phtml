@@ -33,7 +33,7 @@ if (!$this->compact) {
 	foreach ($defs as $id => $def) {
 		?>
 		<fieldset>
-			<legend><?php echo $this->translate("Datasource") . ": " . (!empty($ds_name[$id]) ? $ds_name[$id] : $id); ?></legend>
+			<legend><a href="<?php echo $this->href("rrdtool/graph?large", $params) . "&amp;datasource=" . $id; ?>" target="_blank"><?php echo $this->translate("Datasource") . ": " . (!empty($ds_name[$id]) ? $ds_name[$id] : $id); ?></a></legend>
 			<div class="graph-container">
 				<div class="graph" data-range="<?php echo $params['range']; ?>" data-start="<?php echo $start; ?>" data-end="<?php echo $end; ?>"></div>
 				<img src="<?php echo $this->href("rrdtool/graph?image", $params) . "&amp;datasource=" . $id; ?>" alt=""/>
