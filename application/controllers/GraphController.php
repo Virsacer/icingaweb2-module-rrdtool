@@ -65,6 +65,8 @@ class GraphController extends Controller {
 		$service = $this->params->get("service", "_HOST_");
 		if ($service != "_HOST_") $params['service'] = $service;
 		$params['range'] = $range['range'] == "custom" ? $range['start'] . "-" . $range['end'] : $range['range'];
+		$this->view->start = $range['start'];
+		$this->view->end = $range['end'];
 		$this->view->params = $params;
 
 		$def = array();
@@ -75,8 +77,6 @@ class GraphController extends Controller {
 		if (file_exists($xml)) require($this->Module()->getBaseDir() . "/library/Rrdtool/apply_template.php");
 		$this->view->defs = $def;
 		$this->view->ds_name = $ds_name;
-		$this->view->start = $range['start'];
-		$this->view->end = $range['end'];
 	}
 
 	public function getTabs() {
