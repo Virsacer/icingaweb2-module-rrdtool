@@ -12,17 +12,28 @@ if (!$this->compact) {
 <div class="content">
 	<?php
 	if ($params['host'] != ".pnp-internal") {
+		if ($params['icingadb']) {
+			$url = $this->href("icingadb/host", array("name" => $params['host']));
+		} else {
+			$url = $this->href("monitoring/host/show", array("host" => $params['host']));
+		}
 		echo $this->translate("Host") . ":";
 		?>
-		<strong><a href="<?php echo $this->href("monitoring/host/show", array("host" => $params['host'])); ?>" data-base-target="col1"><?php echo $params['host']; ?></a></strong><br/>
+		<strong><a href="<?php echo $url; ?>" data-base-target="col1"><?php echo $params['host']; ?></a></strong><br/>
 		<?php
 		if (!empty($params['service'])) {
+			if ($params['icingadb']) {
+				$url = $this->href("icingadb/service", array("name" => $params['service'], "host.name" => $params['host']));
+			} else {
+				$url = $this->href("monitoring/service/show", array("host" => $params['host'], "service" => $params['service']));
+			}
 			echo $this->translate("Service") . ":";
 			?>
-			<strong><a href="<?php echo $this->href("monitoring/service/show", array("host" => $params['host'], "service" => $params['service'])); ?>" data-base-target="col1"><?php echo $params['service']; ?></a></strong><br/>
+			<strong><a href="<?php echo $url; ?>" data-base-target="col1"><?php echo $params['service']; ?></a></strong><br/>
 			<?php
 		}
 	}
+	unset($params['icingadb']);
 	?>
 	<br/>
 	<form id="customRange">

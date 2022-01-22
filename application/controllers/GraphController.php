@@ -2,6 +2,7 @@
 
 namespace Icinga\Module\Rrdtool\Controllers;
 
+use Icinga\Application\Icinga;
 use Icinga\Web\Controller;
 
 class GraphController extends Controller {
@@ -64,6 +65,7 @@ class GraphController extends Controller {
 		$params = array("host" => $host);
 		$service = $this->params->get("service", "_HOST_");
 		if ($service != "_HOST_") $params['service'] = $service;
+		$params['icingadb'] = $this->hasPermission("module/icingadb") && Icinga::app()->getModuleManager()->hasLoaded("icingadb");
 		$params['range'] = $range['range'] == "custom" ? $range['start'] . "-" . $range['end'] : $range['range'];
 		$this->view->start = $range['start'];
 		$this->view->end = $range['end'];
