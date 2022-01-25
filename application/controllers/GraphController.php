@@ -26,13 +26,19 @@ class GraphController extends Controller {
 
 				require($this->Module()->getBaseDir() . "/library/Rrdtool/apply_template.php");
 
-				$sourcename = array_search($this->params->get("sourcename", ""), $ds_name);
-				$datasource = $sourcename !== FALSE ? $sourcename : $this->params->get("datasource", array_key_first($def));
-				if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
+				$datasource = $this->params->get("datasource", array_key_first($opt));
+				if (!array_key_exists($datasource, $opt)) {
+					$datasource = array_search($datasource, $ds_name);
+					if ($datasource === FALSE) $return = $data = "No such datasource";
+				}
 
-				ob_start();
-				passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
-				$data = ob_get_clean();
+				if (empty($return)) {
+					if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
+
+					ob_start();
+					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
+					$data = ob_get_clean();
+				}
 			} else $return = $data = "XML missing";
 
 			header("Content-type: image/png");

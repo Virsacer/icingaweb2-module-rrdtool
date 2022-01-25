@@ -62,8 +62,12 @@ class GraphCommand extends Command {
 
 		require(SYSPATH . "/library/Rrdtool/apply_template.php");
 
-		if (!intval($datasource)) $datasource = array_search($datasource, $ds_name);
-		if ($datasource === FALSE || !array_key_exists($datasource, $opt)) $datasource = array_key_first($def);
+		if ($datasource == "") {
+			$datasource = array_key_first($opt);
+		} elseif (!array_key_exists($datasource, $opt)) {
+			$datasource = array_search($datasource, $ds_name);
+			if ($datasource === FALSE) $this->fail("No such datasource");
+		}
 		if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
 		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
 	}
