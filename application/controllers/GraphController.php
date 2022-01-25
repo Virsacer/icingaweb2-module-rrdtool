@@ -65,14 +65,14 @@ class GraphController extends Controller {
 
 	public function viewAction() {
 		$range = $this->parseRange($this->params->get("range", ""));
-		$this->getTabs()->activate($range['range']);
+		$this->getTabs()->activate($range['tab']);
 
 		$host = $this->params->get("host", "");
 		$params = array("host" => $host);
 		$service = $this->params->get("service", "_HOST_");
 		if ($service != "_HOST_") $params['service'] = $service;
 		$params['icingadb'] = $this->hasPermission("module/icingadb") && Icinga::app()->getModuleManager()->hasLoaded("icingadb");
-		$params['range'] = $range['range'] == "custom" ? $range['start'] . "-" . $range['end'] : $range['range'];
+		$params['range'] = $range['range'];
 		$this->view->start = $range['start'];
 		$this->view->end = $range['end'];
 		$this->view->params = $params;
@@ -103,13 +103,13 @@ class GraphController extends Controller {
 		$tabs->add("day", array("title" => "1 " . $this->translate("Day"), "url" => $params . "&range=day"));
 		$tabs->add("hours", array("title" => "4 " . $this->translate("Hours"), "url" => $params . "&range=hours"));
 		$range = $this->parseRange($this->params->get("range", ""));
-		if ($range['range'] == "custom") $tabs->add("custom", array("title" => $this->translate("Custom"), "url" => $params . "&range=" . $range['start'] . "-" . $range['end']));
+		if ($range['tab'] == "custom") $tabs->add("custom", array("title" => $this->translate("Custom"), "url" => $params . "&range=" . $range['range']));
 		return $tabs;
 	}
 
 	public static function parseRange($range) {
 		if (preg_match("/^([0-9]+)-(Q?[0-9]+)$/", $range, $matches)) {
-			$range = "custom";
+			$tab = "custom";
 			if (strlen($matches[1]) == 4 && $matches[2] >= 1 && $matches[2] <= 12) {
 				$start = strtotime($matches[1] . "-" . str_pad($matches[2], 2, "0", STR_PAD_LEFT) . "-01");
 				$end = mktime(0, 0, 0, $matches[2] + 1, 1, $matches[1]) - 1;
@@ -122,6 +122,7 @@ class GraphController extends Controller {
 				$end = max($matches);
 			}
 		} else {
+			$tab = $range;
 			switch ($range) {
 				case "year":
 					$start = time() - 365 * 86400;
@@ -139,16 +140,16 @@ class GraphController extends Controller {
 					$start = time() - 4 * 3600;
 					break;
 				case "hour":
-					$range = "custom";
+					$tab = "custom";
 					$start = time() - 3600;
 					break;
 				default:
-					$range = "month";
+					$range = $tab = "month";
 					$start = time() - 30 * 86400;
 			}
 			$end = time();
 		}
-		return array("range" => $range, "start" => $start, "end" => $end);
+		return array("range" => $range, "start" => $start, "end" => $end, "tab" => $tab);
 	}
 
 }
