@@ -37,7 +37,7 @@ if (!$this->compact) {
 	?>
 	<br/>
 	<form id="customRange">
-		<input type="datetime-local" id="start" data-use-datetime-picker step="1" value="<?php echo date("Y-m-d\TH:i:s", $start); ?>"/> - <input type="datetime-local" id="end" data-use-datetime-picker step="1" value="<?php echo date("Y-m-d\TH:i:s", $end); ?>"/>&nbsp; &nbsp;<input type="submit">
+		<input type="datetime-local" id="start" data-use-datetime-picker step="1" value="<?php echo date("Y-m-d\TH:i:s", $start); ?>"/> - <input type="datetime-local" id="end" data-use-datetime-picker step="1" value="<?php echo date("Y-m-d\TH:i:s", $end); ?>"/>&nbsp; &nbsp;<button type="submit"><?php echo $this->translate("Submit"); ?></button>
 	</form>
 	<br/><br/>
 	<?php
