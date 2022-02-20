@@ -10,7 +10,7 @@ if (file_exists(rtrim($this->getConfig()->get("rrdtool", "rrdpath", "/var/lib/pn
 	$this->provideConfigTab("stats", array(
 		"title" => $this->translate("Show Statistics"),
 		"label" => $this->translate("Stats"),
-		"url" => "graph/view?host=.pnp-internal&range=week"
+		"url" => "graph?host=.pnp-internal&range=week"
 	));
 }
 

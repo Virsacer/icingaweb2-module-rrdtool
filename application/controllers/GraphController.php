@@ -65,7 +65,7 @@ class GraphController extends Controller {
 		parent::init();
 	}
 
-	public function viewAction() {
+	public function indexAction() {
 		$range = $this->parseRange($this->params->get("range", ""));
 		$this->getTabs()->activate($range['tab']);
 
@@ -93,7 +93,7 @@ class GraphController extends Controller {
 		$tabs = parent::getTabs();
 		$host = $this->params->get("host", "");
 		$service = $this->params->get("service", "");
-		$params = "rrdtool/graph/view?host=" . $host;
+		$params = "rrdtool/graph?host=" . $host;
 		if ($service) $params .= "&service=" . $service;
 		if ($host == ".pnp-internal" && $this->hasPermission("config/modules")) {
 			$tabs->add("Module: rrdtool", array("label" => $this->translate("Module: rrdtool"), "url" => "config/module?name=rrdtool"));

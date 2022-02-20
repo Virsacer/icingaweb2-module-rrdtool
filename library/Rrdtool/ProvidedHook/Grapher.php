@@ -36,11 +36,11 @@ class Grapher extends GrapherHook {
 				if ($i == 0) echo "<div class=\"icinga-module module-rrdtool\"><h2>" . mt("rrdtool", "Graphs") . "</h2>";
 				if ($thumbnails > 1) $datasource = "&amp;datasource=" . array_keys($def)[$i];
 				?>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=year" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=year" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Year"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=month" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=month" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Month"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=week" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=week" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Week"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=day" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=day" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Day"); ?></figcaption></figure>
-				<figure><a href="<?php echo $view->href("rrdtool/graph/view", $params); ?>&amp;range=hours" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=hours" alt=""/></a><figcaption>4 <?php echo mt("rrdtool", "Hours"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph", $params); ?>&amp;range=year" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=year" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Year"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph", $params); ?>&amp;range=month" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=month" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Month"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph", $params); ?>&amp;range=week" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=week" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Week"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph", $params); ?>&amp;range=day" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=day" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Day"); ?></figcaption></figure>
+				<figure><a href="<?php echo $view->href("rrdtool/graph", $params); ?>&amp;range=hours" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=hours" alt=""/></a><figcaption>4 <?php echo mt("rrdtool", "Hours"); ?></figcaption></figure>
 				<br/>
 				<?php
 			}
