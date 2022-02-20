@@ -26,6 +26,7 @@ class GraphController extends Controller {
 
 				require($this->Module()->getBaseDir() . "/library/Rrdtool/apply_template.php");
 
+				$return = "";
 				$datasource = $this->params->get("datasource", array_key_first($opt));
 				if (!array_key_exists($datasource, $opt)) {
 					$datasource = array_search($datasource, $ds_name);
@@ -45,6 +46,7 @@ class GraphController extends Controller {
 			if ($return || substr($data, 1, 3) != "PNG") {
 				$size = 2;
 				$width = 1;
+				$data = preg_replace("/(AREA|CDEF|COMMENT|GPRINT|HRULE|LINE|VDEF)/", "\n$1", $data);
 				$lines = explode("\n", $data);
 				$fontwidth = imagefontwidth($size);
 				$fontheight = imagefontheight($size);
