@@ -5,9 +5,9 @@ class pnp {
 	public static function adjust_unit($value, $base = 1000, $format = "%.3lf") {
 		preg_match("/^-?([0-9\.]+)\s*(\D?)(\D?)/", $value, $matches);
 		if ($matches[2] == "%") {
+			if ($matches[0][0] == "-") $matches[1] *= -1;
 			$value = sprintf($format, $matches[1]);
-			if ($matches[0][0] == "-") $value = "-" . $value;
-			return array($value . " %", $value, "%", 1);
+			return array($value . " %", trim($value), "%", 1);
 		}
 		$symbols = array(-3 => "n", -2 => "u", -1 => "m", 0 => "", "K", "M", "G", "T", "P", "E", "Z", "Y");
 		if ($matches[2] == "B" || $matches[2] == "b" || $matches[2] == "s") {
