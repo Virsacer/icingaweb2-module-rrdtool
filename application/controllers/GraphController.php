@@ -73,8 +73,8 @@ class GraphController extends Controller {
 		$params = array("host" => $host);
 		$service = $this->params->get("service", "_HOST_");
 		if ($service != "_HOST_") $params['service'] = $service;
-		$params['icingadb'] = $this->hasPermission("module/icingadb") && Icinga::app()->getModuleManager()->hasLoaded("icingadb");
 		$params['range'] = $range['range'];
+		$this->view->icingadb = $this->hasPermission("module/icingadb") && Icinga::app()->getModuleManager()->hasLoaded("icingadb");
 		$this->view->start = $range['start'];
 		$this->view->end = $range['end'];
 		$this->view->params = $params;
