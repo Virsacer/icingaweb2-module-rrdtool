@@ -85,6 +85,11 @@ class GraphController extends Controller {
 		if ($host == ".pnp-internal") $service = "runtime";
 		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 		if (file_exists($xml)) require($this->Module()->getBaseDir() . "/library/Rrdtool/apply_template.php");
+		$datasource = $this->params->get("datasource", "");
+		if ($datasource != "") {
+			if (!array_key_exists($datasource, $opt)) $datasource = array_search($datasource, $ds_name);
+			if ($datasource !== FALSE) $def = array($datasource => $def[$datasource]);
+		}
 		$this->view->defs = $def;
 		$this->view->ds_name = $ds_name;
 	}
