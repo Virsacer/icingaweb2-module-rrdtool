@@ -8,18 +8,24 @@ use Icinga\Web\Controller;
 class GraphController extends Controller {
 
 	public function init() {
-		if (isset($_GET['image']) || isset($_GET['thumb']) || isset($_GET['large'])) {
+		if (isset($_GET['image']) || isset($_GET['thumb']) || isset($_GET['large']) || isset($_GET['huge']) || preg_match("/^([0-9]+)([xX\*])([0-9]+)(&.*)?$/", $_SERVER['QUERY_STRING'])) {
 			$config = $this->Config();
 			$host = $this->params->get("host", "");
 			$service = $host == ".pnp-internal" ? "runtime" : $this->params->get("service", "_HOST_");
 			$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 			if (file_exists($xml)) {
-				if (isset($_GET['thumb'])) {
-					$params = "--only-graph --width 96 --height 32 ";
+				if (isset($_GET['image'])) {
+					$params = "--width 500 --height 100 ";
+				} elseif (isset($_GET['thumb'])) {
+					$params = "--width 96 --height 32 --only-graph ";
 				} elseif (isset($_GET['large'])) {
 					$params = "--width 1000 --height 200 ";
-				} else {
-					$params = "--width 500 --height 100 ";
+				} elseif (isset($_GET['huge'])) {
+					$params = "--width 1600 --height 900 --full-size-mode ";
+				} elseif (preg_match("/^([0-9]+)([xX\*])([0-9]+)(&.*)?$/", $_SERVER['QUERY_STRING'], $matches)) {
+					$params = "--width " . $matches[1] . " --height " . $matches[3] . " ";
+					if ($matches[2] == "X") $params .= "--only-graph ";
+					if ($matches[2] == "*") $params .= "--full-size-mode ";
 				}
 				$range = $this->parseRange($this->params->get("range", ""));
 				$params .= "--start " . $range['start'] . " --end " . $range['end'] . " ";
