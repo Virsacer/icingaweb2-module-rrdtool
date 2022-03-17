@@ -35,7 +35,7 @@ if ($host == ".pnp-internal") $template = "pnp-runtime";
 
 ob_start();
 if (version_compare(PHP_VERSION, "8.0.0", "<")) {
-	$oldlocale = setlocale(LC_ALL, 0);
+	$oldlocale = setlocale(LC_NUMERIC, 0);
 	setlocale(LC_NUMERIC, "C", "en_US", "en_US.utf8", "en_US.UTF-8");
 }
 if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
@@ -45,7 +45,7 @@ if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
 } elseif (file_exists(SYSPATH . "/templates/default.php")) {
 	require(SYSPATH . "/templates/default.php");
 } else require(SYSPATH . "/library/vendor/pnp4nagios/templates/default.php");
-if (version_compare(PHP_VERSION, "8.0.0", "<")) setlocale(LC_NUMERIC, $oldlocale);
+if (isset($oldlocale)) setlocale(LC_NUMERIC, $oldlocale);
 ob_end_clean();
 
 if (is_string($params)) {
