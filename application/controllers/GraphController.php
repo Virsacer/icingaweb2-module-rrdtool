@@ -110,11 +110,13 @@ class GraphController extends Controller {
 			$tabs->add("Module: rrdtool", array("label" => $this->translate("Module: rrdtool"), "url" => "config/module?name=rrdtool"));
 			$tabs->add("settings", array("title" => $this->translate("Configure rrdtool"), "label" => $this->translate("Settings"), "url" => "rrdtool/config/settings"));
 		}
-		$tabs->add("year", array("title" => "1 " . $this->translate("Year"), "url" => $params . "&range=year"));
-		$tabs->add("month", array("title" => "1 " . $this->translate("Month"), "url" => $params . "&range=month"));
-		$tabs->add("week", array("title" => "1 " . $this->translate("Week"), "url" => $params . "&range=week"));
-		$tabs->add("day", array("title" => "1 " . $this->translate("Day"), "url" => $params . "&range=day"));
-		$tabs->add("hours", array("title" => "4 " . $this->translate("Hours"), "url" => $params . "&range=hours"));
+		$datasource = $this->params->get("datasource", "");
+		if ($datasource) $datasource = "&datasource=" . $datasource;
+		$tabs->add("year", array("title" => "1 " . $this->translate("Year"), "url" => $params . "&range=year" . $datasource));
+		$tabs->add("month", array("title" => "1 " . $this->translate("Month"), "url" => $params . "&range=month" . $datasource));
+		$tabs->add("week", array("title" => "1 " . $this->translate("Week"), "url" => $params . "&range=week" . $datasource));
+		$tabs->add("day", array("title" => "1 " . $this->translate("Day"), "url" => $params . "&range=day" . $datasource));
+		$tabs->add("hours", array("title" => "4 " . $this->translate("Hours"), "url" => $params . "&range=hours" . $datasource));
 		$range = $this->parseRange($this->params->get("range", ""));
 		if ($range['tab'] == "custom") $tabs->add("custom", array("title" => $this->translate("Custom"), "url" => $params . "&range=" . $range['range']));
 		return $tabs;
