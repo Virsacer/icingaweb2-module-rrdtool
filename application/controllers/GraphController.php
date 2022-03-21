@@ -123,22 +123,25 @@ class GraphController extends Controller {
 	}
 
 	public static function parseRange($range) {
-		if (preg_match("/^([1-9][0-9]+)(-(Q?[0-9]+))?$/", $range, $matches)) {
+		if (strlen($range) == 4 && $range >= 1980) {
 			$tab = "custom";
-			if (strlen($matches[1]) == 4 && !isset($matches[2])) {
-				$start = strtotime($matches[1] . "-01-01");
-				$end = strtotime($matches[1] . "-12-31 23:59:59");
-			} elseif (strlen($matches[1]) == 4 && $matches[3] >= 1 && $matches[3] <= 12) {
-				$start = strtotime($matches[1] . "-" . str_pad($matches[3], 2, "0", STR_PAD_LEFT) . "-01");
-				$end = mktime(0, 0, 0, $matches[3] + 1, 1, $matches[1]) - 1;
-			} elseif (strlen($matches[1]) == 4 && $matches[3][0] == "Q" && $matches[3][1] >= 1 && $matches[3][1] <= 4) {
-				$start = strtotime($matches[1] . "-" . str_replace(array("Q1", "Q2", "Q3", "Q4"), array("01", "04", "07", "10"), $matches[3]) . "-01");
-				$end = strtotime($matches[1] . "-" . str_replace(array("Q1", "Q2", "Q3", "Q4"), array("03-31", "06-30", "09-30", "12-31"), $matches[3]) . " 23:59:59");
+			$start = strtotime($range . "-01-01");
+			$end = strtotime($range . "-12-31 23:59:59");
+		} elseif (preg_match("/^([1-9][0-9]+)-(Q[1-4]|[0-9]+)$/", $range, $matches)) {
+			$tab = "custom";
+			if (strlen($matches[1]) == 4 && $matches[2] >= 1 && $matches[2] <= 12) {
+				$start = strtotime($matches[1] . "-" . str_pad($matches[2], 2, "0", STR_PAD_LEFT) . "-01");
+				$end = mktime(0, 0, 0, $matches[2] + 1, 1, $matches[1]) - 1;
+			} elseif (strlen($matches[1]) == 4 && $matches[2][0] == "Q") {
+				$start = strtotime($matches[1] . "-" . str_replace(array("Q1", "Q2", "Q3", "Q4"), array("01", "04", "07", "10"), $matches[2]) . "-01");
+				$end = strtotime($matches[1] . "-" . str_replace(array("Q1", "Q2", "Q3", "Q4"), array("03-31", "06-30", "09-30", "12-31"), $matches[2]) . " 23:59:59");
 			} else {
 				unset($matches[0]);
 				$start = min($matches);
 				$end = max($matches);
 			}
+			if ($start < 315529200) $start = 315529200;
+			if ($end < 315529200) $end = time();
 		} else {
 			$tab = $range;
 			switch ($range) {
