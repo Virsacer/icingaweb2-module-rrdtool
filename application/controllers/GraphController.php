@@ -123,7 +123,7 @@ class GraphController extends Controller {
 	}
 
 	public static function parseRange($range) {
-		if (strlen($range) == 4 && $range >= 1980) {
+		if (strlen($range) == 4 && intval($range) >= 1980) {
 			$tab = "custom";
 			$start = strtotime($range . "-01-01");
 			$end = strtotime($range . "-12-31 23:59:59");
