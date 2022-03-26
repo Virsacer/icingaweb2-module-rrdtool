@@ -4,6 +4,7 @@ namespace Icinga\Module\Rrdtool\Controllers;
 
 use Icinga\Application\Icinga;
 use Icinga\Web\Controller;
+use Icinga\Web\StyleSheet;
 
 class GraphController extends Controller {
 
@@ -17,7 +18,7 @@ class GraphController extends Controller {
 				if (isset($_GET['image'])) {
 					$params = "--width 500 --height 100 ";
 				} elseif (isset($_GET['thumb'])) {
-					$params = "--width 96 --height 32 --only-graph ";
+					$params = "--width 96 --height 32 --only-graph --color=BACK#00000000 --color=CANVAS#00000000 ";
 				} elseif (isset($_GET['large'])) {
 					$params = "--width 1000 --height 200 ";
 				} elseif (isset($_GET['huge'])) {
@@ -41,6 +42,30 @@ class GraphController extends Controller {
 
 				if (empty($return)) {
 					if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
+
+					if (!isset($_GET['thumb'])) {
+						$theme = Icinga::app()->getConfig()->getSection("themes")->get("default", StyleSheet::DEFAULT_THEME);
+						$user = $this->Auth()->getUser()->getPreferences();
+						$theme = $user->getValue("icingaweb", "theme", $theme);
+						$file = StyleSheet::getThemeFile($theme);
+						$file = $file !== NULL ? @file_get_contents($file) : FALSE;
+						if (!$file || strpos($file, "@light-mode:") !== FALSE || strpos($file, "@body-bg-color:") === FALSE) {
+							if (!$user->getValue("icingaweb", "theme_mode", StyleSheet::DEFAULT_MODE != "none")) $params .= \rrd::darkteint();
+						} elseif (strpos($file, "@body-bg-color:") !== FALSE) {
+							preg_match("/@body-bg-color:\s*(.*?);/", $file, $color);
+							if ($color[1][0] == "@") {
+								$base = @file_get_contents(Icinga::app()->getBaseDir("public") . "/css/icinga/base.less");
+								preg_match("/" . $color[1] . ":\s*(.*?);/", $file . $base, $color);
+							}
+							if ($color[1][0] == "#") {
+								preg_match("/^#([0-9a-fA-F]{1,2})([0-9a-fA-F]{1,2})([0-9a-fA-F]{1,2})$/", $color[1], $color);
+								$color[1] = hexdec(str_pad($color[1], 2, $color[1])) * 299;
+								$color[2] = hexdec(str_pad($color[2], 2, $color[2])) * 587;
+								$color[3] = hexdec(str_pad($color[3], 2, $color[3])) * 114;
+								if (($color[1] + $color[2] + $color[3]) / 1000 < 128) $params .= \rrd::darkteint();
+							}
+						}
+					}
 
 					ob_start();
 					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);

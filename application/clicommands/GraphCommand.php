@@ -28,6 +28,7 @@ class GraphCommand extends Command {
 	 *   		[Width]x[Height]  (Size of graph itself)
 	 *   		[Width]X[Height]  (Graph without legend)
 	 *   		[Width]*[Height]  (Size of whole image)
+	 *   --dark	Use dark theme
 	 */
 	public function defaultAction() {
 		$file = $this->params->shiftRequired("file");
@@ -36,6 +37,7 @@ class GraphCommand extends Command {
 		$service = $this->params->shift("service", "_HOST_");
 		$datasource = $this->params->shift("datasource", "");
 		$size = $this->params->shift("size", "image");
+		$dark = $this->params->shift("dark", "");
 		if ($this->hasRemainingParams()) return $this->showUsage("default");
 
 		$config = $this->Config();
@@ -75,6 +77,7 @@ class GraphCommand extends Command {
 			if ($datasource === FALSE) $this->fail("No such datasource");
 		}
 		if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
+		if ($dark) $params .= \rrd::darkteint();
 		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
 	}
 
