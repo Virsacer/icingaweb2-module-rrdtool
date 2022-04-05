@@ -57,12 +57,11 @@ class GraphController extends Controller {
 								$base = @file_get_contents(Icinga::app()->getBaseDir("public") . "/css/icinga/base.less");
 								preg_match("/" . $color[1] . ":\s*(.*?);/", $file . $base, $color);
 							}
-							if ($color[1][0] == "#") {
-								preg_match("/^#([0-9a-fA-F]{1,2})([0-9a-fA-F]{1,2})([0-9a-fA-F]{1,2})$/", $color[1], $color);
-								$color[1] = hexdec(str_pad($color[1], 2, $color[1])) * 299;
-								$color[2] = hexdec(str_pad($color[2], 2, $color[2])) * 587;
-								$color[3] = hexdec(str_pad($color[3], 2, $color[3])) * 114;
-								if (($color[1] + $color[2] + $color[3]) / 1000 < 128) $params .= \rrd::darkteint();
+							if (preg_match("/^#([0-9a-fA-F]{1,2})([0-9a-fA-F]{1,2})([0-9a-fA-F]{1,2})$/", $color[1], $color)) {
+								$color[1] = hexdec(str_pad($color[1], 2, $color[1])) * .299;
+								$color[2] = hexdec(str_pad($color[2], 2, $color[2])) * .587;
+								$color[3] = hexdec(str_pad($color[3], 2, $color[3])) * .114;
+								if ($color[1] + $color[2] + $color[3] < 128) $params .= \rrd::darkteint();
 							}
 						}
 					}
