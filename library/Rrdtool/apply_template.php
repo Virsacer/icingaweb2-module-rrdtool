@@ -26,7 +26,6 @@ $this->MACRO = array(
 	"TIMET" => $xml->NAGIOS_TIMET,
 );
 
-require_once(SYSPATH . "/library/Rrdtool/Kohana_Exception.php");
 require_once(SYSPATH . "/library/Rrdtool/rrd.php");
 require_once(SYSPATH . "/library/Rrdtool/pnp.php");
 
