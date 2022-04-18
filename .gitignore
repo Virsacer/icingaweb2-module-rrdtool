@@ -1,1 +1,5 @@
-/templates/
+/nbproject/
+/templates/*.orig
+/templates/*.php
+/templates/*.url
+/test/
