@@ -65,10 +65,19 @@ class GraphController extends Controller {
 							}
 						}
 					}
-
-					ob_start();
-					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
-					$data = ob_get_clean();
+					if (extension_loaded("rrd")) {
+						try {
+							$rrd = new \RRDGraph("-");
+							$rrd->setOptions(preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', str_replace("\:", ":", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]), NULL, PREG_SPLIT_NO_EMPTY)));
+							$data = $rrd->saveVerbose()['image'];
+						} catch (\Exception $return) {
+							$data = $return->getMessage();
+						}
+					} else {
+						ob_start();
+						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
+						$data = ob_get_clean();
+					}
 				}
 			} else $return = $data = "XML missing";
 

@@ -78,7 +78,12 @@ class GraphCommand extends Command {
 		}
 		if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
 		if ($dark) $params .= \rrd::darkteint();
-		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
+		if (extension_loaded("rrd")) {
+			$return = rrd_graph($file, preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', str_replace("\:", ":", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]), NULL, PREG_SPLIT_NO_EMPTY)));
+			echo $return ? $return['xsize'] . "x" . $return['ysize'] . "\n" : rrd_error() . "\n";
+		} else {
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
+		}
 	}
 
 }
