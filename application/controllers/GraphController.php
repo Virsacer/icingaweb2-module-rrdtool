@@ -2,6 +2,7 @@
 
 namespace Icinga\Module\Rrdtool\Controllers;
 
+use Icinga\Application\Config;
 use Icinga\Application\Icinga;
 use Icinga\Web\Controller;
 use Icinga\Web\StyleSheet;
@@ -16,20 +17,20 @@ class GraphController extends Controller {
 			$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 			if (file_exists($xml)) {
 				if (isset($_GET['image'])) {
-					$params = "--width 500 --height 100 ";
+					$params = "--width=500 --height=100 ";
 				} elseif (isset($_GET['thumb'])) {
-					$params = "--width 96 --height 32 --only-graph --color=BACK#00000000 --color=CANVAS#00000000 ";
+					$params = "--width=96 --height=32 --only-graph --color=BACK#00000000 --color=CANVAS#00000000 ";
 				} elseif (isset($_GET['large'])) {
-					$params = "--width 1000 --height 200 ";
+					$params = "--width=1000 --height=200 ";
 				} elseif (isset($_GET['huge'])) {
-					$params = "--width 1600 --height 900 --full-size-mode ";
+					$params = "--width=1600 --height=900 --full-size-mode ";
 				} elseif (preg_match("/^([0-9]+)([xX\*])([0-9]+)(&.*)?$/", $_SERVER['QUERY_STRING'], $matches)) {
-					$params = "--width " . $matches[1] . " --height " . $matches[3] . " ";
+					$params = "--width=" . $matches[1] . " --height=" . $matches[3] . " ";
 					if ($matches[2] == "X") $params .= "--only-graph ";
 					if ($matches[2] == "*") $params .= "--full-size-mode ";
 				}
 				$range = $this->parseRange($this->params->get("range", ""));
-				$params .= "--start " . $range['start'] . " --end " . $range['end'] . " ";
+				$params .= "--start=" . $range['start'] . " --end=" . $range['end'] . " ";
 
 				require($this->Module()->getBaseDir() . "/library/Rrdtool/apply_template.php");
 
@@ -41,10 +42,10 @@ class GraphController extends Controller {
 				}
 
 				if (empty($return)) {
-					if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
+					if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=\" \" ";
 
 					if (!isset($_GET['thumb'])) {
-						$theme = Icinga::app()->getConfig()->getSection("themes")->get("default", StyleSheet::DEFAULT_THEME);
+						$theme = Config::app()->get("themes", "default", StyleSheet::DEFAULT_THEME);
 						$user = $this->Auth()->getUser()->getPreferences();
 						$theme = $user->getValue("icingaweb", "theme", $theme);
 						$file = StyleSheet::getThemeFile($theme);
@@ -65,17 +66,19 @@ class GraphController extends Controller {
 							}
 						}
 					}
+					$params .= rtrim($opt[$datasource]) . " " . $def[$datasource];
 					if (extension_loaded("rrd")) {
+						$params = preg_replace("/( |=)'([^']*)'/", "$1\"$2\"", str_replace("\:", ":", $params));
 						try {
 							$rrd = new \RRDGraph("-");
-							$rrd->setOptions(preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', str_replace("\:", ":", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]), NULL, PREG_SPLIT_NO_EMPTY)));
+							$rrd->setOptions(preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY)));
 							$data = $rrd->saveVerbose()['image'];
 						} catch (\Exception $return) {
 							$data = $return->getMessage();
 						}
 					} else {
 						ob_start();
-						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
+						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params, $return);
 						$data = ob_get_clean();
 					}
 				}
@@ -85,14 +88,14 @@ class GraphController extends Controller {
 			if ($return || substr($data, 1, 3) != "PNG") {
 				$size = 2;
 				$width = 1;
-				$data = preg_replace("/(AREA|CDEF|COMMENT|GPRINT|HRULE|LINE|VDEF)/", "\n$1", $data);
-				$lines = explode("\n", $data);
 				$fontwidth = imagefontwidth($size);
 				$fontheight = imagefontheight($size);
+				$data = preg_replace("/ (--|AREA|CDEF|COMMENT|GPRINT|HRULE|LINE|VDEF)/", "\n$1", $data);
+				$lines = explode("\n", $data . "\n");
 				foreach ($lines as $line) {
 					$width = max($width, $fontwidth * mb_strlen($line));
 				}
-				$image = imagecreatetruecolor($width, $fontheight * count($lines) + (count($lines) - 1));
+				$image = imagecreatetruecolor($width + $fontwidth, $fontheight * count($lines));
 				imagefill($image, 0, 0, imagecolorallocate($image, 221, 221, 221));
 				foreach ($lines as $offset => $line) {
 					imagestring($image, $size, 0, $fontheight * $offset, $line, imagecolorallocate($image, 0, 0, 0));

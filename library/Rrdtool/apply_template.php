@@ -48,7 +48,7 @@ if (isset($oldlocale)) setlocale(LC_NUMERIC, $oldlocale);
 ob_end_clean();
 
 if (is_string($params)) {
-	foreach ($def as &$data) $data = addcslashes($data, ":");
+	foreach ($def as $key => $val) $def[$key] = addcslashes($val, ":");
 } else {
-	foreach ($ds_name as &$data) $data = stripslashes($data);
+	foreach ($ds_name as $key => $val) $ds_name[$key] = stripslashes($val);
 }

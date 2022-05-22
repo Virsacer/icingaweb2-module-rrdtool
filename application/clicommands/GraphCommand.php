@@ -47,26 +47,26 @@ class GraphCommand extends Command {
 
 		switch ($size) {
 			case "image":
-				$params = "--width 500 --height 100 ";
+				$params = "--width=500 --height=100 ";
 				break;
 			case "thumb":
-				$params = "--width 96 --height 32 --only-graph ";
+				$params = "--width=96 --height=32 --only-graph ";
 				break;
 			case "large":
-				$params = "--width 1000 --height 200 ";
+				$params = "--width=1000 --height=200 ";
 				break;
 			case "huge":
-				$params = "--width 1600 --height 900 --full-size-mode ";
+				$params = "--width=1600 --height=900 --full-size-mode ";
 				break;
 			default:
 				if (preg_match("/^([0-9]+)([xX\*])([0-9]+)$/", $size, $matches)) {
-					$params = "--width " . $matches[1] . " --height " . $matches[3] . " ";
+					$params = "--width=" . $matches[1] . " --height=" . $matches[3] . " ";
 					if ($matches[2] == "X") $params .= "--only-graph ";
 					if ($matches[2] == "*") $params .= "--full-size-mode ";
-				} else $params = "--width 500 --height 100 ";
+				} else $params = "--width=500 --height=100 ";
 		}
 		$range = GraphController::parseRange($range);
-		$params .= "--start " . $range['start'] . " --end " . $range['end'] . " ";
+		$params .= "--start=" . $range['start'] . " --end=" . $range['end'] . " ";
 
 		require(SYSPATH . "/library/Rrdtool/apply_template.php");
 
@@ -76,13 +76,16 @@ class GraphCommand extends Command {
 			$datasource = array_search($datasource, $ds_name);
 			if ($datasource === FALSE) $this->fail("No such datasource");
 		}
-		if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=' ' ";
+		if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=\" \" ";
 		if ($dark) $params .= \rrd::darkteint();
+
+		$params .= rtrim($opt[$datasource]) . " " . $def[$datasource];
 		if (extension_loaded("rrd")) {
-			$return = rrd_graph($file, preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', str_replace("\:", ":", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]), NULL, PREG_SPLIT_NO_EMPTY)));
+			$params = preg_replace("/( |=)'([^']*)'/", "$1\"$2\"", str_replace("\:", ":", $params));
+			$return = rrd_graph($file, preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY)));
 			echo $return ? $return['xsize'] . "x" . $return['ysize'] . "\n" : rrd_error() . "\n";
 		} else {
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params . rtrim($opt[$datasource]) . " " . $def[$datasource], $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params, $return);
 		}
 	}
 
