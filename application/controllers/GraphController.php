@@ -66,19 +66,20 @@ class GraphController extends Controller {
 							}
 						}
 					}
+
 					$params .= rtrim($opt[$datasource]) . " " . $def[$datasource];
 					if (extension_loaded("rrd")) {
 						$params = preg_replace("/( |=)'([^']*)'/", "$1\"$2\"", str_replace("\:", ":", $params));
 						try {
 							$rrd = new \RRDGraph("-");
-							$rrd->setOptions(preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY)));
+							$rrd->setOptions(str_replace("\\\\", "\\", preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY))));
 							$data = $rrd->saveVerbose()['image'];
 						} catch (\Exception $return) {
 							$data = $return->getMessage();
 						}
 					} else {
 						ob_start();
-						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params, $return);
+						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . " 2>&1", $return);
 						$data = ob_get_clean();
 					}
 				}

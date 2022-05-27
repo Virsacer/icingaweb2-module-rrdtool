@@ -82,7 +82,7 @@ class GraphCommand extends Command {
 		$params .= rtrim($opt[$datasource]) . " " . $def[$datasource];
 		if (extension_loaded("rrd")) {
 			$params = preg_replace("/( |=)'([^']*)'/", "$1\"$2\"", str_replace("\:", ":", $params));
-			$return = rrd_graph($file, preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY)));
+			$return = rrd_graph($file, str_replace("\\\\", "\\", preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY))));
 			echo $return ? $return['xsize'] . "x" . $return['ysize'] . "\n" : rrd_error() . "\n";
 		} else {
 			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params, $return);
