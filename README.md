@@ -12,7 +12,7 @@ Icinga Web 2 and this Icinga Web 2 module are licensed under the terms of the GN
 
 ## Requirements
 
-This module requires Icinga Web 2 (>= 2.9.0) and the rrdtool-binaries.
+This module requires Icinga Web 2 (>= 2.9.0) and the PHP RRD-extension (recommended) or the rrdtool-binaries.
 
 ## Installation
 
