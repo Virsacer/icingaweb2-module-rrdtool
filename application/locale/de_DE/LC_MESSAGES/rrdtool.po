@@ -1,14 +1,8 @@
-# Icinga Web 2 rrdtool module.
-# Copyright (C) 2022 rrdtool module team
-# This file is distributed under the same license as Rrdtool Module.
-# Virsacer <virsacer@online.de>
-#
 msgid ""
 msgstr ""
-"Project-Id-Version: Rrdtool Module (1.1.0)\n"
-"Report-Msgid-Bugs-To: ISSUE TRACKER\n"
-"POT-Creation-Date: 2022-02-04 23:52+0100\n"
-"PO-Revision-Date: 2022-02-05 00:18+0100\n"
+"Project-Id-Version: icingaweb2-module-rrdtool\n"
+"POT-Creation-Date: 2022-05-29 14:44+0200\n"
+"PO-Revision-Date: 2022-05-29 14:44+0200\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -16,109 +10,148 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Poedit-Basepath: .\n"
 "X-Generator: Poedit 3.0.1\n"
-"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-KeywordsList: ;translate;mt:2\n"
+"X-Poedit-SearchPath-0: ../../../..\n"
 
-#: ../../../../configuration.php:4
-#: ../../../../application/controllers/GraphController.php:98
-msgid "Configure rrdtool"
-msgstr "Konfiguriere rrdtool"
-
-#: ../../../../application/controllers/GraphController.php:106
-msgid "Custom"
-msgstr "Benutzerdefiniert"
-
-#: ../../../../application/views/scripts/graph/view.phtml:47
-msgid "Datasource"
-msgstr "Datenquelle"
-
-#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:42
-#: ../../../../application/controllers/GraphController.php:103
-msgid "Day"
-msgstr "Tag"
-
-#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:36
-msgid "Graphs"
-msgstr "Diagramme"
-
-#: ../../../../application/views/scripts/graph/view.phtml:20
-msgid "Host"
-msgstr "Host"
-
-#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:43
-#: ../../../../application/controllers/GraphController.php:104
-msgid "Hours"
-msgstr "Stunden"
-
-#: ../../../../application/forms/Config/SettingsForm.php:27
-msgid ""
-"Max number of graphs to generate thumbnails for (\"check_command_1\":2,"
-"\"check_command_2\":3)"
-msgstr ""
-"Maximale Anzahl an Diagrammen für die Miniaturansichten generiert "
-"werden (\"check_command_1\":2,\"check_command_2\":3)"
-
-#: ../../../../application/controllers/GraphController.php:97
+#: ../../../../application/controllers/GraphController.php:147
 msgid "Module: rrdtool"
 msgstr "Module: rrdtool"
 
-#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:40
-#: ../../../../application/controllers/GraphController.php:101
-msgid "Month"
-msgstr "Monat"
+#: ../../../../application/controllers/GraphController.php:148
+#: ../../../../configuration.php:4
+msgid "Configure rrdtool"
+msgstr "Konfiguriere rrdtool"
 
-#: ../../../../application/forms/Config/SettingsForm.php:26
-msgid "Override max thumbnails"
-msgstr "Übersteuere maximale Miniaturansichten"
-
-#: ../../../../application/forms/Config/SettingsForm.php:21
-msgid "Path to rrd files"
-msgstr "Pfad zu rrd Dateien"
-
-#: ../../../../application/forms/Config/SettingsForm.php:16
-msgid "Path to rrdtool binary"
-msgstr "Pfad zum rrdtool Programm"
-
-#: ../../../../application/forms/Config/SettingsForm.php:11
-msgid "Save Changes"
-msgstr "Änderungen speichern"
-
-#: ../../../../application/views/scripts/graph/view.phtml:30
-msgid "Service"
-msgstr "Service"
-
+#: ../../../../application/controllers/GraphController.php:148
 #: ../../../../configuration.php:5
-#: ../../../../application/controllers/GraphController.php:98
 msgid "Settings"
 msgstr "Einstellungen"
 
+#: ../../../../application/controllers/GraphController.php:152
+#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:39
+msgid "Year"
+msgstr "Jahr"
+
+#: ../../../../application/controllers/GraphController.php:153
+#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:40
+msgid "Month"
+msgstr "Monat"
+
+#: ../../../../application/controllers/GraphController.php:154
+#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:41
+msgid "Week"
+msgstr "Woche"
+
+#: ../../../../application/controllers/GraphController.php:155
+#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:42
+msgid "Day"
+msgstr "Tag"
+
+#: ../../../../application/controllers/GraphController.php:156
+#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:43
+msgid "Hours"
+msgstr "Stunden"
+
+#: ../../../../application/controllers/GraphController.php:158
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+#: ../../../../application/forms/Config/SettingsForm.php:11
+msgid "Save changes"
+msgstr "Änderungen speichern"
+
+#: ../../../../application/forms/Config/SettingsForm.php:16
+msgid "Path to RRD and XML files"
+msgstr "Pfad zu RRD und XML Dateien"
+
+#: ../../../../application/forms/Config/SettingsForm.php:17
+msgid "The path where the RRD and XML files are located."
+msgstr "Pfad unter dem die RRD und XML Dateien liegen."
+
+#: ../../../../application/forms/Config/SettingsForm.php:24
+msgid "Path to PerfdataWriter output"
+msgstr "Pfad zur PerfdataWriter Ausgabe"
+
+#: ../../../../application/forms/Config/SettingsForm.php:25
+msgid "The path where the PerfdataWriter output is located."
+msgstr "Pfad unter dem die PerfdataWriter Ausgabe liegt."
+
+#: ../../../../application/forms/Config/SettingsForm.php:29
+msgid "Checks with multiple RRDs"
+msgstr "Checks mit mehreren RRDs"
+
+#: ../../../../application/forms/Config/SettingsForm.php:30
+msgid ""
+"Checkcommands that should use a RRD for each datasource.\n"
+"(\"check_command_1\",\"check_command_2\")"
+msgstr ""
+"Checkcommands die eine RRD pro Datenquelle verwenden sollen.\n"
+"(\"check_command_1\",\"check_command_2\")"
+
+#: ../../../../application/forms/Config/SettingsForm.php:37
+msgid "Enable perfdata processing"
+msgstr "Aktiviere perfdata Verarbeitung"
+
+#: ../../../../application/forms/Config/SettingsForm.php:38
+msgid ""
+"Enable the CLI command for processing and writing perfdata to RRDs.\n"
+"(\"icingacli rrdtool process\")"
+msgstr ""
+"Aktiviere den CLI Befehl zum Verarbeiten und schreiben von perfdata in "
+"RRDs.\n"
+"(\"icingacli rrdtool process\")"
+
+#: ../../../../application/forms/Config/SettingsForm.php:44
+msgid "Path to rrdtool binary"
+msgstr "Pfad zum rrdtool Programm"
+
+#: ../../../../application/forms/Config/SettingsForm.php:45
+msgid ""
+"The path where the rrdtool executable is located.\n"
+"(Only used if PHP extension is not available.)"
+msgstr ""
+"Pfad unter dem das rrdtool Programm liegt.\n"
+"(Wird nur verwendet, wenn die PHP Erweiterung nicht verfügbar ist.)"
+
+#: ../../../../application/forms/Config/SettingsForm.php:49
+msgid "Override max thumbnails"
+msgstr "Übersteuere maximale Miniaturansichten"
+
+#: ../../../../application/forms/Config/SettingsForm.php:50
+msgid ""
+"Max number of graphs to generate thumbnails for.\n"
+"(\"check_command_1\":2,\"check_command_2\":3)"
+msgstr ""
+"Maximale Anzahl an Diagrammen, für die Miniaturansichten generiert "
+"werden.\n"
+"(\"check_command_1\":2,\"check_command_2\":3)"
+
 #: ../../../../configuration.php:11
-msgid "Show Statistics"
+msgid "Show statistics"
 msgstr "Statistik anzeigen"
 
 #: ../../../../configuration.php:12
 msgid "Stats"
 msgstr "Statistik"
 
-#: ../../../../application/views/scripts/graph/view.phtml:40
+#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:36
+msgid "Graphs"
+msgstr "Diagramme"
+
+#: ../../../../application/views/scripts/graph/index.phtml:20
+msgid "Host"
+msgstr "Host"
+
+#: ../../../../application/views/scripts/graph/index.phtml:30
+msgid "Service"
+msgstr "Service"
+
+#: ../../../../application/views/scripts/graph/index.phtml:39
 msgid "Submit"
 msgstr "Absenden"
 
-#: ../../../../application/forms/Config/SettingsForm.php:17
-msgid "The path where rrdtool executable is located."
-msgstr "Pfad unter dem sich das rrdtool Programm befindet."
-
-#: ../../../../application/forms/Config/SettingsForm.php:22
-msgid "The path where the rrd databases are located."
-msgstr "Pfad unter dem die rrd Datenbanken liegen."
-
-#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:41
-#: ../../../../application/controllers/GraphController.php:102
-msgid "Week"
-msgstr "Woche"
-
-#: ../../../../library/Rrdtool/ProvidedHook/Grapher.php:39
-#: ../../../../application/controllers/GraphController.php:100
-msgid "Year"
-msgstr "Jahr"
+#: ../../../../application/views/scripts/graph/index.phtml:46
+msgid "Datasource"
+msgstr "Datenquelle"

@@ -8,7 +8,7 @@ $this->provideConfigTab("settings", array(
 
 if (file_exists(rtrim($this->getConfig()->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/.pnp-internal/runtime.xml")) {
 	$this->provideConfigTab("stats", array(
-		"title" => $this->translate("Show Statistics"),
+		"title" => $this->translate("Show statistics"),
 		"label" => $this->translate("Stats"),
 		"url" => "graph?host=.pnp-internal&range=week"
 	));
