@@ -71,7 +71,7 @@ class ProcessCommand extends Command {
 		}
 
 		$config = $this->Config();
-		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $this->cleanup($data['HOSTNAME']);
+		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $this->cleanup($data['HOSTNAME']);
 		if (!is_dir($path)) mkdir($path, 0777, TRUE);
 
 		if ($data['DATATYPE'] == "HOSTPERFDATA") {

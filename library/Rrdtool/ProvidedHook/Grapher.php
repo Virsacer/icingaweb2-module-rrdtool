@@ -14,7 +14,7 @@ class Grapher extends GrapherHook {
 		$config = Config::module("rrdtool");
 		$host = $object->getType() == MonitoredObject::TYPE_HOST ? $object->getName() : $object->getHost()->getName();
 		$service = $object->getType() == MonitoredObject::TYPE_SERVICE ? $object->getName() : "_HOST_";
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 		if (file_exists($xml)) {
 			$view = $this->getView();
 			$params = array("host" => $host);
@@ -53,7 +53,7 @@ class Grapher extends GrapherHook {
 		$config = Config::module("rrdtool");
 		$host = $object->getType() == MonitoredObject::TYPE_HOST ? $object->getName() : $object->getHost()->getName();
 		$service = $object->getType() == MonitoredObject::TYPE_SERVICE ? $object->getName() : "_HOST_";
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 		return file_exists($xml);
 	}
 

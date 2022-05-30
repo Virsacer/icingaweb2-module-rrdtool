@@ -42,7 +42,7 @@ class GraphCommand extends Command {
 
 		$config = $this->Config();
 		if ($host == ".pnp-internal") $service = "runtime";
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/pnp4nagios"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 		if (!file_exists($xml)) $this->fail("XML missing");
 
 		switch ($size) {
