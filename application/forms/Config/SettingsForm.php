@@ -18,7 +18,7 @@ class SettingsForm extends ConfigForm {
 			"placeholder" => "/var/lib/icinga2/rrdtool",
 		));
 		$this->addElement("note", "rrdtool_spacer_1", array(
-			"decorators" => array(array("HtmlTag", array("tag" => "br"))),
+			"value" => "<br/>",
 		));
 		$this->addElement("text", "rrdtool_perfdata", array(
 			"label" => $this->translate("Path to PerfdataWriter output"),
@@ -38,7 +38,17 @@ class SettingsForm extends ConfigForm {
 			"description" => $this->translate("Enable the CLI command for processing and writing perfdata to RRDs.\n(\"icingacli rrdtool process\")"),
 		));
 		$this->addElement("note", "rrdtool_spacer_2", array(
-			"decorators" => array(array("HtmlTag", array("tag" => "br"))),
+			"value" => "<br/>",
+		));
+		$this->addElement("note", "rrdtool_extension", array(
+			"label" => $this->translate("PHP RRD Extension"),
+			"value" => "<i class=\"icon-" . (extension_loaded("rrd") ? "ok" : "cancel") . "\"></i>",
+			"decorators" => array(
+				"Label",
+				array(array("labelWrap" => "HtmlTag"), array("tag" => "div", "class" => "control-label-group")),
+				"ViewHelper",
+				array("HtmlTag", array("tag" => "div", "class" => "control-group")),
+			),
 		));
 		$this->addElement("text", "rrdtool_rrdtool", array(
 			"label" => $this->translate("Path to rrdtool binary"),

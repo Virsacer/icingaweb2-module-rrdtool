@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: icingaweb2-module-rrdtool\n"
-"POT-Creation-Date: 2022-05-29 14:44+0200\n"
-"PO-Revision-Date: 2022-05-29 14:44+0200\n"
+"POT-Creation-Date: 2022-05-31 23:54+0200\n"
+"PO-Revision-Date: 2022-05-31 23:54+0200\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -104,10 +104,14 @@ msgstr ""
 "(\"icingacli rrdtool process\")"
 
 #: ../../../../application/forms/Config/SettingsForm.php:44
+msgid "PHP RRD Extension"
+msgstr "PHP RRD Extension"
+
+#: ../../../../application/forms/Config/SettingsForm.php:54
 msgid "Path to rrdtool binary"
 msgstr "Pfad zum rrdtool Programm"
 
-#: ../../../../application/forms/Config/SettingsForm.php:45
+#: ../../../../application/forms/Config/SettingsForm.php:55
 msgid ""
 "The path where the rrdtool executable is located.\n"
 "(Only used if PHP extension is not available.)"
@@ -115,11 +119,11 @@ msgstr ""
 "Pfad unter dem das rrdtool Programm liegt.\n"
 "(Wird nur verwendet, wenn die PHP Erweiterung nicht verfügbar ist.)"
 
-#: ../../../../application/forms/Config/SettingsForm.php:49
+#: ../../../../application/forms/Config/SettingsForm.php:59
 msgid "Override max thumbnails"
 msgstr "Übersteuere maximale Miniaturansichten"
 
-#: ../../../../application/forms/Config/SettingsForm.php:50
+#: ../../../../application/forms/Config/SettingsForm.php:60
 msgid ""
 "Max number of graphs to generate thumbnails for.\n"
 "(\"check_command_1\":2,\"check_command_2\":3)"
