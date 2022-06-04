@@ -79,13 +79,19 @@ class GraphCommand extends Command {
 		if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=\" \" ";
 		if ($dark) $params .= \rrd::darkteint();
 
-		$params .= rtrim($opt[$datasource]) . " " . $def[$datasource];
 		if (extension_loaded("rrd")) {
-			$params = preg_replace("/( |=)'([^']*)'/", "$1\"$2\"", str_replace("\:", ":", $params));
-			$return = rrd_graph($file, str_replace("\\\\", "\\", preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY))));
+			$params = preg_replace("/(.+ |=)'([^']*)'/", "$1\"$2\"", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]);
+			$params = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY);
+			foreach ($params as $key => $val) {
+				if (preg_match("/(.*)\"(.*)\"(.*)/", $val, $match)) {
+					if (strpos($match[1], ":") !== FALSE) $match[2] = addcslashes($match[2], ":");
+					$params[$key] = $match[1] . str_replace("\\\\", "\\", $match[2]) . ($match[3] ?? "");
+				}
+			}
+			$return = rrd_graph($file, $params);
 			echo $return ? $return['xsize'] . "x" . $return['ysize'] . "\n" : rrd_error() . "\n";
 		} else {
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params, $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph " . $file . " " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":"), $return);
 		}
 	}
 

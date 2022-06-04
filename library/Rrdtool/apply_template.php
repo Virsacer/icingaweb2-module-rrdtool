@@ -44,15 +44,12 @@ if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
 } elseif (file_exists(SYSPATH . "/templates/default.php")) {
 	require(SYSPATH . "/templates/default.php");
 } else require(SYSPATH . "/templates/pnp4nagios/default.php");
+if (isset($oldlocale)) setlocale(LC_NUMERIC, $oldlocale);
+ob_end_clean();
+
 if ($hostname == ".pnp-internal") {
 	$opt[1] = str_replace("process_perfdata.pl", "RRDTOOL", $opt[1]);
 	$def[1] = str_replace("%6.2l", "%6.3l", $def[1]);
 }
-if (isset($oldlocale)) setlocale(LC_NUMERIC, $oldlocale);
-ob_end_clean();
 
-if (is_string($params)) {
-	foreach ($def as $key => $val) $def[$key] = addcslashes($val, ":");
-} else {
-	foreach ($ds_name as $key => $val) $ds_name[$key] = stripslashes($val);
-}
+foreach ($ds_name as $key => $val) $ds_name[$key] = stripslashes($val);

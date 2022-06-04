@@ -19,7 +19,9 @@ class ProcessCommand extends Command {
 		if (!$config->get("rrdtool", "process", FALSE)) exit("Process not enabled in the config...");
 		$path = rtrim($config->get("rrdtool", "perfdata", "/var/spool/icinga2/perfdata"), "/") . "/";
 		$files = scandir($path);
-		usort($files, fn($a, $b) => str_replace(array("host", "service"), "", $a) <=> str_replace(array("host", "service"), "", $b));
+		usort($files, function ($a, $b) {
+			return str_replace(array("host", "service"), "", $a) <=> str_replace(array("host", "service"), "", $b);
+		});
 
 		$runtime = hrtime(TRUE);
 		foreach ($files as $file) {
@@ -61,7 +63,7 @@ class ProcessCommand extends Command {
 		}
 
 		$data['DATASOURCES'] = array();
-		while (preg_match("/^([^=]+)=([\d\.\-]+|U)([\w\/%]*)(;@?([\d\.\-~:]*))?(;@?([\d\.\-~:]*))?(;([\d\.\-]*))?(;([\d\.\-]*))?\s*(.*?)$/", $perfdata, $datasource)) {
+		while (preg_match("/^([^=]+)=([\d\.\-]+|U|)([\w\/%]*)(;@?([\d\.\-~:]*))?(;@?([\d\.\-~:]*))?(;([\d\.\-]*))?(;([\d\.\-]*))?\s*(.*?)$/", $perfdata, $datasource)) {
 			$perfdata = array_pop($datasource);
 			$data['DATASOURCES'][] = $datasource;
 		}
@@ -105,7 +107,7 @@ class ProcessCommand extends Command {
 
 			$datasource['LABEL'] = str_replace(array("&", "\"", "'"), "", $datasource[1]);
 			$datasource['NAME'] = $this->cleanup(str_replace(array("\"", "'"), "", $datasource[1]));
-			$datasource['ACT'] = $datasource[2];
+			$datasource['ACT'] = $datasource[2] == "" ? "U" : $datasource[2];
 			$datasource['UNIT'] = $datasource[3] == "%" ? "%%" : $datasource[3];
 			$datasource['WARN'] = $datasource[5];
 			$datasource['CRIT'] = $datasource[7];
@@ -131,7 +133,7 @@ class ProcessCommand extends Command {
 			$xml->writeElement("TEMPLATE", $data['CHECKCOMMAND']);
 			$xml->writeElement("RRDFILE", $datasource['RRDFILE']);
 			$xml->writeElement("RRD_STORAGE_TYPE", $data['RRD_STORAGE_TYPE']);
-			$xml->writeElement("RRD_HEARTBEAT", "8460");
+			$xml->writeElement("RRD_HEARTBEAT", "8640");
 			$xml->writeElement("IS_MULTI", "0");
 			$xml->writeElement("DS", $ds);
 			$xml->writeElement("NAME", $datasource['NAME']);
@@ -199,15 +201,16 @@ class ProcessCommand extends Command {
 		$ds = 1;
 		$update = "";
 		$create = array();
+		$returnmulti = "";
 		$config = $this->Config();
 		$file = $data['NAGIOS_RRDFILE'] ?? "";
 		foreach ($data['DATASOURCES'] as $key => $datasource) {
 			$update .= ":" . $datasource['ACT'];
-			$create[] = "DS:" . $ds++ . ":GAUGE:8460:U:U";
+			$create[] = "DS:" . $ds++ . ":GAUGE:8640:U:U";
 			if ($data['RRD_STORAGE_TYPE'] == "MULTIPLE" || $key === array_key_last($data['DATASOURCES'])) {
 				if ($data['RRD_STORAGE_TYPE'] == "MULTIPLE") {
 					$update = ":" . $datasource['ACT'];
-					$create = array("DS:1:GAUGE:8460:U:U");
+					$create = array("DS:1:GAUGE:8640:U:U");
 					$file = $datasource['RRDFILE'];
 				}
 
@@ -238,7 +241,8 @@ class ProcessCommand extends Command {
 					}
 					if ($return) {
 						$this->stats['errors']++;
-						return array(1, $rrd ?? rrd_error());
+						if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd ?? rrd_error());
+						$returnmulti .= rrd_error() . ", ";
 					}
 					$this->stats['create']++;
 				}
@@ -252,11 +256,13 @@ class ProcessCommand extends Command {
 				}
 				if ($return) {
 					$this->stats['errors']++;
-					return array(1, $rrd ?? rrd_error());
+					if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd ?? rrd_error());
+					$returnmulti .= rrd_error() . ", ";
 				}
 				$this->stats['update']++;
 			}
 		}
+		if ($returnmulti != "") return array(1, rtrim($returnmulti, ", "));
 		return array(0, "successful updated");
 	}
 

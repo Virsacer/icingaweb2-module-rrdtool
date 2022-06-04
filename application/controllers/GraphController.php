@@ -67,19 +67,25 @@ class GraphController extends Controller {
 						}
 					}
 
-					$params .= rtrim($opt[$datasource]) . " " . $def[$datasource];
 					if (extension_loaded("rrd")) {
-						$params = preg_replace("/( |=)'([^']*)'/", "$1\"$2\"", str_replace("\:", ":", $params));
+						$params = preg_replace("/(.+ |=)'([^']*)'/", "$1\"$2\"", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]);
+						$params = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY);
+						foreach ($params as $key => $val) {
+							if (preg_match("/(.*)\"(.*)\"(.*)/", $val, $match)) {
+								if (strpos($match[1], ":") !== FALSE) $match[2] = addcslashes($match[2], ":");
+								$params[$key] = $match[1] . str_replace("\\\\", "\\", $match[2]) . ($match[3] ?? "");
+							}
+						}
 						try {
 							$rrd = new \RRDGraph("-");
-							$rrd->setOptions(str_replace("\\\\", "\\", preg_replace("/\"/", "", preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY))));
+							$rrd->setOptions($params);
 							$data = $rrd->saveVerbose()['image'];
 						} catch (\Exception $return) {
 							$data = $return->getMessage();
 						}
 					} else {
 						ob_start();
-						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . " 2>&1", $return);
+						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":") . " 2>&1", $return);
 						$data = ob_get_clean();
 					}
 				}
