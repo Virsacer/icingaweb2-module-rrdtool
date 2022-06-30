@@ -69,7 +69,7 @@ class GraphController extends Controller {
 
 					if (extension_loaded("rrd")) {
 						$params = preg_replace("/(.+ |=)'([^']*)'/", "$1\"$2\"", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]);
-						$params = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, NULL, PREG_SPLIT_NO_EMPTY);
+						$params = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, -1, PREG_SPLIT_NO_EMPTY);
 						foreach ($params as $key => $val) {
 							if (preg_match("/(.*)\"(.*)\"(.*)/", $val, $match)) {
 								if (strpos($match[1], ":") !== FALSE) $match[2] = addcslashes($match[2], ":");
