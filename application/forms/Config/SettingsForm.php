@@ -17,6 +17,11 @@ class SettingsForm extends ConfigForm {
 			"description" => $this->translate("The path where the RRD and XML files are located."),
 			"placeholder" => "/var/lib/icinga2/rrdtool",
 		));
+		$this->addElement("text", "rrdtool_templates", array(
+			"label" => $this->translate("Path to templates"),
+			"description" => $this->translate("The path where the templates are located."),
+			"placeholder" => "templates",
+		));
 		$this->addElement("note", "rrdtool_spacer_1", array(
 			"value" => "<br/>",
 		));

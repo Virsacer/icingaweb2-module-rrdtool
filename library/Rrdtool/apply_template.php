@@ -37,12 +37,16 @@ if (version_compare(PHP_VERSION, "8.0.0", "<")) {
 	$oldlocale = setlocale(LC_NUMERIC, 0);
 	setlocale(LC_NUMERIC, "C", "en_US", "en_US.utf8", "en_US.UTF-8");
 }
-if (file_exists(SYSPATH . "/templates/" . $template . ".php")) {
-	require(SYSPATH . "/templates/" . $template . ".php");
+
+$templates = rtrim($config->get("rrdtool", "templates", "templates"), "/") . "/";
+if (substr($templates, 0, 1) != "/") $templates = SYSPATH . "/" . $templates;
+
+if (file_exists($templates . $template . ".php")) {
+	require($templates . $template . ".php");
 } elseif (file_exists(SYSPATH . "/templates/pnp4nagios/" . $template . ".php")) {
 	require(SYSPATH . "/templates/pnp4nagios/" . $template . ".php");
-} elseif (file_exists(SYSPATH . "/templates/default.php")) {
-	require(SYSPATH . "/templates/default.php");
+} elseif (file_exists($templates . "default.php")) {
+	require($templates . "default.php");
 } else require(SYSPATH . "/templates/pnp4nagios/default.php");
 if (isset($oldlocale)) setlocale(LC_NUMERIC, $oldlocale);
 ob_end_clean();
