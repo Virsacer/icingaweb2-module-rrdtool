@@ -43,8 +43,8 @@ if (substr($templates, 0, 1) != "/") $templates = SYSPATH . "/" . $templates;
 
 if (file_exists($templates . $template . ".php")) {
 	require($templates . $template . ".php");
-} elseif (file_exists(SYSPATH . "/templates/pnp4nagios/" . $template . ".php")) {
-	require(SYSPATH . "/templates/pnp4nagios/" . $template . ".php");
+} elseif (file_exists($templates . "pnp4nagios/" . $template . ".php")) {
+	require($templates . "pnp4nagios/" . $template . ".php");
 } elseif (file_exists($templates . "default.php")) {
 	require($templates . "default.php");
 } else require(SYSPATH . "/templates/pnp4nagios/default.php");
