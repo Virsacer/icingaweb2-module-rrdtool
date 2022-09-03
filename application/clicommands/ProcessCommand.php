@@ -26,9 +26,10 @@ class ProcessCommand extends Command {
 		$runtime = hrtime(TRUE);
 		foreach ($files as $file) {
 			if ($file == "." || $file == "..") continue;
-			foreach (file($path . $file, FILE_IGNORE_NEW_LINES) as $data) {
+			$data = file($path . $file, FILE_IGNORE_NEW_LINES);
+			foreach ($data as $item) {
 				$this->stats['rows']++;
-				$this->process($data);
+				$this->process($item);
 			}
 			unlink($path . $file);
 			if (hrtime(TRUE) - $runtime >= 55000000000) break;
@@ -242,7 +243,7 @@ class ProcessCommand extends Command {
 					if ($return) {
 						$this->stats['errors']++;
 						if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd ?? rrd_error());
-						$returnmulti .= rrd_error() . ", ";
+						$returnmulti .= ($rrd ?? rrd_error()) . ", ";
 					}
 					$this->stats['create']++;
 				}
@@ -257,7 +258,7 @@ class ProcessCommand extends Command {
 				if ($return) {
 					$this->stats['errors']++;
 					if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd ?? rrd_error());
-					$returnmulti .= rrd_error() . ", ";
+					$returnmulti .= ($rrd ?? rrd_error()) . ", ";
 				}
 				$this->stats['update']++;
 			}
