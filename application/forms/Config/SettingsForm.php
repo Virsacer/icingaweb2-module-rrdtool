@@ -42,6 +42,10 @@ class SettingsForm extends ConfigForm {
 			"label" => $this->translate("Enable perfdata processing"),
 			"description" => $this->translate("Enable the CLI command for processing and writing perfdata to RRDs.\n(\"icingacli rrdtool process\")"),
 		));
+		$this->addElement("checkbox", "rrdtool_logging", array(
+			"label" => $this->translate("Enable logging"),
+			"description" => $this->translate("Log \"Skipped\", \"Invalid\" and \"Errors\" during processing."),
+		));
 		$this->addElement("note", "rrdtool_spacer_2", array(
 			"value" => "<br/>",
 		));

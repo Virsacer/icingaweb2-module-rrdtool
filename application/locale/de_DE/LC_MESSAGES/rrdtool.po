@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: icingaweb2-module-rrdtool\n"
-"POT-Creation-Date: 2022-07-18 16:02+0200\n"
-"PO-Revision-Date: 2022-07-18 16:02+0200\n"
+"POT-Creation-Date: 2022-09-04 21:29+0200\n"
+"PO-Revision-Date: 2022-09-04 21:29+0200\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -111,15 +111,25 @@ msgstr ""
 "RRDs.\n"
 "(\"icingacli rrdtool process\")"
 
-#: ../../../../application/forms/Config/SettingsForm.php:49
+#: ../../../../application/forms/Config/SettingsForm.php:46
+msgid "Enable logging"
+msgstr "Aktiviere Protokollierung"
+
+#: ../../../../application/forms/Config/SettingsForm.php:47
+msgid "Log \"Skipped\", \"Invalid\" and \"Errors\" during processing."
+msgstr ""
+"Protokolliere \"Skipped\", \"Invalid\" und \"Errors\" während der "
+"Verarbeitung."
+
+#: ../../../../application/forms/Config/SettingsForm.php:53
 msgid "PHP RRD Extension"
 msgstr "PHP RRD Extension"
 
-#: ../../../../application/forms/Config/SettingsForm.php:59
+#: ../../../../application/forms/Config/SettingsForm.php:63
 msgid "Path to rrdtool binary"
 msgstr "Pfad zum rrdtool Programm"
 
-#: ../../../../application/forms/Config/SettingsForm.php:60
+#: ../../../../application/forms/Config/SettingsForm.php:64
 msgid ""
 "The path where the rrdtool executable is located.\n"
 "(Only used if PHP extension is not available.)"
@@ -127,11 +137,11 @@ msgstr ""
 "Pfad unter dem das rrdtool Programm liegt.\n"
 "(Wird nur verwendet, wenn die PHP Erweiterung nicht verfügbar ist.)"
 
-#: ../../../../application/forms/Config/SettingsForm.php:64
+#: ../../../../application/forms/Config/SettingsForm.php:68
 msgid "Override max thumbnails"
 msgstr "Übersteuere maximale Miniaturansichten"
 
-#: ../../../../application/forms/Config/SettingsForm.php:65
+#: ../../../../application/forms/Config/SettingsForm.php:69
 msgid ""
 "Max number of graphs to generate thumbnails for.\n"
 "(\"check_command_1\":2,\"check_command_2\":3)"
