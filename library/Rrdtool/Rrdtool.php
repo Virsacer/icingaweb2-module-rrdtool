@@ -1,22 +1,17 @@
 <?php
 
-namespace Icinga\Module\Rrdtool\ProvidedHook;
+namespace Icinga\Module\Rrdtool;
 
 use Icinga\Application\Config;
-use Icinga\Application\Hook\GrapherHook;
-use Icinga\Module\Monitoring\Object\MonitoredObject;
+use Icinga\Application\Icinga;
 
-class Grapher extends GrapherHook {
+class Rrdtool {
 
-	protected $hasPreviews = TRUE;
-
-	public function getPreviewHtml(MonitoredObject $object) {
+	static function graphs($host, $service) {
 		$config = Config::module("rrdtool");
-		$host = $object->getType() == MonitoredObject::TYPE_HOST ? $object->getName() : $object->getHost()->getName();
-		$service = $object->getType() == MonitoredObject::TYPE_SERVICE ? $object->getName() : "_HOST_";
 		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 		if (file_exists($xml)) {
-			$view = $this->getView();
+			$view = Icinga::app()->getViewRenderer()->view;
 			$params = array("host" => $host);
 			if ($service != "_HOST_") $params['service'] = $service;
 
@@ -47,14 +42,6 @@ class Grapher extends GrapherHook {
 			if ($i) echo "</div>";
 			return ob_get_clean();
 		}
-	}
-
-	public function has(MonitoredObject $object) {
-		$config = Config::module("rrdtool");
-		$host = $object->getType() == MonitoredObject::TYPE_HOST ? $object->getName() : $object->getHost()->getName();
-		$service = $object->getType() == MonitoredObject::TYPE_SERVICE ? $object->getName() : "_HOST_";
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
-		return file_exists($xml);
 	}
 
 }
