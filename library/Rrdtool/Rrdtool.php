@@ -7,7 +7,7 @@ use Icinga\Application\Icinga;
 
 class Rrdtool {
 
-	static function graphs($host, $service) {
+	public function graphs($host, $service) {
 		$config = Config::module("rrdtool");
 		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
 		if (file_exists($xml)) {

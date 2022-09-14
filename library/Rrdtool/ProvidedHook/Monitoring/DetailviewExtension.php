@@ -10,9 +10,9 @@ class DetailviewExtension extends DetailviewExtensionHook {
 
 	public function getHtmlForObject(MonitoredObject $object) {
 		if ($object->getType() == MonitoredObject::TYPE_HOST) {
-			return Rrdtool::graphs($object->getName(), "_HOST_");
+			return (new Rrdtool())->graphs($object->getName(), "_HOST_");
 		}
-		return Rrdtool::graphs($object->getHost()->getName(), $object->getName());
+		return (new Rrdtool())->graphs($object->getHost()->getName(), $object->getName());
 	}
 
 }

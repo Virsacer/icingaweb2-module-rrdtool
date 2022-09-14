@@ -11,7 +11,7 @@ use ipl\Html\ValidHtml;
 class ServiceDetailExtension extends ServiceDetailExtensionHook {
 
 	public function getHtmlForObject(Service $object): ValidHtml {
-		return HtmlString::create(Rrdtool::graphs($object->host->name, $object->name));
+		return HtmlString::create((new Rrdtool())->graphs($object->host->name, $object->name));
 	}
 
 }
