@@ -258,9 +258,10 @@ class ProcessCommand extends Command {
 					}
 					if ($return) {
 						$this->stats['errors']++;
-						$this->log($data, "Error: " . ($rrd ?? rrd_error()));
-						if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd ?? rrd_error());
-						$returnmulti .= ($rrd ?? rrd_error()) . ", ";
+						if (!isset($rrd)) $rrd = rrd_error();
+						$this->log($data, "Error: " . $rrd);
+						if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd);
+						$returnmulti .= $rrd . ", ";
 					}
 					$this->stats['create']++;
 				}
@@ -274,9 +275,10 @@ class ProcessCommand extends Command {
 				}
 				if ($return) {
 					$this->stats['errors']++;
-					$this->log($data, "Error: " . ($rrd ?? rrd_error()));
-					if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd ?? rrd_error());
-					$returnmulti .= ($rrd ?? rrd_error()) . ", ";
+					if (!isset($rrd)) $rrd = rrd_error();
+					$this->log($data, "Error: " . $rrd);
+					if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd);
+					$returnmulti .= $rrd . ", ";
 				}
 				$this->stats['update']++;
 			}
