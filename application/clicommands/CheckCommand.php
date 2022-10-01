@@ -30,9 +30,9 @@ class CheckCommand extends Command {
 			if ($xml->RRD->RC == 0) continue;
 
 			if ($status != 2) {
-				if (preg_match("/(conversion of .* to float|Malformed perfdata|minimum one second step)/", $xml->RRD->TXT)) {
-					$status = 1;
-				} else $status = 2;
+				$messages = explode(", ", $xml->RRD->TXT);
+				$messages = preg_grep("/(conversion of .* to float|Malformed perfdata|minimum one second step)/", $messages, PREG_GREP_INVERT);
+				$status = count($messages) ? 2 : 1;
 			}
 			$out .= $file . ": " . $xml->RRD->TXT . "\n";
 		}

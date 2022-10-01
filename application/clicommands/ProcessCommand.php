@@ -80,9 +80,11 @@ class ProcessCommand extends Command {
 
 		$data['DATASOURCES'] = array();
 		while (preg_match("/^([^=]+)=([\d\.\-]+|U|)([\w\/%]*)(;@?([\d\.\-~:]*))?(;@?([\d\.\-~:]*))?(;([\d\.\-]*))?(;([\d\.\-]*))?\s*(.*?)$/", $perfdata, $datasource)) {
+			unset($datasource[0]);
 			$perfdata = array_pop($datasource);
 			$data['DATASOURCES'][] = $datasource;
 		}
+		$data['DATASOURCES'] = array_intersect_key($data['DATASOURCES'], array_unique(array_map("json_encode", $data['DATASOURCES'])));
 		if ($perfdata) {
 			$this->stats['invalid']++;
 			$this->log($data, "Invalid: " . $data['PERFDATA']);
@@ -251,6 +253,7 @@ class ProcessCommand extends Command {
 					);
 					if (extension_loaded("rrd")) {
 						$return = !rrd_create($file, $create);
+						$rrd = rrd_error();
 					} else {
 						ob_start();
 						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " create " . $file . " " . implode(" ", $create) . " 2>&1", $return);
@@ -258,7 +261,6 @@ class ProcessCommand extends Command {
 					}
 					if ($return) {
 						$this->stats['errors']++;
-						if (!isset($rrd)) $rrd = rrd_error();
 						$this->log($data, "Error: " . $rrd);
 						if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd);
 						$returnmulti .= $rrd . ", ";
@@ -268,6 +270,7 @@ class ProcessCommand extends Command {
 
 				if (extension_loaded("rrd")) {
 					$return = !rrd_update($file, array($data['TIMET'] . $update));
+					$rrd = rrd_error();
 				} else {
 					ob_start();
 					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " update " . $file . " " . $data['TIMET'] . $update . " 2>&1", $return);
@@ -275,7 +278,6 @@ class ProcessCommand extends Command {
 				}
 				if ($return) {
 					$this->stats['errors']++;
-					if (!isset($rrd)) $rrd = rrd_error();
 					$this->log($data, "Error: " . $rrd);
 					if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd);
 					$returnmulti .= $rrd . ", ";
