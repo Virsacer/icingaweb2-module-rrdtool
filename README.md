@@ -8,6 +8,8 @@ It uses `rrdtool` to store perfdata (from Icinga2 PerfdataWriter) in RRDs and to
 
 [![Screenshot](.github/Screenshot.png)](.github/Screenshot.png)
 
+[![Graphs](.github/Graphs.png)](.github/Graphs.png)
+
 ## License
 
 Icinga Web 2 and this Icinga Web 2 module are licensed under the terms of the GNU General Public License Version 2, you will find a copy of this license in the LICENSE file included in the source package.
