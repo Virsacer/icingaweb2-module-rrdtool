@@ -2,6 +2,7 @@
 
 namespace Icinga\Module\Rrdtool\Forms\Config;
 
+use Icinga\Application\Config;
 use Icinga\Forms\ConfigForm;
 use Zend_Validate_Regex;
 
@@ -16,6 +17,16 @@ class SettingsForm extends ConfigForm {
 			"label" => $this->translate("Path to RRD and XML files"),
 			"description" => $this->translate("The path where the RRD and XML files are located."),
 			"placeholder" => "/var/lib/icinga2/rrdtool",
+		));
+		$this->addElement("note", "rrdpath_check", array(
+			"label" => $this->translate("Path is readable"),
+			"value" => "<i class=\"icon-" . (is_readable(rtrim(Config::module("rrdtool")->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/") ? "ok" : "cancel") . "\"></i>",
+			"decorators" => array(
+				"Label",
+				array(array("labelWrap" => "HtmlTag"), array("tag" => "div", "class" => "control-label-group")),
+				"ViewHelper",
+				array("HtmlTag", array("tag" => "div", "class" => "control-group")),
+			),
 		));
 		$this->addElement("text", "rrdtool_templates", array(
 			"label" => $this->translate("Path to templates"),
