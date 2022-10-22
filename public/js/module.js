@@ -29,6 +29,7 @@
 			} else {
 				window.location = window.location.href.replace("range=" + $("div.graph").first().attr("data-range"), "range=" + start + "-" + end);
 			}
+			event.submit();
 		}
 	};
 	Rrdtool.zoom = function(img, selection) {
