@@ -4,6 +4,7 @@ namespace Icinga\Module\Rrdtool\Clicommands;
 
 use Icinga\Cli\Command;
 use Icinga\Module\Rrdtool\Controllers\GraphController;
+use Icinga\Module\Rrdtool\Rrdtool;
 
 class GraphCommand extends Command {
 
@@ -42,7 +43,7 @@ class GraphCommand extends Command {
 
 		$config = $this->Config();
 		if ($host == ".pnp-internal") $service = "runtime";
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host . "/" . str_replace(array("/", " "), "_", $service) . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
 		if (!file_exists($xml)) $this->fail("XML missing");
 
 		switch ($size) {

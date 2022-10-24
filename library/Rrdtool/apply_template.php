@@ -1,12 +1,14 @@
 <?php
 
+use Icinga\Module\Rrdtool\Rrdtool;
+
 $ds_name = array();
 $this->DS = array();
 if (is_string($xml)) $xml = simplexml_load_file($xml);
 
 $i = 1;
 foreach ($xml->DATASOURCE as $data) {
-	$data->RRDFILE = str_replace(dirname($data->RRDFILE), rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $host, $data->RRDFILE);
+	$data->RRDFILE = str_replace(dirname($data->RRDFILE), rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host), $data->RRDFILE);
 	if (preg_match("/^[A-Z]__(_used)?$/", $data->NAME)) $data->NAME = str_replace(" used", "", $data->LABEL);
 	foreach ($data as $key => $val) {
 		$val = addslashes($val);

@@ -3,6 +3,7 @@
 namespace Icinga\Module\Rrdtool\Clicommands;
 
 use Icinga\Cli\Command;
+use Icinga\Module\Rrdtool\Rrdtool;
 
 class ProcessCommand extends Command {
 
@@ -52,10 +53,6 @@ class ProcessCommand extends Command {
 		));
 	}
 
-	protected function cleanup($string) {
-		return str_replace(array("&", " ", ":", "/", "\\"), "_", $string);
-	}
-
 	protected function log($data, $message) {
 		if ($this->logs === FALSE) return;
 		$this->logs[] = date("Y-m-d H:i:s", $data['TIMET']) . "\t"
@@ -92,7 +89,7 @@ class ProcessCommand extends Command {
 		}
 
 		$config = $this->Config();
-		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $this->cleanup($data['HOSTNAME']);
+		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($data['HOSTNAME']);
 		if (!is_dir($path)) mkdir($path, 0777, TRUE);
 
 		if ($data['DATATYPE'] == "HOSTPERFDATA") {
@@ -101,7 +98,7 @@ class ProcessCommand extends Command {
 			$data['RRD'] = "_HOST_";
 		} else {
 			$data['CHECKCOMMAND'] = $data['SERVICECHECKCOMMAND'];
-			$data['RRD'] = $this->cleanup($data['SERVICEDESC']);
+			$data['RRD'] = Rrdtool::cleanup($data['SERVICEDESC']);
 		}
 
 		$multiple = json_decode("[" . $config->get("rrdtool", "multiple", "") . "]", TRUE);
@@ -125,7 +122,7 @@ class ProcessCommand extends Command {
 			$xml->startElement("DATASOURCE");
 
 			$datasource['LABEL'] = str_replace(array("&", "\"", "'"), "", $datasource[1]);
-			$datasource['NAME'] = $this->cleanup(str_replace(array("\"", "'"), "", $datasource[1]));
+			$datasource['NAME'] = Rrdtool::cleanup(str_replace(array("\"", "'"), "", $datasource[1]));
 			$datasource['ACT'] = $datasource[2] == "" ? "U" : $datasource[2];
 			$datasource['UNIT'] = $datasource[3] == "%" ? "%%" : $datasource[3];
 			$datasource['WARN'] = $datasource[5];
@@ -202,7 +199,7 @@ class ProcessCommand extends Command {
 		$xml->writeElement("NAGIOS_RRDFILE", $data['NAGIOS_RRDFILE'] ?? "");
 		if ($data['DATATYPE'] == "SERVICEPERFDATA") {
 			$xml->writeElement("NAGIOS_SERVICECHECKCOMMAND", $data['SERVICECHECKCOMMAND']);
-			$xml->writeElement("NAGIOS_SERVICEDESC", $this->cleanup($data['SERVICEDESC']));
+			$xml->writeElement("NAGIOS_SERVICEDESC", Rrdtool::cleanup($data['SERVICEDESC']));
 			$xml->writeElement("NAGIOS_SERVICEPERFDATA", $data['SERVICEPERFDATA']);
 			$xml->writeElement("NAGIOS_SERVICESTATE", $data['SERVICESTATE']);
 			$xml->writeElement("NAGIOS_SERVICESTATETYPE", $data['SERVICESTATETYPE']);
