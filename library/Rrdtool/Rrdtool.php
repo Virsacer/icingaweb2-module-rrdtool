@@ -34,8 +34,9 @@ class Rrdtool {
 			for ($i = 0; $i < $thumbnails; $i++) {
 				if ($i == 0) echo "<div class=\"icinga-module module-rrdtool\"><h2>" . mt("rrdtool", "Graphs") . "</h2>";
 				if ($thumbnails > 1) {
-					$datasource = "&amp;datasource=" . array_keys($def)[$i];
-					echo !empty($ds_name[$i]) ? $ds_name[$i] . "<br/>" : "";
+					$datasource = array_keys($def)[$i];
+					if (!empty($ds_name[$datasource])) echo $ds_name[$datasource] . "<br/>";
+					$datasource = "&amp;datasource=" . $datasource;
 				}
 				?>
 				<figure><a href="<?php echo $view->href("rrdtool/graph", $params); ?>&amp;range=year" data-base-target="_next"><img src="<?php echo $view->href("rrdtool/graph?thumb", $params) . $datasource; ?>&amp;range=year" alt=""/></a><figcaption>1 <?php echo mt("rrdtool", "Year"); ?></figcaption></figure>
