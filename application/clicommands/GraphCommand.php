@@ -3,7 +3,6 @@
 namespace Icinga\Module\Rrdtool\Clicommands;
 
 use Icinga\Cli\Command;
-use Icinga\Module\Rrdtool\Controllers\GraphController;
 use Icinga\Module\Rrdtool\Rrdtool;
 
 class GraphCommand extends Command {
@@ -66,7 +65,7 @@ class GraphCommand extends Command {
 					if ($matches[2] == "*") $params .= "--full-size-mode ";
 				} else $params = "--width=500 --height=100 ";
 		}
-		$range = GraphController::parseRange($range);
+		$range = Rrdtool::parseRange($range);
 		$params .= "--start=" . $range['start'] . " --end=" . $range['end'] . " ";
 
 		require(SYSPATH . "/library/Rrdtool/apply_template.php");
