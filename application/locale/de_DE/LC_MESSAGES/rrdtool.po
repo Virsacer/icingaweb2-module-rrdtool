@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: icingaweb2-module-rrdtool\n"
-"POT-Creation-Date: 2022-10-20 23:42+0200\n"
-"PO-Revision-Date: 2022-10-20 23:42+0200\n"
+"POT-Creation-Date: 2022-11-03 07:15+0100\n"
+"PO-Revision-Date: 2022-11-03 07:24+0100\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -10,51 +10,51 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: ;translate;mt:2\n"
 "X-Poedit-SearchPath-0: ../../../..\n"
 
-#: ../../../../application/controllers/GraphController.php:153
+#: ../../../../application/controllers/GraphController.php:154
 msgid "Module: rrdtool"
 msgstr "Module: rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:154
+#: ../../../../application/controllers/GraphController.php:155
 #: ../../../../configuration.php:4
 msgid "Configure rrdtool"
 msgstr "Konfiguriere rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:154
+#: ../../../../application/controllers/GraphController.php:155
 #: ../../../../configuration.php:5
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: ../../../../application/controllers/GraphController.php:158
-#: ../../../../library/Rrdtool/Rrdtool.php:34
+#: ../../../../application/controllers/GraphController.php:159
+#: ../../../../library/Rrdtool/Rrdtool.php:42
 msgid "Year"
 msgstr "Jahr"
 
-#: ../../../../application/controllers/GraphController.php:159
-#: ../../../../library/Rrdtool/Rrdtool.php:35
+#: ../../../../application/controllers/GraphController.php:160
+#: ../../../../library/Rrdtool/Rrdtool.php:43
 msgid "Month"
 msgstr "Monat"
 
-#: ../../../../application/controllers/GraphController.php:160
-#: ../../../../library/Rrdtool/Rrdtool.php:36
+#: ../../../../application/controllers/GraphController.php:161
+#: ../../../../library/Rrdtool/Rrdtool.php:44
 msgid "Week"
 msgstr "Woche"
 
-#: ../../../../application/controllers/GraphController.php:161
-#: ../../../../library/Rrdtool/Rrdtool.php:37
+#: ../../../../application/controllers/GraphController.php:162
+#: ../../../../library/Rrdtool/Rrdtool.php:45
 msgid "Day"
 msgstr "Tag"
 
-#: ../../../../application/controllers/GraphController.php:162
-#: ../../../../library/Rrdtool/Rrdtool.php:38
+#: ../../../../application/controllers/GraphController.php:163
+#: ../../../../library/Rrdtool/Rrdtool.php:46
 msgid "Hours"
 msgstr "Stunden"
 
-#: ../../../../application/controllers/GraphController.php:164
+#: ../../../../application/controllers/GraphController.php:165
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
@@ -125,15 +125,23 @@ msgstr ""
 "Protokolliere \"Skipped\", \"Invalid\" und \"Errors\" während der "
 "Verarbeitung."
 
-#: ../../../../application/forms/Config/SettingsForm.php:64
+#: ../../../../application/forms/Config/SettingsForm.php:61
+msgid "Verbose logging"
+msgstr "Erweiterte Protokollierung"
+
+#: ../../../../application/forms/Config/SettingsForm.php:62
+msgid "Verbose logging."
+msgstr "Erweiterte Protokollierung."
+
+#: ../../../../application/forms/Config/SettingsForm.php:68
 msgid "PHP RRD Extension"
 msgstr "PHP RRD Extension"
 
-#: ../../../../application/forms/Config/SettingsForm.php:74
+#: ../../../../application/forms/Config/SettingsForm.php:78
 msgid "Path to rrdtool binary"
 msgstr "Pfad zum rrdtool Programm"
 
-#: ../../../../application/forms/Config/SettingsForm.php:75
+#: ../../../../application/forms/Config/SettingsForm.php:79
 msgid ""
 "The path where the rrdtool executable is located.\n"
 "(Only used if PHP extension is not available.)"
@@ -141,11 +149,11 @@ msgstr ""
 "Pfad unter dem das rrdtool Programm liegt.\n"
 "(Wird nur verwendet, wenn die PHP Erweiterung nicht verfügbar ist.)"
 
-#: ../../../../application/forms/Config/SettingsForm.php:79
+#: ../../../../application/forms/Config/SettingsForm.php:83
 msgid "Override max thumbnails"
 msgstr "Übersteuere maximale Miniaturansichten"
 
-#: ../../../../application/forms/Config/SettingsForm.php:80
+#: ../../../../application/forms/Config/SettingsForm.php:84
 msgid ""
 "Max number of graphs to generate thumbnails for.\n"
 "(\"check_command_1\":2,\"check_command_2\":3)"
@@ -162,7 +170,7 @@ msgstr "Statistik anzeigen"
 msgid "Stats"
 msgstr "Statistik"
 
-#: ../../../../library/Rrdtool/Rrdtool.php:31
+#: ../../../../library/Rrdtool/Rrdtool.php:35
 msgid "Graphs"
 msgstr "Diagramme"
 
@@ -174,10 +182,10 @@ msgstr "Host"
 msgid "Service"
 msgstr "Service"
 
-#: ../../../../application/views/scripts/graph/index.phtml:39
+#: ../../../../application/views/scripts/graph/index.phtml:42
 msgid "Submit"
 msgstr "Absenden"
 
-#: ../../../../application/views/scripts/graph/index.phtml:46
+#: ../../../../application/views/scripts/graph/index.phtml:50
 msgid "Datasource"
 msgstr "Datenquelle"

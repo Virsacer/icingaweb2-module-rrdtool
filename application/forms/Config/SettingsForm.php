@@ -57,6 +57,10 @@ class SettingsForm extends ConfigForm {
 			"label" => $this->translate("Enable logging"),
 			"description" => $this->translate("Log \"Skipped\", \"Invalid\" and \"Errors\" during processing."),
 		));
+		$this->addElement("checkbox", "rrdtool_verbose", array(
+			"label" => $this->translate("Verbose logging"),
+			"description" => $this->translate("Verbose logging."),
+		));
 		$this->addElement("note", "rrdtool_spacer_2", array(
 			"value" => "<br/>",
 		));

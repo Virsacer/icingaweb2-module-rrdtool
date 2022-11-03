@@ -8,6 +8,7 @@ use Icinga\Module\Rrdtool\Rrdtool;
 class ProcessCommand extends Command {
 
 	private $logs = FALSE;
+	private $verbose = FALSE;
 	private $stats = array("rows" => 0, "errors" => 0, "invalid" => 0, "skipped" => 0, "update" => 0, "create" => 0);
 
 	/**
@@ -20,12 +21,14 @@ class ProcessCommand extends Command {
 		$config = $this->Config();
 		if (!$config->get("rrdtool", "process", FALSE)) exit("Process not enabled in the config...");
 		if ($config->get("rrdtool", "logging", FALSE)) $this->logs = array();
+		if ($config->get("rrdtool", "verbose", FALSE)) $this->verbose = TRUE;
 		$path = rtrim($config->get("rrdtool", "perfdata", "/var/spool/icinga2/perfdata"), "/") . "/";
 		$files = scandir($path);
 		usort($files, function ($a, $b) {
 			return str_replace(array("host", "service"), "", $a) <=> str_replace(array("host", "service"), "", $b);
 		});
 
+		$this->log2("Start processing");
 		$runtime = hrtime(TRUE);
 		foreach ($files as $file) {
 			if ($file == "." || $file == "..") continue;
@@ -35,30 +38,36 @@ class ProcessCommand extends Command {
 				$this->process($item);
 			}
 			unlink($path . $file);
-			if (hrtime(TRUE) - $runtime >= 55000000000) break;
+			if (hrtime(TRUE) - $runtime >= 55000000000) {
+				$this->log2("Stopping due to timelimit");
+				break;
+			}
 		}
 		$runtime = (hrtime(TRUE) - $runtime) / 1000000000;
+
+		$stats = "runtime=" . number_format($runtime, 6, ".", "") . "s rows=" . $this->stats['rows'] . " errors=" . $this->stats['errors'] . " invalid=" . $this->stats['invalid'] . " skipped=" . $this->stats['skipped'] . " update=" . $this->stats['update'] . " create=" . $this->stats['create'];
+		$this->process(array("DATATYPE" => "RRDTOOLPERFDATA", "TIMET" => time(), "HOSTNAME" => ".pnp-internal", "SERVICEDESC" => "runtime", "RRDTOOLPERFDATA" => $stats, "SERVICECHECKCOMMAND" => "pnp-runtime"));
+		$this->log2("End processing (" . $stats . ")");
 
 		if ($this->logs !== FALSE && count($this->logs)) {
 			file_put_contents(rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/rrdtool.log", $this->logs, FILE_APPEND);
 		}
-
-		$this->process(array(
-			"DATATYPE" => "RRDTOOLPERFDATA",
-			"TIMET" => time(),
-			"HOSTNAME" => ".pnp-internal",
-			"SERVICEDESC" => "runtime",
-			"RRDTOOLPERFDATA" => "runtime=" . number_format($runtime, 6, ".", "") . "s rows=" . $this->stats['rows'] . " errors=" . $this->stats['errors'] . " invalid=" . $this->stats['invalid'] . " skipped=" . $this->stats['skipped'] . " update=" . $this->stats['update'] . " create=" . $this->stats['create'],
-			"SERVICECHECKCOMMAND" => "pnp-runtime",
-		));
 	}
 
-	protected function log($data, $message) {
+	protected function log($message, $data = NULL) {
 		if ($this->logs === FALSE) return;
-		$this->logs[] = date("Y-m-d H:i:s", $data['TIMET']) . "\t"
-			. ($data['SERVICEDESC'] ?? "_HOST_") . "(" . ($data['SERVICESTATE'] ?? "?") . ")\t"
-			. $data['HOSTNAME'] . "(" . ($data['HOSTSTATE'] ?? "?") . ")\t"
-			. $message . "\n";
+		$log = date("Y-m-d H:i:s") . "\t";
+		if (is_array($data)) {
+			$log .= "Timestamp: " . date("Y-m-d H:i:s", $data['TIMET']) . "\t";
+			$log .= "Service:" . ($data['SERVICEDESC'] ?? "Host Perfdata") . "(" . ($data['SERVICESTATE'] ?? "?") . ")\t";
+			$log .= "Host:" . $data['HOSTNAME'] . "(" . ($data['HOSTSTATE'] ?? "?") . ")\t";
+		}
+		$this->logs[] = $log . $message . "\n";
+	}
+
+	protected function log2($message, $data = NULL) {
+		if ($this->verbose === FALSE) return;
+		$this->log($message, $data);
 	}
 
 	protected function process($data) {
@@ -71,7 +80,7 @@ class ProcessCommand extends Command {
 		$perfdata = $data['PERFDATA'] = str_replace(",", ".", trim($data[$data['DATATYPE']]));
 		if (!$perfdata) {
 			$this->stats['skipped']++;
-			$this->log($data, "Skipped: No perfdata");
+			$this->log("Skipped: No perfdata", $data);
 			return;
 		}
 
@@ -84,7 +93,7 @@ class ProcessCommand extends Command {
 		$data['DATASOURCES'] = array_intersect_key($data['DATASOURCES'], array_unique(array_map("json_encode", $data['DATASOURCES'])));
 		if ($perfdata) {
 			$this->stats['invalid']++;
-			$this->log($data, "Invalid: " . $data['PERFDATA']);
+			$this->log("Invalid: " . $data['PERFDATA'], $data);
 			$error = "Malformed perfdata";
 		}
 
@@ -258,7 +267,7 @@ class ProcessCommand extends Command {
 					}
 					if ($return) {
 						$this->stats['errors']++;
-						$this->log($data, "Error: " . $rrd);
+						$this->log("Error: " . $rrd, $data);
 						if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd);
 						$returnmulti .= $rrd . ", ";
 					}
@@ -275,7 +284,7 @@ class ProcessCommand extends Command {
 				}
 				if ($return) {
 					$this->stats['errors']++;
-					$this->log($data, "Error: " . $rrd);
+					$this->log("Error: " . $rrd, $data);
 					if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd);
 					$returnmulti .= $rrd . ", ";
 				}
