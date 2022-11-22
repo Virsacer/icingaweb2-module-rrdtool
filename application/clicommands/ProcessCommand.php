@@ -77,6 +77,12 @@ class ProcessCommand extends Command {
 			$data = array_combine($data[1], $data[2]);
 		}
 
+		if (!isset($data['HOSTCHECKCOMMAND']) && !isset($data['SERVICECHECKCOMMAND'])) {
+			$this->stats['errors']++;
+			$this->log("Error: Perfdata incomplete", $data);
+			return;
+		}
+
 		$perfdata = $data['PERFDATA'] = str_replace(",", ".", trim($data[$data['DATATYPE']]));
 		if (!$perfdata) {
 			$this->stats['skipped']++;
@@ -200,8 +206,8 @@ class ProcessCommand extends Command {
 			$xml->writeElement("NAGIOS_HOSTPERFDATA", $data['HOSTPERFDATA']);
 		} else $xml->writeElement("NAGIOS_HOSTNAME", $data['HOSTNAME']);
 		if ($data['DATATYPE'] != "RRDTOOLPERFDATA") {
-			$xml->writeElement("NAGIOS_HOSTSTATE", $data['HOSTSTATE']);
-			$xml->writeElement("NAGIOS_HOSTSTATETYPE", $data['HOSTSTATETYPE']);
+			$xml->writeElement("NAGIOS_HOSTSTATE", $data['HOSTSTATE'] ?? "?");
+			$xml->writeElement("NAGIOS_HOSTSTATETYPE", $data['HOSTSTATETYPE'] ?? "?");
 		}
 		$xml->writeElement("NAGIOS_MULTI_PARENT", "");
 		$xml->writeElement("NAGIOS_PERFDATA", $data['PERFDATA']);
@@ -210,8 +216,8 @@ class ProcessCommand extends Command {
 			$xml->writeElement("NAGIOS_SERVICECHECKCOMMAND", $data['SERVICECHECKCOMMAND']);
 			$xml->writeElement("NAGIOS_SERVICEDESC", Rrdtool::cleanup($data['SERVICEDESC']));
 			$xml->writeElement("NAGIOS_SERVICEPERFDATA", $data['SERVICEPERFDATA']);
-			$xml->writeElement("NAGIOS_SERVICESTATE", $data['SERVICESTATE']);
-			$xml->writeElement("NAGIOS_SERVICESTATETYPE", $data['SERVICESTATETYPE']);
+			$xml->writeElement("NAGIOS_SERVICESTATE", $data['SERVICESTATE'] ?? "?");
+			$xml->writeElement("NAGIOS_SERVICESTATETYPE", $data['SERVICESTATETYPE'] ?? "?");
 		} else $xml->writeElement("NAGIOS_SERVICEDESC", $data['RRD']);
 		$xml->writeElement("NAGIOS_TIMET", $data['TIMET']);
 		$xml->writeElement("NAGIOS_XMLFILE", $path . "/" . $data['RRD'] . ".xml");
