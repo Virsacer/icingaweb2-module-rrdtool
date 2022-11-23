@@ -7,7 +7,7 @@ use Icinga\Cli\Command;
 class CheckCommand extends Command {
 
 	/**
-	 * Check for error messages in XML files
+	 * Check if XML files are beeing updated and if they contain error messages
 	 * USAGE
 	 *
 	 *   icingacli rrdtool check
@@ -15,7 +15,9 @@ class CheckCommand extends Command {
 	public function defaultAction() {
 		$out = "";
 		$status = 0;
+		$time = time();
 		$config = $this->Config();
+		$updated = array("HOST" => 0, "SERVICE" => 0, "RRDTOOL" => 0);
 		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/";
 
 		libxml_use_internal_errors(TRUE);
@@ -27,6 +29,10 @@ class CheckCommand extends Command {
 				libxml_clear_errors();
 				continue;
 			}
+
+			$type = $xml->NAGIOS_HOSTNAME == ".pnp-internal" ? "RRDTOOL" : str_replace("PERFDATA", "", $xml->NAGIOS_DATATYPE);
+			if (intval($xml->NAGIOS_TIMET) > $updated[$type]) $updated[$type] = intval($xml->NAGIOS_TIMET);
+
 			if ($xml->RRD->RC == 0) continue;
 
 			if ($status != 2) {
@@ -36,6 +42,21 @@ class CheckCommand extends Command {
 			}
 			$out .= $file . ": " . $xml->RRD->TXT . "\n";
 		}
+
+		if ($time - $updated['RRDTOOL'] > 300) {
+			$status = 2;
+			$out = "RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['RRDTOOL']) . "\n" . $out;
+		} else {
+			if ($time - $updated['SERVICE'] > 300) {
+				$status = 2;
+				$out = "Service RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['SERVICE']) . "\n" . $out;
+			}
+			if ($time - $updated['HOST'] > 300) {
+				$status = 2;
+				$out = "Host RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['HOST']) . "\n" . $out;
+			}
+		}
+
 		$out = preg_replace("/" . preg_quote($path, "/") . "/", "", rtrim($out));
 
 		if ($status == 2) {
