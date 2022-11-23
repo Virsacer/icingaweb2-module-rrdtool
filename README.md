@@ -26,6 +26,8 @@ Additional pnp4nagios-templates should be compatible and can be placed in the `t
 
 ## Configuration
 
+### Icinga2
+
 To enable the PerfdataWriter you need to run `icinga2 feature enable perfdata`.
 
 You can set the `rotation_interval` a little lower to have less perfdata waiting for the next processing run.
@@ -37,12 +39,22 @@ When you use checkcommands like `nrpe`, that actually call other commands, you c
     	service_format_template = "DATATYPE::SERVICEPERFDATA\tTIMET::$service.last_check$\tHOSTNAME::$host.name$\tSERVICEDESC::$service.name$\tSERVICEPERFDATA::$service.perfdata$\tSERVICECHECKCOMMAND::$service.check_command$$rrdtool$\tHOSTSTATE::$host.state$\tHOSTSTATETYPE::$host.state_type$\tSERVICESTATE::$service.state$\tSERVICESTATETYPE::$service.state_type$"
     }
 
-By default all perfdata of a service is written to a single RRD. They expect the number of datasources to stay the same.
+### Module
 
-On some checks it might be expected that this number changes over time. You can configure these checkcommands so that a different RRD will be used for each datasource.
+To be able to render the graphs, PHP and/or the webserver needs the permission to read the RRD and XML files. A check is included in the configuration page.
+
+After the module has been configured, you can set up a cronjob running the command `icingacli rrdtool process` every minute to generate/update the RRDs. The user needs the permission to write the RRD and XML files.
+
+By default all perfdata of a service is written to a single RRD. To be able to update the file, the number of datasources must not change.
+
+On some checks it might be expected that this number changes over time. You can configure these checkcommands to use a dedicated RRD for each datasource.
 
 Example: A check that lists all disks or partitions. When each is in a separate file they can be updated independently. So adding or removing disks/partition does not prevent the update.
 
-After configuring the module you can set up a cronjob running `icingacli rrdtool process` every minute to generate/update the RRDs.
+## CLI
 
-This module also has a CLI command to export graphs with various parameters. See `icingacli rrdtool graph --help` for details.
+This module also provides CLI commands. For a list of commands run `icingacli rrdtool`.
+
+You can export graphs with various parameters. See `icingacli rrdtool graph --help` for details.
+
+The values for `size` and `range` are also valid in URLs. Example: /rrdtool/graph?1500*200&host=.pnp-internal&range=2022
