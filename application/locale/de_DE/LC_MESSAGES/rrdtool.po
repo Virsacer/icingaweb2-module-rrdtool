@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: icingaweb2-module-rrdtool\n"
-"POT-Creation-Date: 2022-11-03 07:15+0100\n"
-"PO-Revision-Date: 2022-11-03 07:24+0100\n"
+"POT-Creation-Date: 2023-01-26 19:24+0100\n"
+"PO-Revision-Date: 2023-01-26 19:24+0100\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -189,3 +189,11 @@ msgstr "Absenden"
 #: ../../../../application/views/scripts/graph/index.phtml:50
 msgid "Datasource"
 msgstr "Datenquelle"
+
+#: ../../../../application/views/scripts/graph/index.phtml:56
+msgid "Large"
+msgstr "Groß"
+
+#: ../../../../application/views/scripts/graph/index.phtml:57
+msgid "Huge"
+msgstr "Riesig"
