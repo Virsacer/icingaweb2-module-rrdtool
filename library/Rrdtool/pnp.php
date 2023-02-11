@@ -2,7 +2,8 @@
 
 class pnp {
 
-	public static function adjust_unit($value, $base = 1000, $format = "%.3lf") {
+	public static function adjust_unit($value, $base = 1000, $format = "%.3lF") {
+		$format = str_replace("f", "F", $format);
 		preg_match("/^-?([0-9\.]+)\s*(\D?)(\D?)/", $value, $matches);
 		if ($matches[2] == "%") {
 			if ($matches[0][0] == "-") $matches[1] *= -1;
