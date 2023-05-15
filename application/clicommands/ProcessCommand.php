@@ -117,13 +117,17 @@ class ProcessCommand extends Command {
 		}
 
 		$multiple = json_decode("[" . $config->get("rrdtool", "multiple", "") . "]", TRUE);
-		if (!is_array($multiple)) exit("Config for multiple-mode is invalid...");
-		if (in_array($data['CHECKCOMMAND'], $multiple) || $data['HOSTNAME'] == ".pnp-internal") {
+		if (!is_array($multiple)) exit("Config 'Checks with multiple RRDs' is invalid...");
+		$data['RRD_STORAGE_TYPE'] = "SINGLE";
+		if ($data['HOSTNAME'] == ".pnp-internal") {
 			$data['RRD_STORAGE_TYPE'] = "MULTIPLE";
-		} else {
-			$data['RRD_STORAGE_TYPE'] = "SINGLE";
-			$data['NAGIOS_RRDFILE'] = $path . "/" . $data['RRD'] . ".rrd";
+		} elseif (file_exists($path . "/" . $data['RRD'] . ".xml")) {
+			$xml = file_get_contents($path . "/" . $data['RRD'] . ".xml");
+			if (strpos($xml, "<RRD_STORAGE_TYPE>MULTIPLE") !== FALSE) $data['RRD_STORAGE_TYPE'] = "MULTIPLE";
+		} elseif (in_array($data['CHECKCOMMAND'], $multiple)) {
+			$data['RRD_STORAGE_TYPE'] = "MULTIPLE";
 		}
+		if ($data['RRD_STORAGE_TYPE'] == "SINGLE") $data['NAGIOS_RRDFILE'] = $path . "/" . $data['RRD'] . ".rrd";
 
 		$xml = new \XMLWriter();
 		$xml->openUri($path . "/" . $data['RRD'] . ".xml");
