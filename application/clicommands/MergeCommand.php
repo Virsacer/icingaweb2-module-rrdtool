@@ -26,9 +26,11 @@ class MergeCommand extends Command {
 		$rrd = array();
 		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/";
 		$dest = $path . array_pop($params);
-		$last = end($params);
+		if (!is_writable($dest) && (file_exists($dest) || !is_writable(dirname($dest)))) $this->fail("Destination file is not writable");
 
+		$last = end($params);
 		foreach ($params as $file) {
+			if (!file_exists($path . $file)) $this->fail("Source file '" . $file . "' does not exist");
 			ob_start();
 			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " dump " . $path . $file, $return);
 			$lines = explode("\n", trim(ob_get_clean()));
@@ -48,7 +50,7 @@ class MergeCommand extends Command {
 			}
 		}
 
-		$datetime = date(".YmdHis");
+		$datetime = date(".Y-m-d_His");
 		if (file_exists($dest)) rename($dest, $dest . $datetime);
 		file_put_contents($dest . ".dump" . $datetime, $data);
 		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " restore " . $dest . ".dump" . $datetime . " " . $dest, $return);
