@@ -57,4 +57,4 @@ This module also provides CLI commands. For a list of commands run `icingacli rr
 
 You can export graphs with various parameters. See `icingacli rrdtool graph --help` for details.
 
-The values for `size` and `range` are also valid in URLs. Example: `/rrdtool/graph?1500*200&host=.pnp-internal&range=2022`
+The values for `size` and `range` are also valid in URLs. Example: `/rrdtool/graph?1500*200&host=.pnp-internal&range=2023`
