@@ -8,7 +8,7 @@ use Icinga\Application\Icinga;
 class Rrdtool {
 
 	static function cleanup($string) {
-		return str_replace(array(" ", "&", "/", ":", "\\"), "_", $string);
+		return str_replace(array(" ", "&", "/", ":", "\\", "*", "?", "\"", "<", ">", "|"), "_", $string);
 	}
 
 	public function graphs($host, $service) {

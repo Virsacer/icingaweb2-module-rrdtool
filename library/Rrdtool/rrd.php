@@ -100,7 +100,7 @@ class rrd {
 	}
 
 	public static function def($vname, $rrdfile, $ds, $cf = "AVERAGE") {
-		return "DEF:" . $vname . "=" . $rrdfile . ":" . $ds . ":" . $cf . " ";
+		return "DEF:" . $vname . "=\"" . $rrdfile . "\":" . $ds . ":" . $cf . " ";
 	}
 
 	public static function gprint($vname, $cf = "AVERAGE", $text = "%6.2lf %s") {

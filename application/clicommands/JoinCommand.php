@@ -36,7 +36,7 @@ class JoinCommand extends Command {
 		$xml->NAGIOS_RRDFILE = str_replace("_" . $xml->DATASOURCE[0]->NAME . ".rrd", ".rrd", $xml->DATASOURCE[0]->RRDFILE);
 		foreach ($xml->DATASOURCE as $datasource) {
 			ob_start();
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " dump " . $datasource->RRDFILE, $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " dump \"" . $datasource->RRDFILE . "\"", $return);
 
 			if ($ds == 1) {
 				$data = trim(ob_get_clean());
@@ -74,7 +74,7 @@ class JoinCommand extends Command {
 
 		if (file_exists($xml->NAGIOS_RRDFILE)) rename($xml->NAGIOS_RRDFILE, $xml->NAGIOS_RRDFILE . $datetime);
 		file_put_contents($xml->NAGIOS_RRDFILE . ".dump" . $datetime, preg_replace("/<replace_[^\/]+\/>/", "", $data));
-		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " restore " . $xml->NAGIOS_RRDFILE . ".dump" . $datetime . " " . $xml->NAGIOS_RRDFILE, $return);
+		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " restore \"" . $xml->NAGIOS_RRDFILE . ".dump" . $datetime . "\" " . $xml->NAGIOS_RRDFILE, $return);
 		unlink($xml->NAGIOS_RRDFILE . ".dump" . $datetime);
 
 		rename($path . $file, $path . $file . $datetime);

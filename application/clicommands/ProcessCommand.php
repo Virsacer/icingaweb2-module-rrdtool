@@ -272,7 +272,7 @@ class ProcessCommand extends Command {
 						$rrd = rrd_error();
 					} else {
 						ob_start();
-						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " create " . $file . " " . implode(" ", $create) . " 2>&1", $return);
+						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " create \"" . $file . "\" " . implode(" ", $create) . " 2>&1", $return);
 						$rrd = trim(ob_get_clean());
 					}
 					if ($return) {
@@ -289,7 +289,7 @@ class ProcessCommand extends Command {
 					$rrd = rrd_error();
 				} else {
 					ob_start();
-					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " update " . $file . " " . $data['TIMET'] . $update . " 2>&1", $return);
+					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " update \"" . $file . "\" " . $data['TIMET'] . $update . " 2>&1", $return);
 					$rrd = trim(ob_get_clean());
 				}
 				if ($return) {

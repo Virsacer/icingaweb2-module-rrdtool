@@ -32,7 +32,7 @@ class MergeCommand extends Command {
 		foreach ($params as $file) {
 			if (!file_exists($path . $file)) $this->fail("Source file '" . $file . "' does not exist");
 			ob_start();
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " dump " . $path . $file, $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " dump \"" . $path . $file . "\"", $return);
 			$lines = explode("\n", trim(ob_get_clean()));
 			foreach ($lines as $line) {
 				if (preg_match("/<cf>(.*)<\/cf>/", $line, $match)) {
@@ -53,7 +53,7 @@ class MergeCommand extends Command {
 		$datetime = date(".Y-m-d_His");
 		if (file_exists($dest)) rename($dest, $dest . $datetime);
 		file_put_contents($dest . ".dump" . $datetime, $data);
-		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " restore " . $dest . ".dump" . $datetime . " " . $dest, $return);
+		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " restore \"" . $dest . ".dump" . $datetime . "\" \"" . $dest . "\"", $return);
 		unlink($dest . ".dump" . $datetime);
 	}
 

@@ -39,11 +39,12 @@ class SplitCommand extends Command {
 				if ($i == $datasource->DS) continue;
 				$tune .= " DEL:" . $i;
 			}
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune " . $datasource->RRDFILE . $tune, $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune \"" . $datasource->RRDFILE . "\"" . $tune, $return);
 			if ($datasource->DS != 1) {
-				passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune " . $datasource->RRDFILE . " --data-source-rename " . $datasource->DS . ":1", $return);
+				passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune \"" . $datasource->RRDFILE . "\" --data-source-rename " . $datasource->DS . ":1", $return);
 				$datasource->DS = 1;
 			}
+			if ($return) unlink($datasource->RRDFILE);
 
 			$datasource->RRD_STORAGE_TYPE = "MULTIPLE";
 		}
