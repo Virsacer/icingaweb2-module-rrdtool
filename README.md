@@ -18,6 +18,8 @@ Icinga Web 2 and this Icinga Web 2 module are licensed under the terms of the GN
 
 This module requires Icinga Web 2 (>= 2.9.0) and the PHP RRD-extension (highly recommended) or the rrdtool-binaries.
 
+Fast storage: Writing a lot of RRD files also requres a lot of IO.
+
 ## Installation
 
 Extract this module to your Icinga Web 2 modules directory as `rrdtool` directory.
