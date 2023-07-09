@@ -91,7 +91,7 @@ class ProcessCommand extends Command {
 		}
 
 		$data['DATASOURCES'] = array();
-		while (preg_match("/^([^=]+)=([\d\.\-]+|U|)([\w\/%]*)(;@?([\d\.\-~:]*))?(;@?([\d\.\-~:]*))?(;([\d\.\-]*))?(;([\d\.\-]*))?\s*(.*?)$/", $perfdata, $datasource)) {
+		while (preg_match("/^([^=]+)=([\d\.\-eE]+|U|)([\w\/%]*)(;@?([\d\.\-~:]*))?(;@?([\d\.\-~:]*))?(;([\d\.\-]*))?(;([\d\.\-]*))?\s*(.*?)$/", $perfdata, $datasource)) {
 			unset($datasource[0]);
 			$perfdata = array_pop($datasource);
 			$data['DATASOURCES'][] = $datasource;
