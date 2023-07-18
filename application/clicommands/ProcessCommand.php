@@ -122,19 +122,14 @@ class ProcessCommand extends Command {
 		if ($data['HOSTNAME'] == ".pnp-internal") {
 			$data['RRD_STORAGE_TYPE'] = "MULTIPLE";
 		} elseif (file_exists($path . "/" . $data['RRD'] . ".xml")) {
-			$xml = file_get_contents($path . "/" . $data['RRD'] . ".xml");
-			if (strpos($xml, "<RRD_STORAGE_TYPE>MULTIPLE") !== FALSE) $data['RRD_STORAGE_TYPE'] = "MULTIPLE";
+			$old = file_get_contents($path . "/" . $data['RRD'] . ".xml");
+			if (strpos($old, "<RRD_STORAGE_TYPE>MULTIPLE") !== FALSE) $data['RRD_STORAGE_TYPE'] = "MULTIPLE";
 		} elseif (in_array($data['CHECKCOMMAND'], $multiple)) {
 			$data['RRD_STORAGE_TYPE'] = "MULTIPLE";
 		}
 		if ($data['RRD_STORAGE_TYPE'] == "SINGLE") $data['NAGIOS_RRDFILE'] = $path . "/" . $data['RRD'] . ".rrd";
 
-		$xml = new \XMLWriter();
-		$xml->openUri($path . "/" . $data['RRD'] . ".xml");
-		$xml->setIndent(TRUE);
-		$xml->setIndentString("\t");
-		$xml->startDocument("1.0", "UTF-8", "yes");
-		$xml->startElement("NAGIOS");
+		$xml = $this->xml();
 
 		$ds = 1;
 		foreach ($data['DATASOURCES'] as &$datasource) {
@@ -193,6 +188,12 @@ class ProcessCommand extends Command {
 			$rrd = $this->rrd($data);
 		} else $rrd = array(1, $error);
 
+		if ($rrd[0] && file_exists($path . "/" . $data['RRD'] . ".xml")) {
+			$xml = $this->xml();
+			if (!isset($old)) $old = file_get_contents($path . "/" . $data['RRD'] . ".xml");
+			$xml->writeRaw(preg_replace("/^.*<NAGIOS>(.*)\t<RRD>.*$/s", "$1", $old));
+		}
+
 		$xml->startElement("RRD");
 		$xml->writeElement("RC", $rrd[0]);
 		$xml->writeElement("TXT", $rrd[1]);
@@ -230,6 +231,7 @@ class ProcessCommand extends Command {
 		$xml->writeElement("VERSION", 4);
 		$xml->endElement();
 		$xml->endDocument();
+		file_put_contents($path . "/" . $data['RRD'] . ".xml", $xml->outputMemory());
 	}
 
 	protected function rrd($data) {
@@ -305,4 +307,13 @@ class ProcessCommand extends Command {
 		return array(0, "successful updated");
 	}
 
+	protected function xml() {
+		$xml = new \XMLWriter();
+		$xml->openMemory();
+		$xml->setIndent(TRUE);
+		$xml->setIndentString("\t");
+		$xml->startDocument("1.0", "UTF-8", "yes");
+		$xml->startElement("NAGIOS");
+		return $xml;
+	}
 }
