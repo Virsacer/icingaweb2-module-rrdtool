@@ -23,10 +23,11 @@ class ProcessCommand extends Command {
 		if ($config->get("rrdtool", "logging", FALSE)) $this->logs = array();
 		if ($config->get("rrdtool", "verbose", FALSE)) $this->verbose = TRUE;
 		$path = rtrim($config->get("rrdtool", "perfdata", "/var/spool/icinga2/perfdata"), "/") . "/";
-		$files = scandir($path);
-		usort($files, function ($a, $b) {
-			return str_replace(array("host", "service"), "", $a) <=> str_replace(array("host", "service"), "", $b);
-		});
+		$files = array();
+		foreach (scandir($path) as $file) {
+			$files[str_replace(array("host", "service"), "", $file) . $file] = $file;
+		}
+		ksort($files);
 
 		$this->log2("Start processing");
 		$runtime = hrtime(TRUE);
