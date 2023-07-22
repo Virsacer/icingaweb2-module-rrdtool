@@ -47,6 +47,8 @@ To be able to render the graphs, PHP and/or the webserver needs the permission t
 
 After the module has been configured, you can set up a cronjob running the command `icingacli rrdtool process` every minute to generate/update the RRDs. The user needs the permission to write the RRD and XML files.
 
+If you need to process lots of perfdata, you can use `icingacli rrdtool process bulk` for bulk mode. Make sure only one processing-instance is running at a time.
+
 By default all perfdata of a service is written to a single RRD. To be able to update the file, the number of datasources must not change.
 
 On some checks it might be expected that this number changes over time. You can configure these checkcommands to use a dedicated RRD for each datasource.

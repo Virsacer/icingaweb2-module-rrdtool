@@ -17,41 +17,53 @@ class ProcessCommand extends Command {
 	 * USAGE
 	 *
 	 *   icingacli rrdtool process
+	 *   icingacli rrdtool process bulk
 	 */
 	public function defaultAction() {
+		$this->main(FALSE);
+	}
+
+	public function bulkAction() {
+		$this->main(TRUE);
+	}
+
+	public function main($bulk) {
 		$config = $this->Config();
 		if (!$config->get("rrdtool", "process", FALSE)) exit("Process not enabled in the config...");
 		if ($config->get("rrdtool", "logging", FALSE)) $this->logfile = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/rrdtool.log";
 		if ($config->get("rrdtool", "verbose", FALSE)) $this->verbose = TRUE;
 		$path = rtrim($config->get("rrdtool", "perfdata", "/var/spool/icinga2/perfdata"), "/") . "/";
-		$files = array();
-		foreach (scandir($path) as $file) {
-			$files[str_replace(array("host", "service"), "", $file) . $file] = $file;
-		}
-		ksort($files);
-
-		$this->log2("Start processing");
-		$runtime = hrtime(TRUE);
-		foreach ($files as $file) {
-			if ($file == "." || $file == "..") continue;
-			$data = file($path . $file, FILE_IGNORE_NEW_LINES);
-			foreach ($data as $item) {
-				$this->stats['rows']++;
-				$this->process($item);
+		do {
+			$files = array();
+			if (!$bulk) $runtime = hrtime(TRUE);
+			foreach (scandir($path) as $file) {
+				$files[str_replace(array("host", "service"), "", $file) . $file] = $file;
 			}
-			unlink($path . $file);
-			if (hrtime(TRUE) - $runtime >= 55000000000) {
-				$this->log2("Stopping due to timelimit");
-				break;
+			ksort($files);
+
+			$this->log2("Start processing");
+			if ($bulk) $runtime = hrtime(TRUE);
+			foreach ($files as $file) {
+				if ($file == "." || $file == "..") continue;
+				$data = file($path . $file, FILE_IGNORE_NEW_LINES);
+				foreach ($data as $item) {
+					$this->stats['rows']++;
+					$this->process($item);
+				}
+				unlink($path . $file);
+				if ($bulk) {
+					if (hrtime(TRUE) - $runtime >= 60000000000) {
+						$this->statistics($runtime, TRUE);
+						$runtime = hrtime(TRUE);
+					}
+				} elseif (hrtime(TRUE) - $runtime >= 55000000000) {
+					$this->log2("Stopping due to timelimit");
+					break;
+				}
 			}
-		}
-		$runtime = (hrtime(TRUE) - $runtime) / 1000000000;
 
-		$stats = "runtime=" . number_format($runtime, 6, ".", "") . "s rows=" . $this->stats['rows'] . " errors=" . $this->stats['errors'] . " invalid=" . $this->stats['invalid'] . " skipped=" . $this->stats['skipped'] . " update=" . $this->stats['update'] . " create=" . $this->stats['create'];
-		$this->process(array("DATATYPE" => "RRDTOOLPERFDATA", "TIMET" => time(), "HOSTNAME" => ".pnp-internal", "SERVICEDESC" => "runtime", "RRDTOOLPERFDATA" => $stats, "SERVICECHECKCOMMAND" => "pnp-runtime"));
-		$this->log2("End processing (" . $stats . ")");
-
-		if ($this->logfile !== FALSE && count($this->logs)) file_put_contents($this->logfile, $this->logs, FILE_APPEND);
+			$this->statistics($runtime, $bulk, $bulk);
+		} while ($bulk);
 	}
 
 	protected function log($message, $data = NULL) {
@@ -305,6 +317,19 @@ class ProcessCommand extends Command {
 		}
 		if ($returnmulti != "") return array(1, rtrim($returnmulti, ", "));
 		return array(0, "successful updated");
+	}
+
+	protected function statistics($runtime, $reset = FALSE, $wait = FALSE) {
+		$runtime = (hrtime(TRUE) - $runtime) / 1000000000;
+		$stats = "runtime=" . number_format($runtime, 6, ".", "") . "s rows=" . $this->stats['rows'] . " errors=" . $this->stats['errors'] . " invalid=" . $this->stats['invalid'] . " skipped=" . $this->stats['skipped'] . " update=" . $this->stats['update'] . " create=" . $this->stats['create'];
+		if ($wait) sleep(ceil(60 - $runtime));
+		$this->process(array("DATATYPE" => "RRDTOOLPERFDATA", "TIMET" => time(), "HOSTNAME" => ".pnp-internal", "SERVICEDESC" => "runtime", "RRDTOOLPERFDATA" => $stats, "SERVICECHECKCOMMAND" => "pnp-runtime"));
+		$this->log2(($reset && !$wait ? "Writing statistics" : "End processing") . " (" . $stats . ")");
+		if ($this->logfile !== FALSE && count($this->logs)) file_put_contents($this->logfile, $this->logs, FILE_APPEND);
+		if ($reset) {
+			$this->logs = array();
+			$this->stats = array("rows" => 0, "errors" => 0, "invalid" => 0, "skipped" => 0, "update" => 0, "create" => 0);
+		}
 	}
 
 	protected function xml() {
