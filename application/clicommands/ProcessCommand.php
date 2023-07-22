@@ -7,7 +7,8 @@ use Icinga\Module\Rrdtool\Rrdtool;
 
 class ProcessCommand extends Command {
 
-	private $logs = FALSE;
+	private $logs = array();
+	private $logfile = FALSE;
 	private $verbose = FALSE;
 	private $stats = array("rows" => 0, "errors" => 0, "invalid" => 0, "skipped" => 0, "update" => 0, "create" => 0);
 
@@ -20,7 +21,7 @@ class ProcessCommand extends Command {
 	public function defaultAction() {
 		$config = $this->Config();
 		if (!$config->get("rrdtool", "process", FALSE)) exit("Process not enabled in the config...");
-		if ($config->get("rrdtool", "logging", FALSE)) $this->logs = array();
+		if ($config->get("rrdtool", "logging", FALSE)) $this->logfile = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/rrdtool.log";
 		if ($config->get("rrdtool", "verbose", FALSE)) $this->verbose = TRUE;
 		$path = rtrim($config->get("rrdtool", "perfdata", "/var/spool/icinga2/perfdata"), "/") . "/";
 		$files = array();
@@ -50,18 +51,16 @@ class ProcessCommand extends Command {
 		$this->process(array("DATATYPE" => "RRDTOOLPERFDATA", "TIMET" => time(), "HOSTNAME" => ".pnp-internal", "SERVICEDESC" => "runtime", "RRDTOOLPERFDATA" => $stats, "SERVICECHECKCOMMAND" => "pnp-runtime"));
 		$this->log2("End processing (" . $stats . ")");
 
-		if ($this->logs !== FALSE && count($this->logs)) {
-			file_put_contents(rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/rrdtool.log", $this->logs, FILE_APPEND);
-		}
+		if ($this->logfile !== FALSE && count($this->logs)) file_put_contents($this->logfile, $this->logs, FILE_APPEND);
 	}
 
 	protected function log($message, $data = NULL) {
-		if ($this->logs === FALSE) return;
+		if ($this->logfile === FALSE) return;
 		$log = date("Y-m-d H:i:s") . "\t";
 		if (is_array($data)) {
-			$log .= "Timestamp: " . date("Y-m-d H:i:s", $data['TIMET']) . "\t";
+			$log .= "Timestamp: " . date("Y-m-d H:i:s", $data['TIMET'] ?? 0) . "\t";
 			$log .= "Service:" . ($data['SERVICEDESC'] ?? "Host Perfdata") . "(" . ($data['SERVICESTATE'] ?? "?") . ")\t";
-			$log .= "Host:" . $data['HOSTNAME'] . "(" . ($data['HOSTSTATE'] ?? "?") . ")\t";
+			$log .= "Host:" . ($data['HOSTNAME'] ?? "???") . "(" . ($data['HOSTSTATE'] ?? "?") . ")\t";
 		}
 		$this->logs[] = $log . $message . "\n";
 	}
