@@ -37,6 +37,7 @@ class ProcessCommand extends Command {
 			$files = array();
 			if (!$bulk) $runtime = hrtime(TRUE);
 			foreach (scandir($path) as $file) {
+				if ($file == "." || $file == "..") continue;
 				$files[str_replace(array("host", "service"), "", $file) . $file] = $file;
 			}
 			ksort($files);
@@ -44,7 +45,6 @@ class ProcessCommand extends Command {
 			$this->log2("Start processing");
 			if ($bulk) $runtime = hrtime(TRUE);
 			foreach ($files as $file) {
-				if ($file == "." || $file == "..") continue;
 				$data = file($path . $file, FILE_IGNORE_NEW_LINES);
 				foreach ($data as $item) {
 					$this->stats['rows']++;
