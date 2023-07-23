@@ -55,7 +55,11 @@ ob_end_clean();
 
 if ($hostname == ".pnp-internal") {
 	$opt[1] = str_replace("process_perfdata.pl", "RRDTOOL", $opt[1]);
-	$def[1] = str_replace("%6.2l", "%6.3l", $def[1]);
+	$def[1] = str_replace(rrd::gprint("var1", array("MAX", "AVERAGE"), "%6.2lf$UNIT[1]"), rrd::gprint("var1", array("AVERAGE", "MIN", "MAX"), "%6.3lf$UNIT[1]"), $def[1]);
+	$def[1] = str_replace(rrd::gprint("t_var1", array("MAX", "AVERAGE"), "%6.2lf$UNIT[1]"), rrd::gprint("t_var1", array("AVERAGE", "MIN", "MAX"), "%6.3lf$UNIT[1]"), $def[1]);
+	for($i=2; $i <= count($DS); $i++) {
+		$def[2] = str_replace(rrd::gprint("var$i", array("MAX", "AVERAGE"), "%4.0lf$UNIT[$i]"), rrd::gprint("var$i", array("AVERAGE", "MIN", "MAX"), "%4.0lf$UNIT[$i]"), $def[2]);
+	}
 }
 
 foreach ($ds_name as $key => $val) $ds_name[$key] = stripslashes($val);
