@@ -1,5 +1,5 @@
 Name: rrdtool
-Version: 1.4.1
+Version: 1.5.0
 Depends: monitoring (>=2.9.0), icingadb (>=1.0)
 Description: Icinga Web 2 rrdtool module
  This module integrates rrd graphs in your Icinga Web 2 frontend.
