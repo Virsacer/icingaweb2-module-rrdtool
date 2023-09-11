@@ -7,6 +7,8 @@ use Icinga\Application\Icinga;
 
 class Rrdtool {
 
+	protected $DS, $MACRO;
+
 	static function cleanup($string) {
 		return str_replace(array(" ", "&", "/", ":", "\\", "*", "?", "\"", "<", ">", "|"), "_", $string);
 	}

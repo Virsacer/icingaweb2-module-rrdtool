@@ -7,6 +7,8 @@ use Icinga\Module\Rrdtool\Rrdtool;
 
 class GraphCommand extends Command {
 
+	protected $DS, $MACRO;
+
 	/**
 	 * Generate a graph
 	 * USAGE

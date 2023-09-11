@@ -10,6 +10,8 @@ use Icinga\Web\StyleSheet;
 
 class GraphController extends Controller {
 
+	protected $DS, $MACRO;
+
 	public function init() {
 		if (isset($_GET['image']) || isset($_GET['thumb']) || isset($_GET['large']) || isset($_GET['huge']) || preg_match("/^([0-9]+)([xX\*])([0-9]+)(&.*)?$/", $_SERVER['QUERY_STRING'])) {
 			$config = $this->Config();
