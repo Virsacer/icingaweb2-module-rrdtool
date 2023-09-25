@@ -51,7 +51,7 @@ If you need to process lots of perfdata, you can use `icingacli rrdtool process 
 
 By default all perfdata of a service is written to a single RRD. To be able to update the file, the number of datasources must not change.
 
-On some checks it might be expected that this number changes over time. You can configure these checkcommands to use a dedicated RRD for each datasource.
+On some checks it might be expected that this number changes over time. You can configure these checkcommands to use a dedicated RRD for each datasource. This setting only effects new databases. Existing ones can be converted with `icingacli rrdtool split Host/Service.xml` or `icingacli rrdtool join Host/Service.xml`
 
 Example: A check that lists all disks or partitions. When each is in a separate file they can be updated independently. So adding or removing disks/partition does not prevent the update.
 
