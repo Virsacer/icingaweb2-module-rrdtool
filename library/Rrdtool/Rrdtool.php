@@ -22,7 +22,7 @@ class Rrdtool {
 			if ($service != "_HOST_") $params['service'] = $service;
 
 			$thumbnails = 1;
-			$overrides = json_decode("{" . $config->get("rrdtool", "thumbnails", '"nrpe_check_disk":3') . "}", TRUE);
+			$overrides = json_decode("{" . $config->get("rrdtool", "thumbnails", '"check_disk":3') . "}", TRUE);
 			if (is_array($overrides)) {
 				$xml = simplexml_load_file($xml);
 				if (array_key_exists((string) $xml->NAGIOS_CHECK_COMMAND, $overrides)) {

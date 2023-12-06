@@ -82,7 +82,7 @@ class SettingsForm extends ConfigForm {
 		$this->addElement("text", "rrdtool_thumbnails", array(
 			"label" => $this->translate("Override max thumbnails"),
 			"description" => $this->translate("Max number of graphs to generate thumbnails for.\n(\"check_command_1\":2,\"check_command_2\":3)"),
-			"placeholder" => "\"nrpe_check_disk\":3",
+			"placeholder" => "\"check_disk\":3",
 			"validators" => array(
 				new Zend_Validate_Regex("/^\"[^\"]+\":[1-9]*[0-9](, ?\"[^\"]+\":[1-9]*[0-9])*$/"),
 			),
