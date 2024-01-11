@@ -128,6 +128,8 @@ class GraphController extends Controller {
 			$params['service'] = $service;
 			$this->view->title = $service . " " . $this->translate("on") . " " . $host;
 		} else $this->view->title = $host;
+		$size = $this->params->get("size", "");
+		if ($size) $params['size'] = $size;
 		$params['range'] = $range['range'];
 		$this->view->icingadb = $this->hasPermission("module/icingadb") && Icinga::app()->getModuleManager()->hasLoaded("icingadb");
 		$this->view->start = $range['start'];
@@ -159,6 +161,8 @@ class GraphController extends Controller {
 			$tabs->add("Module: rrdtool", array("label" => $this->translate("Module: rrdtool"), "url" => "config/module?name=rrdtool"));
 			$tabs->add("settings", array("title" => $this->translate("Configure rrdtool"), "label" => $this->translate("Settings"), "url" => "rrdtool/config/settings"));
 		}
+		$size = $this->params->get("size", "");
+		if ($size) $params .= "&size=" . $size;
 		$datasource = $this->params->get("datasource", "");
 		if ($datasource) $datasource = "&datasource=" . $datasource;
 		$tabs->add("year", array("title" => "1 " . $this->translate("Year"), "url" => $params . "&range=year" . $datasource));
