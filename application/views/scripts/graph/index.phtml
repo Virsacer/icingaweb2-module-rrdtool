@@ -34,7 +34,6 @@ if (!$this->compact) {
 		}
 	}
 	?>
-	<br/>
 	<form id="customRange" class="icinga-form icinga-controls">
 		<div class="control-group">
 			<input type="datetime-local" id="start" data-use-datetime-picker="" step="1" value="<?php echo date("Y-m-d\TH:i:s", $start); ?>"/>
@@ -42,7 +41,11 @@ if (!$this->compact) {
 			<button type="submit"><?php echo $this->translate("Submit"); ?></button>
 		</div>
 	</form>
-	<br/>
+	<i aria-hidden="true" class="icon-search"></i>
+	<a href="<?php echo $this->href("rrdtool/graph", $params); ?>"><?php echo $this->translate("Normal"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=large"; ?>"><?php echo $this->translate("Large"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=huge"; ?>"><?php echo $this->translate("Huge"); ?></a>
+	<br/><br/>
 	<?php
 	foreach ($defs as $id => $def) {
 		?>
@@ -53,6 +56,8 @@ if (!$this->compact) {
 				<img src="<?php echo $this->href("rrdtool/graph?" . $size, $params) . "&amp;datasource=" . $id; ?>" alt=""/>
 			</div>
 			<div class="graph-links">
+				<i aria-hidden="true" class="icon-download"></i>
+				<a href="<?php echo $this->href("rrdtool/graph?image", $params) . "&amp;datasource=" . $id; ?>" target="_blank"><?php echo $this->translate("Normal"); ?></a>
 				<a href="<?php echo $this->href("rrdtool/graph?large", $params) . "&amp;datasource=" . $id; ?>" target="_blank"><?php echo $this->translate("Large"); ?></a>
 				<a href="<?php echo $this->href("rrdtool/graph?huge", $params) . "&amp;datasource=" . $id; ?>" target="_blank"><?php echo $this->translate("Huge"); ?></a>
 			</div>
