@@ -128,10 +128,9 @@ class GraphController extends Controller {
 			$params['service'] = $service;
 			$this->view->title = $service . " " . $this->translate("on") . " " . $host;
 		} else $this->view->title = $host;
-		$size = $this->params->get("size", "");
-		if ($size) $params['size'] = $size;
 		$params['range'] = $range['range'];
 		$this->view->icingadb = $this->hasPermission("module/icingadb") && Icinga::app()->getModuleManager()->hasLoaded("icingadb");
+		$this->view->size = $this->params->get("size", "image");
 		$this->view->start = $range['start'];
 		$this->view->end = $range['end'];
 		$this->view->params = $params;
@@ -162,14 +161,14 @@ class GraphController extends Controller {
 			$tabs->add("settings", array("title" => $this->translate("Configure rrdtool"), "label" => $this->translate("Settings"), "url" => "rrdtool/config/settings"));
 		}
 		$size = $this->params->get("size", "");
-		if ($size) $params .= "&size=" . $size;
+		if ($size) $size = "&size=" . $size;
 		$datasource = $this->params->get("datasource", "");
 		if ($datasource) $datasource = "&datasource=" . $datasource;
-		$tabs->add("year", array("title" => "1 " . $this->translate("Year"), "url" => $params . "&range=year" . $datasource));
-		$tabs->add("month", array("title" => "1 " . $this->translate("Month"), "url" => $params . "&range=month" . $datasource));
-		$tabs->add("week", array("title" => "1 " . $this->translate("Week"), "url" => $params . "&range=week" . $datasource));
-		$tabs->add("day", array("title" => "1 " . $this->translate("Day"), "url" => $params . "&range=day" . $datasource));
-		$tabs->add("hours", array("title" => "4 " . $this->translate("Hours"), "url" => $params . "&range=hours" . $datasource));
+		$tabs->add("year", array("title" => "1 " . $this->translate("Year"), "url" => $params . "&range=year" . $size . $datasource));
+		$tabs->add("month", array("title" => "1 " . $this->translate("Month"), "url" => $params . "&range=month" . $size . $datasource));
+		$tabs->add("week", array("title" => "1 " . $this->translate("Week"), "url" => $params . "&range=week" . $size . $datasource));
+		$tabs->add("day", array("title" => "1 " . $this->translate("Day"), "url" => $params . "&range=day" . $size . $datasource));
+		$tabs->add("hours", array("title" => "4 " . $this->translate("Hours"), "url" => $params . "&range=hours" . $size . $datasource));
 		$range = Rrdtool::parseRange($this->params->get("range", ""));
 		if ($range['tab'] == "custom") $tabs->add("custom", array("title" => $this->translate("Custom"), "url" => $params . "&range=" . $range['range']));
 		return $tabs;
