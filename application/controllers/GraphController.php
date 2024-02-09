@@ -32,8 +32,12 @@ class GraphController extends Controller {
 					if ($matches[2] == "X") $params .= "--only-graph ";
 					if ($matches[2] == "*") $params .= "--full-size-mode ";
 				}
-				$range = Rrdtool::parseRange($this->params->get("range", ""));
-				$params .= "--start=" . $range['start'] . " --end=" . $range['end'] . " ";
+				if (isset($_GET['meta'])) {
+					$params .= "--start=now --end=now ";
+				} else {
+					$range = Rrdtool::parseRange($this->params->get("range", ""));
+					$params .= "--start=" . $range['start'] . " --end=" . $range['end'] . " ";
+				}
 
 				require($this->Module()->getBaseDir() . "/library/Rrdtool/apply_template.php");
 
@@ -82,12 +86,20 @@ class GraphController extends Controller {
 						try {
 							$rrd = new \RRDGraph("-");
 							$rrd->setOptions($params);
-							$data = $rrd->saveVerbose()['image'];
+							$data = $rrd->saveVerbose();
+							if (isset($_GET['meta'])) {
+								exit($data['graph_left'] . "x" . $data['graph_top'] . ":" . $data['graph_width'] . "x" . $data['graph_height']);
+							}
+							$data = $data['image'];
 						} catch (\Exception $return) {
 							$data = $return->getMessage();
 						}
 					} else {
 						ob_start();
+						if (isset($_GET['meta'])) {
+							passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graphv - " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":") . " 2>&1", $return);
+							exit(preg_replace("/.*graph_left = (\d+).*graph_top = (\d+).*graph_width = (\d+).*graph_height = (\d+).*/s", "$1x$2:$3x$4", ob_get_clean()));
+						}
 						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":") . " 2>&1", $return);
 						$data = ob_get_clean();
 					}

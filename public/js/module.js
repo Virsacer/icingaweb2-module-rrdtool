@@ -11,8 +11,20 @@
 		},
 		onRendered: function(event) {
 			$("div.graph").each(function() {
-				$(this).css("cursor", "ew-resize");
-				$(this).imgAreaSelect({autoHide: true, fadeSpeed: 500, handles: false, minHeight: 102, onSelectEnd: Rrdtool.zoom, parent: ".content"});
+				var current = $(this);
+				$.ajax({url: current.next().attr("src").replace("range=" + current.attr("data-range"), "meta"), cache: true, success: function(data) {
+						data = data.split(/[x:]/);
+						if (data.length === 4) {
+							data[3] = parseInt(data[3]) + 2;
+							current.css("left", data[0]);
+							current.css("top", data[1]);
+							current.css("width", data[2]);
+							current.css("height", data[3]);
+							current.css("cursor", "ew-resize");
+							current.imgAreaSelect({autoHide: true, fadeSpeed: 500, handles: false, minHeight: data[3], onSelectEnd: Rrdtool.zoom, parent: ".content"});
+						}
+					}
+				});
 			});
 		},
 		onSubmit: function(event) {
