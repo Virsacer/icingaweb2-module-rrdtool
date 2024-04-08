@@ -42,24 +42,24 @@ if (!$this->compact) {
 		</div>
 	</form>
 	<i aria-hidden="true" class="icon-search"></i>
-	<a href="<?php echo $this->href("rrdtool/graph", $params) . $datasource; ?>"><?php echo $this->translate("Normal"); ?></a>
-	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=large" . $datasource; ?>"><?php echo $this->translate("Large"); ?></a>
-	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=huge" . $datasource; ?>"><?php echo $this->translate("Huge"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . $datasource . "&amp;range=" . $range; ?>"><?php echo $this->translate("Normal"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=large" . $datasource . "&amp;range=" . $range; ?>"><?php echo $this->translate("Large"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=huge" . $datasource . "&amp;range=" . $range; ?>"><?php echo $this->translate("Huge"); ?></a>
 	<br/><br/>
 	<?php
 	foreach ($defs as $id => $def) {
 		?>
 		<fieldset>
-			<legend><a href="<?php echo $this->href("rrdtool/graph", $params) . ($size ? "&amp;size=" . $size : "") . "&amp;datasource=" . $id; ?>"><?php echo $this->translate("Datasource") . ": " . (!empty($ds_name[$id]) ? $ds_name[$id] : $id); ?></a></legend>
+			<legend><a href="<?php echo $this->href("rrdtool/graph", $params) . ($size ? "&amp;size=" . $size : "") . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>"><?php echo $this->translate("Datasource") . ": " . (!empty($ds_name[$id]) ? $ds_name[$id] : $id); ?></a></legend>
 			<div class="graph-container">
-				<div class="graph" data-range="<?php echo $params['range']; ?>" data-start="<?php echo $start; ?>" data-end="<?php echo $end; ?>"></div>
-				<img src="<?php echo $this->href("rrdtool/graph?" . $size, $params) . "&amp;datasource=" . $id; ?>" alt=""/>
+				<div class="graph" data-range="<?php echo $range; ?>" data-start="<?php echo $start; ?>" data-end="<?php echo $end; ?>"></div>
+				<img src="<?php echo $this->href("rrdtool/graph?" . $size, $params) . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>" alt=""/>
 			</div>
 			<div class="graph-links">
 				<i aria-hidden="true" class="icon-download"></i>
-				<a href="<?php echo $this->href("rrdtool/graph?image", $params) . "&amp;datasource=" . $id; ?>" target="_blank"><?php echo $this->translate("Normal"); ?></a>
-				<a href="<?php echo $this->href("rrdtool/graph?large", $params) . "&amp;datasource=" . $id; ?>" target="_blank"><?php echo $this->translate("Large"); ?></a>
-				<a href="<?php echo $this->href("rrdtool/graph?huge", $params) . "&amp;datasource=" . $id; ?>" target="_blank"><?php echo $this->translate("Huge"); ?></a>
+				<a href="<?php echo $this->href("rrdtool/graph?image", $params) . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>" target="_blank"><?php echo $this->translate("Normal"); ?></a>
+				<a href="<?php echo $this->href("rrdtool/graph?large", $params) . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>" target="_blank"><?php echo $this->translate("Large"); ?></a>
+				<a href="<?php echo $this->href("rrdtool/graph?huge", $params) . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>" target="_blank"><?php echo $this->translate("Huge"); ?></a>
 			</div>
 		</fieldset>
 		<br/>
