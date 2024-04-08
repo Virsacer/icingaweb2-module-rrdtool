@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: icingaweb2-module-rrdtool\n"
-"POT-Creation-Date: 2024-02-09 23:37+0100\n"
-"PO-Revision-Date: 2024-02-09 23:37+0100\n"
+"POT-Creation-Date: 2024-04-08 17:52+0200\n"
+"PO-Revision-Date: 2024-04-08 17:52+0200\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -19,46 +19,46 @@ msgstr ""
 msgid "on"
 msgstr "auf"
 
-#: ../../../../application/controllers/GraphController.php:172
+#: ../../../../application/controllers/GraphController.php:176
 msgid "Module: rrdtool"
 msgstr "Module: rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:173
+#: ../../../../application/controllers/GraphController.php:177
 #: ../../../../configuration.php:4
 msgid "Configure rrdtool"
 msgstr "Konfiguriere rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:173
+#: ../../../../application/controllers/GraphController.php:177
 #: ../../../../configuration.php:5
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: ../../../../application/controllers/GraphController.php:179
+#: ../../../../application/controllers/GraphController.php:183
 #: ../../../../library/Rrdtool/Rrdtool.php:44
 msgid "Year"
 msgstr "Jahr"
 
-#: ../../../../application/controllers/GraphController.php:180
+#: ../../../../application/controllers/GraphController.php:184
 #: ../../../../library/Rrdtool/Rrdtool.php:45
 msgid "Month"
 msgstr "Monat"
 
-#: ../../../../application/controllers/GraphController.php:181
+#: ../../../../application/controllers/GraphController.php:185
 #: ../../../../library/Rrdtool/Rrdtool.php:46
 msgid "Week"
 msgstr "Woche"
 
-#: ../../../../application/controllers/GraphController.php:182
+#: ../../../../application/controllers/GraphController.php:186
 #: ../../../../library/Rrdtool/Rrdtool.php:47
 msgid "Day"
 msgstr "Tag"
 
-#: ../../../../application/controllers/GraphController.php:183
+#: ../../../../application/controllers/GraphController.php:187
 #: ../../../../library/Rrdtool/Rrdtool.php:48
 msgid "Hours"
 msgstr "Stunden"
 
-#: ../../../../application/controllers/GraphController.php:185
+#: ../../../../application/controllers/GraphController.php:189
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
@@ -208,3 +208,7 @@ msgstr "Riesig"
 #: ../../../../application/views/scripts/graph/index.phtml:53
 msgid "Datasource"
 msgstr "Datenquelle"
+
+#: ../../../../application/views/scripts/graph/index.phtml:70
+msgid "Show all"
+msgstr "Alle anzeigen"

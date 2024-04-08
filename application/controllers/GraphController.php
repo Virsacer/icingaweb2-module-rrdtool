@@ -156,10 +156,14 @@ class GraphController extends Controller {
 		$datasource = $this->params->get("datasource", "");
 		if ($datasource != "") {
 			if (!array_key_exists($datasource, $opt)) $datasource = array_search($datasource, $ds_name);
-			if ($datasource !== FALSE) $def = array($datasource => $def[$datasource]);
+			if ($datasource !== FALSE) {
+				$def = array($datasource => $def[$datasource]);
+				$datasource = "&amp;datasource=" . $datasource;
+			}
 		}
 		$this->view->defs = $def;
 		$this->view->ds_name = $ds_name;
+		$this->view->datasource = $datasource;
 	}
 
 	public function getTabs() {
@@ -185,5 +189,4 @@ class GraphController extends Controller {
 		if ($range['tab'] == "custom") $tabs->add("custom", array("title" => $this->translate("Custom"), "url" => $params . "&range=" . $range['range']));
 		return $tabs;
 	}
-
 }

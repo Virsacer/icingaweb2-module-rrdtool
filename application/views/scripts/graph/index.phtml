@@ -42,9 +42,9 @@ if (!$this->compact) {
 		</div>
 	</form>
 	<i aria-hidden="true" class="icon-search"></i>
-	<a href="<?php echo $this->href("rrdtool/graph", $params); ?>"><?php echo $this->translate("Normal"); ?></a>
-	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=large"; ?>"><?php echo $this->translate("Large"); ?></a>
-	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=huge"; ?>"><?php echo $this->translate("Huge"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . $datasource; ?>"><?php echo $this->translate("Normal"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=large" . $datasource; ?>"><?php echo $this->translate("Large"); ?></a>
+	<a href="<?php echo $this->href("rrdtool/graph", $params) . "&amp;size=huge" . $datasource; ?>"><?php echo $this->translate("Huge"); ?></a>
 	<br/><br/>
 	<?php
 	foreach ($defs as $id => $def) {
@@ -63,6 +63,11 @@ if (!$this->compact) {
 			</div>
 		</fieldset>
 		<br/>
+		<?php
+	}
+	if ($datasource) {
+		?>
+		<a href="<?php echo $this->href("rrdtool/graph", $params) . ($size ? "&amp;size=" . $size : "") . "&amp;range=" . $range; ?>"><?php echo $this->translate("Show all"); ?></a>
 		<?php
 	}
 	?>
