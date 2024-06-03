@@ -179,7 +179,7 @@ class GraphController extends Controller {
 		$size = $this->params->get("size", "");
 		if ($size) $size = "&size=" . $size;
 		$datasource = $this->params->get("datasource", "");
-		if ($datasource) $datasource = "&datasource=" . $datasource;
+		if ($datasource != "") $datasource = "&datasource=" . $datasource;
 		$tabs->add("year", array("title" => "1 " . $this->translate("Year"), "url" => $params . $size . $datasource . "&range=year"));
 		$tabs->add("month", array("title" => "1 " . $this->translate("Month"), "url" => $params . $size . $datasource . "&range=month"));
 		$tabs->add("week", array("title" => "1 " . $this->translate("Week"), "url" => $params . $size . $datasource . "&range=week"));
