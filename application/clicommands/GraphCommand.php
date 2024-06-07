@@ -31,6 +31,7 @@ class GraphCommand extends Command {
 	 *   		[Width]X[Height]  (Graph without legend)
 	 *   		[Width]*[Height]  (Size of whole image)
 	 *   --dark	Use dark theme
+	 *   --format	PNG|SVG|EPS|PDF
 	 */
 	public function defaultAction() {
 		$file = $this->params->shiftRequired("file");
@@ -40,6 +41,7 @@ class GraphCommand extends Command {
 		$datasource = $this->params->shift("datasource", "");
 		$size = $this->params->shift("size", "image");
 		$dark = $this->params->shift("dark", "");
+		$format = $this->params->shift("format", "");
 		if ($this->hasRemainingParams()) return $this->showUsage("default");
 
 		$config = $this->Config();
@@ -75,6 +77,7 @@ class GraphCommand extends Command {
 		}
 		$range = Rrdtool::parseRange($range);
 		$params .= "--start=" . $range['start'] . " --end=" . $range['end'] . " ";
+		if (preg_match("/^(PNG|SVG|EPS|PDF)$/i", $format)) $params .= "--imgformat=" . strtoupper($format) . " ";
 
 		require(SYSPATH . "/library/Rrdtool/apply_template.php");
 
@@ -102,5 +105,4 @@ class GraphCommand extends Command {
 			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph \"" . $file . "\" " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":"), $return);
 		}
 	}
-
 }
