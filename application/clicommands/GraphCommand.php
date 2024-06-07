@@ -47,6 +47,12 @@ class GraphCommand extends Command {
 		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
 		if (!file_exists($xml)) $this->fail("XML missing");
 
+		if ($range == "datasources") {
+			require(SYSPATH . "/library/Rrdtool/apply_template.php");
+			foreach ($ds_name as $datasource) echo $datasource . "\n";
+			exit();
+		}
+
 		switch ($size) {
 			case "image":
 				$params = "--width=500 --height=100 ";
