@@ -16,10 +16,10 @@ foreach ($xml->DATASOURCE as $data) {
 		$key = strtoupper($key);
 		$$key[$i] = $val;
 	}
-	if (count($xml->DATASOURCE) == 1) $ds_name[$i] = $data->LABEL;
 	$i++;
 }
 
+if (count($DS) == 1) $ds_name = array($LABEL[1], $LABEL[1]);
 $hostname = $xml->NAGIOS_DISP_HOSTNAME;
 $servicedesc = $xml->NAGIOS_DISP_SERVICEDESC;
 $this->MACRO = array(
@@ -31,7 +31,7 @@ $this->MACRO = array(
 require_once(SYSPATH . "/library/Rrdtool/rrd.php");
 require_once(SYSPATH . "/library/Rrdtool/pnp.php");
 
-$template = str_replace("check_check_", "check_", "check_" . $data->TEMPLATE);
+$template = str_replace("check_check_", "check_", "check_" . $TEMPLATE[1]);
 if ($host == ".pnp-internal") $template = "pnp-runtime";
 
 ob_start();
@@ -62,4 +62,8 @@ if ($hostname == ".pnp-internal") {
 	}
 }
 
-foreach ($ds_name as $key => $val) $ds_name[$key] = stripslashes($val);
+foreach ($ds_name as $key => $val) {
+	if (array_key_exists($key, $opt)) {
+		$ds_name[$key] = stripslashes($val);
+	} else unset($ds_name[$key]);
+}
