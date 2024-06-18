@@ -82,7 +82,7 @@ class rrd {
 	}
 
 	public static function cut($string, $length = 18, $align = "left") {
-		if (strlen($string) > $length) return substr($string, 0, ($length - 3)) . "...";
+		if (strlen($string) > $length) return substr($string, 0, $length - 1) . "…";
 		return str_pad($string, $length, " ", $align == "left" ? STR_PAD_RIGHT : STR_PAD_LEFT);
 	}
 
