@@ -90,6 +90,9 @@ class GraphCommand extends Command {
 		if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=\" \" ";
 		if ($dark) $params .= \rrd::darkteint();
 
+		$rrdcached = $config->get("rrdtool", "rrdcached", "");
+		if ($rrdcached) $params .= "--daemon=" . $rrdcached . " ";
+
 		if (extension_loaded("rrd")) {
 			$params = preg_replace("/(.+ |=)'([^']*)'/", "$1\"$2\"", $params . rtrim($opt[$datasource]) . " " . $def[$datasource]);
 			$params = preg_split('/\s(?=([^"]*"[^"]*")*[^"]*$)/', $params, -1, PREG_SPLIT_NO_EMPTY);

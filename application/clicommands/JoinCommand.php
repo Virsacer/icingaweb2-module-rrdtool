@@ -31,12 +31,15 @@ class JoinCommand extends Command {
 		if (libxml_get_last_error() !== FALSE) $this->fail("XML is invalid");
 		if ($xml->NAGIOS_HOSTNAME == ".pnp-internal") $this->fail("Not allowed");
 
+		$rrdcached = $config->get("rrdtool", "rrdcached", "");
+		if ($rrdcached) $rrdcached = "--daemon=" . $rrdcached . " ";
+
 		$ds = 1;
 		$datetime = date(".Y-m-d_His");
 		$xml->NAGIOS_RRDFILE = str_replace("_" . $xml->DATASOURCE[0]->NAME . ".rrd", ".rrd", $xml->DATASOURCE[0]->RRDFILE);
 		foreach ($xml->DATASOURCE as $datasource) {
 			ob_start();
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " dump \"" . $datasource->RRDFILE . "\"", $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " dump " . $rrdcached . "\"" . $datasource->RRDFILE . "\"", $return);
 
 			if ($ds == 1) {
 				$data = trim(ob_get_clean());

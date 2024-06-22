@@ -30,6 +30,9 @@ class SplitCommand extends Command {
 		$xml = @simplexml_load_string($xml);
 		if (libxml_get_last_error() !== FALSE) $this->fail("XML is invalid");
 
+		$rrdcached = $config->get("rrdtool", "rrdcached", "");
+		if ($rrdcached) $rrdcached = "--daemon=" . $rrdcached . " ";
+
 		foreach ($xml->DATASOURCE as $datasource) {
 			$datasource->RRDFILE = str_replace(".rrd", "_" . $datasource->NAME . ".rrd", $datasource->RRDFILE);
 			copy($xml->NAGIOS_RRDFILE, $datasource->RRDFILE);
@@ -39,9 +42,9 @@ class SplitCommand extends Command {
 				if ($i == $datasource->DS) continue;
 				$tune .= " DEL:" . $i;
 			}
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune \"" . $datasource->RRDFILE . "\"" . $tune, $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune " . $rrdcached . "\"" . $datasource->RRDFILE . "\"" . $tune, $return);
 			if ($datasource->DS != 1) {
-				passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune \"" . $datasource->RRDFILE . "\" --data-source-rename " . $datasource->DS . ":1", $return);
+				passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " tune " . $rrdcached . "\"" . $datasource->RRDFILE . "\" --data-source-rename " . $datasource->DS . ":1", $return);
 				$datasource->DS = 1;
 			}
 			if ($return) unlink($datasource->RRDFILE);

@@ -253,6 +253,8 @@ class ProcessCommand extends Command {
 		$returnmulti = "";
 		$config = $this->Config();
 		$file = $data['NAGIOS_RRDFILE'] ?? "";
+		$rrdcached = $config->get("rrdtool", "rrdcached", "");
+		if ($rrdcached) $rrdcached = " --daemon=" . $rrdcached;
 		foreach ($data['DATASOURCES'] as $key => $datasource) {
 			$update .= ":" . $datasource['ACT'];
 			$create[] = "DS:" . $ds++ . ":GAUGE:8640:U:U";
@@ -299,11 +301,13 @@ class ProcessCommand extends Command {
 				}
 
 				if (extension_loaded("rrd")) {
-					$return = !rrd_update($file, array($data['TIMET'] . $update));
+					$update = array($data['TIMET'] . $update);
+					if ($rrdcached) $update[] = trim($rrdcached);
+					$return = !rrd_update($file, $update);
 					$rrd = rrd_error();
 				} else {
 					ob_start();
-					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " update \"" . $file . "\" " . $data['TIMET'] . $update . " 2>&1", $return);
+					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " update \"" . $file . "\" " . $data['TIMET'] . $update . ($rrdcached ?? "") . " 2>&1", $return);
 					$rrd = trim(ob_get_clean());
 				}
 				if ($return) {
