@@ -93,7 +93,8 @@ class GraphController extends Controller {
 							if (isset($_GET['meta'])) {
 								exit($data['graph_left'] . "x" . $data['graph_top'] . ":" . $data['graph_width'] . "x" . $data['graph_height']);
 							}
-							$data = $data['image'];
+							$rrd = rrd_error();
+							$data = $rrd ? $rrd : $data['image'];
 						} catch (\Exception $return) {
 							$data = $return->getMessage();
 						}
@@ -105,6 +106,11 @@ class GraphController extends Controller {
 						}
 						passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":") . " 2>&1", $return);
 						$data = ob_get_clean();
+						if ($return && substr($data, 1, 3) == "PNG") {
+							ob_start();
+							passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph - " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":") . " 2>&1 >/dev/null", $return);
+							$data = ob_get_clean();
+						}
 					}
 				}
 			} else $return = $data = "XML missing";

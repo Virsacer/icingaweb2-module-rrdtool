@@ -310,7 +310,7 @@ class ProcessCommand extends Command {
 					passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " update \"" . $file . "\" " . $data['TIMET'] . $update . ($rrdcached ?? "") . " 2>&1", $return);
 					$rrd = trim(ob_get_clean());
 				}
-				if ($return) {
+				if ($return || $rrd) {
 					$this->stats['errors']++;
 					$this->log("Error: " . $rrd, $data);
 					if ($data['RRD_STORAGE_TYPE'] != "MULTIPLE") return array(1, $rrd);

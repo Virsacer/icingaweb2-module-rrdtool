@@ -32,7 +32,12 @@ class JoinCommand extends Command {
 		if ($xml->NAGIOS_HOSTNAME == ".pnp-internal") $this->fail("Not allowed");
 
 		$rrdcached = $config->get("rrdtool", "rrdcached", "");
-		if ($rrdcached) $rrdcached = "--daemon=" . $rrdcached . " ";
+		if ($rrdcached) {
+			$rrdcached = "--daemon=" . $rrdcached . " ";
+			$files = " \"" . implode("\" \"", $xml->xpath('//DATASOURCE/RRDFILE')) . "\"";
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " flushcached " . $rrdcached . $files, $return);
+			if ($return) exit();
+		}
 
 		$ds = 1;
 		$datetime = date(".Y-m-d_His");

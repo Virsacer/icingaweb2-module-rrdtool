@@ -31,7 +31,11 @@ class SplitCommand extends Command {
 		if (libxml_get_last_error() !== FALSE) $this->fail("XML is invalid");
 
 		$rrdcached = $config->get("rrdtool", "rrdcached", "");
-		if ($rrdcached) $rrdcached = "--daemon=" . $rrdcached . " ";
+		if ($rrdcached) {
+			$rrdcached = "--daemon=" . $rrdcached . " ";
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " flushcached " . $rrdcached . "\"" . $xml->DATASOURCE->RRDFILE . "\"" , $return);
+			if ($return) exit();
+		}
 
 		foreach ($xml->DATASOURCE as $datasource) {
 			$datasource->RRDFILE = str_replace(".rrd", "_" . $datasource->NAME . ".rrd", $datasource->RRDFILE);

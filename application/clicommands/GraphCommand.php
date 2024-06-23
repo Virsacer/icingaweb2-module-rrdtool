@@ -103,7 +103,8 @@ class GraphCommand extends Command {
 				}
 			}
 			$return = rrd_graph($file, $params);
-			echo $return ? $return['xsize'] . "x" . $return['ysize'] . "\n" : rrd_error() . "\n";
+			$rrd = rrd_error();
+			echo ($return && !$rrd) ? $return['xsize'] . "x" . $return['ysize'] . "\n" : $rrd . "\n";
 		} else {
 			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " graph \"" . $file . "\" " . $params . rtrim($opt[$datasource]) . " " . addcslashes($def[$datasource], ":"), $return);
 		}

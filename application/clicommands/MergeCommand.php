@@ -29,7 +29,12 @@ class MergeCommand extends Command {
 		if (!is_writable($dest) && (file_exists($dest) || !is_writable(dirname($dest)))) $this->fail("Destination file is not writable");
 
 		$rrdcached = $config->get("rrdtool", "rrdcached", "");
-		if ($rrdcached) $rrdcached = "--daemon=" . $rrdcached . " ";
+		if ($rrdcached) {
+			$rrdcached = "--daemon=" . $rrdcached . " ";
+			$files = " \"" . $path . implode("\" \"" . $path, $params) . "\"";
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " flushcached " . $rrdcached . $files, $return);
+			if ($return) exit();
+		}
 
 		$last = end($params);
 		foreach ($params as $file) {
