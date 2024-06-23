@@ -33,6 +33,11 @@ class SettingsForm extends ConfigForm {
 			"description" => $this->translate("The path where the templates are located."),
 			"placeholder" => "templates",
 		));
+		$this->addElement("text", "rrdtool_rrdcached", array(
+			"label" => $this->translate("rrdcached daemon"),
+			"description" => $this->translate("Address of the rrdcached daemon."),
+			"placeholder" => "",
+		));
 		$this->addElement("note", "rrdtool_spacer_1", array(
 			"value" => "<br/>",
 		));

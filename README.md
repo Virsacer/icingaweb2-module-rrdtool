@@ -55,6 +55,16 @@ On some checks it might be expected that this number changes over time. You can 
 
 Example: A check that lists all disks or partitions. When each is in a separate file they can be updated independently. So adding or removing disks/partition does not prevent the update.
 
+### rrdcached
+
+You can also use `rrdcached`. Keep in mind, that while it reduces IO, dataloss might occur unless it is actually written to disk.
+
+The `base_dir` for the daemon needs to be set to the directory where the RRD and XML files are (or to one of its parents).
+
+The user running PHP and/or the webserver needs the permission to access the daemon.
+
+Also read the security considerations in the `rrdcached` manual.
+
 ## CLI
 
 This module also provides CLI commands. For a list of commands run `icingacli rrdtool`.

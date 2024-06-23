@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: icingaweb2-module-rrdtool\n"
-"POT-Creation-Date: 2024-04-08 17:52+0200\n"
-"PO-Revision-Date: 2024-04-08 17:52+0200\n"
+"POT-Creation-Date: 2024-06-23 22:44+0200\n"
+"PO-Revision-Date: 2024-06-23 22:44+0200\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -10,55 +10,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: ;translate;mt:2\n"
 "X-Poedit-SearchPath-0: ../../../..\n"
 
-#: ../../../../application/controllers/GraphController.php:141
+#: ../../../../application/controllers/GraphController.php:150
 msgid "on"
 msgstr "auf"
 
-#: ../../../../application/controllers/GraphController.php:176
+#: ../../../../application/controllers/GraphController.php:185
 msgid "Module: rrdtool"
 msgstr "Module: rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:177
+#: ../../../../application/controllers/GraphController.php:186
 #: ../../../../configuration.php:4
 msgid "Configure rrdtool"
 msgstr "Konfiguriere rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:177
+#: ../../../../application/controllers/GraphController.php:186
 #: ../../../../configuration.php:5
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: ../../../../application/controllers/GraphController.php:183
+#: ../../../../application/controllers/GraphController.php:192
 #: ../../../../library/Rrdtool/Rrdtool.php:44
 msgid "Year"
 msgstr "Jahr"
 
-#: ../../../../application/controllers/GraphController.php:184
+#: ../../../../application/controllers/GraphController.php:193
 #: ../../../../library/Rrdtool/Rrdtool.php:45
 msgid "Month"
 msgstr "Monat"
 
-#: ../../../../application/controllers/GraphController.php:185
+#: ../../../../application/controllers/GraphController.php:194
 #: ../../../../library/Rrdtool/Rrdtool.php:46
 msgid "Week"
 msgstr "Woche"
 
-#: ../../../../application/controllers/GraphController.php:186
+#: ../../../../application/controllers/GraphController.php:195
 #: ../../../../library/Rrdtool/Rrdtool.php:47
 msgid "Day"
 msgstr "Tag"
 
-#: ../../../../application/controllers/GraphController.php:187
+#: ../../../../application/controllers/GraphController.php:196
 #: ../../../../library/Rrdtool/Rrdtool.php:48
 msgid "Hours"
 msgstr "Stunden"
 
-#: ../../../../application/controllers/GraphController.php:189
+#: ../../../../application/controllers/GraphController.php:198
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
@@ -86,19 +86,27 @@ msgstr "Pfad zu Templates"
 msgid "The path where the templates are located."
 msgstr "Pfad unter dem die Templates liegen."
 
-#: ../../../../application/forms/Config/SettingsForm.php:40
+#: ../../../../application/forms/Config/SettingsForm.php:37
+msgid "rrdcached daemon"
+msgstr "rrdcached Daemon"
+
+#: ../../../../application/forms/Config/SettingsForm.php:38
+msgid "Address of the rrdcached daemon."
+msgstr "Adresse des rrdcached Daemons."
+
+#: ../../../../application/forms/Config/SettingsForm.php:45
 msgid "Path to PerfdataWriter output"
 msgstr "Pfad zur PerfdataWriter Ausgabe"
 
-#: ../../../../application/forms/Config/SettingsForm.php:41
+#: ../../../../application/forms/Config/SettingsForm.php:46
 msgid "The path where the PerfdataWriter output is located."
 msgstr "Pfad unter dem die PerfdataWriter Ausgabe liegt."
 
-#: ../../../../application/forms/Config/SettingsForm.php:45
+#: ../../../../application/forms/Config/SettingsForm.php:50
 msgid "Checks with multiple RRDs"
 msgstr "Checks mit mehreren RRDs"
 
-#: ../../../../application/forms/Config/SettingsForm.php:46
+#: ../../../../application/forms/Config/SettingsForm.php:51
 msgid ""
 "Checkcommands that should use a RRD for each datasource.\n"
 "(\"check_command_1\",\"check_command_2\")"
@@ -106,11 +114,11 @@ msgstr ""
 "Checkcommands die eine RRD pro Datenquelle verwenden sollen.\n"
 "(\"check_command_1\",\"check_command_2\")"
 
-#: ../../../../application/forms/Config/SettingsForm.php:53
+#: ../../../../application/forms/Config/SettingsForm.php:58
 msgid "Enable perfdata processing"
 msgstr "Aktiviere perfdata Verarbeitung"
 
-#: ../../../../application/forms/Config/SettingsForm.php:54
+#: ../../../../application/forms/Config/SettingsForm.php:59
 msgid ""
 "Enable the CLI command for processing and writing perfdata to RRDs.\n"
 "(\"icingacli rrdtool process\")"
@@ -119,33 +127,33 @@ msgstr ""
 "RRDs.\n"
 "(\"icingacli rrdtool process\")"
 
-#: ../../../../application/forms/Config/SettingsForm.php:57
+#: ../../../../application/forms/Config/SettingsForm.php:62
 msgid "Enable logging"
 msgstr "Aktiviere Protokollierung"
 
-#: ../../../../application/forms/Config/SettingsForm.php:58
+#: ../../../../application/forms/Config/SettingsForm.php:63
 msgid "Log \"Skipped\", \"Invalid\" and \"Errors\" during processing."
 msgstr ""
 "Protokolliere \"Skipped\", \"Invalid\" und \"Errors\" während der "
 "Verarbeitung."
 
-#: ../../../../application/forms/Config/SettingsForm.php:61
+#: ../../../../application/forms/Config/SettingsForm.php:66
 msgid "Verbose logging"
 msgstr "Erweiterte Protokollierung"
 
-#: ../../../../application/forms/Config/SettingsForm.php:62
+#: ../../../../application/forms/Config/SettingsForm.php:67
 msgid "Verbose logging."
 msgstr "Erweiterte Protokollierung."
 
-#: ../../../../application/forms/Config/SettingsForm.php:68
+#: ../../../../application/forms/Config/SettingsForm.php:73
 msgid "PHP RRD Extension"
 msgstr "PHP RRD Extension"
 
-#: ../../../../application/forms/Config/SettingsForm.php:78
+#: ../../../../application/forms/Config/SettingsForm.php:83
 msgid "Path to rrdtool binary"
 msgstr "Pfad zum rrdtool Programm"
 
-#: ../../../../application/forms/Config/SettingsForm.php:79
+#: ../../../../application/forms/Config/SettingsForm.php:84
 msgid ""
 "The path where the rrdtool executable is located.\n"
 "(Only used if PHP extension is not available.)"
@@ -153,11 +161,11 @@ msgstr ""
 "Pfad unter dem das rrdtool Programm liegt.\n"
 "(Wird nur verwendet, wenn die PHP Erweiterung nicht verfügbar ist.)"
 
-#: ../../../../application/forms/Config/SettingsForm.php:83
+#: ../../../../application/forms/Config/SettingsForm.php:88
 msgid "Override max thumbnails"
 msgstr "Übersteuere maximale Miniaturansichten"
 
-#: ../../../../application/forms/Config/SettingsForm.php:84
+#: ../../../../application/forms/Config/SettingsForm.php:89
 msgid ""
 "Max number of graphs to generate thumbnails for.\n"
 "(\"check_command_1\":2,\"check_command_2\":3)"
