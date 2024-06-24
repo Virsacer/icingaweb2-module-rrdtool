@@ -13,5 +13,4 @@ class ServiceDetailExtension extends ServiceDetailExtensionHook {
 	public function getHtmlForObject(Service $object): ValidHtml {
 		return HtmlString::create((new Rrdtool())->graphs($object->host->name, $object->name));
 	}
-
 }

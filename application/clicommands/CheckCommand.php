@@ -72,5 +72,4 @@ class CheckCommand extends Command {
 		}
 		exit($status);
 	}
-
 }

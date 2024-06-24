@@ -24,5 +24,4 @@ class pnp {
 		$value = sprintf($format, $value);
 		return array($value . " " . $symbols[$exponent] . $matches[3], trim($value), $symbols[$exponent] . $matches[3], $divisor);
 	}
-
 }

@@ -104,5 +104,4 @@ class Rrdtool {
 		}
 		return array("range" => $range, "start" => $start, "end" => $end, "tab" => $tab);
 	}
-
 }

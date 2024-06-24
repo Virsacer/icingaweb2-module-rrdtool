@@ -89,5 +89,4 @@ class JoinCommand extends Command {
 		$xml = preg_replace("/<([^\/]+)\/>/", "<$1></$1>", $xml->asXML());
 		file_put_contents($path . $file, $xml);
 	}
-
 }

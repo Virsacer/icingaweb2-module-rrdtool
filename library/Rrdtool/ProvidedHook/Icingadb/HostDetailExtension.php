@@ -13,5 +13,4 @@ class HostDetailExtension extends HostDetailExtensionHook {
 	public function getHtmlForObject(Host $object): ValidHtml {
 		return HtmlString::create((new Rrdtool())->graphs($object->name, "_HOST_"));
 	}
-
 }

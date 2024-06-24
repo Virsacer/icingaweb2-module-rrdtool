@@ -17,5 +17,4 @@ class ConfigController extends Controller {
 		$form->setIniConfig($this->Config())->handleRequest();
 		$this->view->tabs = $this->Module()->getConfigTabs()->activate("settings");
 	}
-
 }

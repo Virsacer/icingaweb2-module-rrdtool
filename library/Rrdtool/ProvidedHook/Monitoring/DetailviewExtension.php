@@ -14,5 +14,4 @@ class DetailviewExtension extends DetailviewExtensionHook {
 		}
 		return (new Rrdtool())->graphs($object->getHost()->getName(), $object->getName());
 	}
-
 }

@@ -64,5 +64,4 @@ class MergeCommand extends Command {
 		passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " restore \"" . $dest . ".dump" . $datetime . "\" \"" . $dest . "\"", $return);
 		unlink($dest . ".dump" . $datetime);
 	}
-
 }

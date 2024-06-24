@@ -33,7 +33,7 @@ class SplitCommand extends Command {
 		$rrdcached = $config->get("rrdtool", "rrdcached", "");
 		if ($rrdcached) {
 			$rrdcached = "--daemon=" . $rrdcached . " ";
-			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " flushcached " . $rrdcached . "\"" . $xml->DATASOURCE->RRDFILE . "\"" , $return);
+			passthru($config->get("rrdtool", "rrdtool", "rrdtool") . " flushcached " . $rrdcached . "\"" . $xml->DATASOURCE->RRDFILE . "\"", $return);
 			if ($return) exit();
 		}
 
@@ -64,5 +64,4 @@ class SplitCommand extends Command {
 		$xml = preg_replace("/<([^\/]+)\/>/", "<$1></$1>", $xml->asXML());
 		file_put_contents($path . $file, $xml);
 	}
-
 }

@@ -200,5 +200,4 @@ class rrd {
 	public static function vdef($vname, $rpn) {
 		return "VDEF:" . $vname . "=" . $rpn . " ";
 	}
-
 }
