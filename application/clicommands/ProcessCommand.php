@@ -256,15 +256,15 @@ class ProcessCommand extends Command {
 		$rrdcached = $config->get("rrdtool", "rrdcached", "");
 		if ($rrdcached) $rrdcached = " --daemon=" . $rrdcached;
 		foreach ($data['DATASOURCES'] as $key => $datasource) {
-			$update .= ":" . $datasource['ACT'];
-			$create[] = "DS:" . $ds++ . ":GAUGE:8640:U:U";
+			if ($data['RRD_STORAGE_TYPE'] == "MULTIPLE") {
+				$update = ":" . $datasource['ACT'];
+				$create = array("DS:1:GAUGE:8640:U:U");
+				$file = $datasource['RRDFILE'];
+			} else {
+				$update .= ":" . $datasource['ACT'];
+				$create[] = "DS:" . $ds++ . ":GAUGE:8640:U:U";
+			}
 			if ($data['RRD_STORAGE_TYPE'] == "MULTIPLE" || $key === array_key_last($data['DATASOURCES'])) {
-				if ($data['RRD_STORAGE_TYPE'] == "MULTIPLE") {
-					$update = ":" . $datasource['ACT'];
-					$create = array("DS:1:GAUGE:8640:U:U");
-					$file = $datasource['RRDFILE'];
-				}
-
 				if (!file_exists($file)) {
 					$create = array_merge(array(
 						"--start=" . ($data['TIMET'] - 1),
