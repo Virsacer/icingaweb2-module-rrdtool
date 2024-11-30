@@ -13,7 +13,7 @@ class GraphController extends Controller {
 	protected $DS, $MACRO;
 
 	public function init() {
-		if (isset($_GET['image']) || isset($_GET['thumb']) || isset($_GET['large']) || isset($_GET['huge']) || preg_match("/^([0-9]+)([xX\*])([0-9]+)(&.*)?$/", $_SERVER['QUERY_STRING'])) {
+		if (isset($_GET['image']) || isset($_GET['thumb']) || isset($_GET['large']) || isset($_GET['huge']) || isset($_GET['ultra']) || preg_match("/^([0-9]+)([xX\*])([0-9]+)(&.*)?$/", $_SERVER['QUERY_STRING'])) {
 			$config = $this->Config();
 			$host = $this->params->get("host", "");
 			$service = $host == ".pnp-internal" ? "runtime" : $this->params->get("service", "_HOST_");
@@ -26,7 +26,9 @@ class GraphController extends Controller {
 				} elseif (isset($_GET['large'])) {
 					$params = "--width=1000 --height=200 ";
 				} elseif (isset($_GET['huge'])) {
-					$params = "--width=1600 --height=900 --full-size-mode ";
+					$params = "--width=1496 --height=1024 --full-size-mode ";
+				} elseif (isset($_GET['ultra'])) {
+					$params = "--width=3440 --height=1440 --full-size-mode ";
 				} elseif (preg_match("/^([0-9]+)([xX\*])([0-9]+)(&.*)?$/", $_SERVER['QUERY_STRING'], $matches)) {
 					$params = "--width=" . $matches[1] . " --height=" . $matches[3] . " ";
 					if ($matches[2] == "X") $params .= "--only-graph ";

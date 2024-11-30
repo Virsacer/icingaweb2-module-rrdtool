@@ -26,7 +26,7 @@ class GraphCommand extends Command {
 	 *
 	 *   --service	Name of the service
 	 *   --datasource	Name or number of the datasource
-	 *   --size	Size: image, thumb, large, huge,
+	 *   --size	Size: image, thumb, large, huge, ultra,
 	 *   		[Width]x[Height]  (Size of graph itself)
 	 *   		[Width]X[Height]  (Graph without legend)
 	 *   		[Width]*[Height]  (Size of whole image)
@@ -66,7 +66,10 @@ class GraphCommand extends Command {
 				$params = "--width=1000 --height=200 ";
 				break;
 			case "huge":
-				$params = "--width=1600 --height=900 --full-size-mode ";
+				$params = "--width=1496 --height=1024 --full-size-mode ";
+				break;
+			case "ultra":
+				$params = "--width=3440 --height=1440 --full-size-mode ";
 				break;
 			default:
 				if (preg_match("/^([0-9]+)([xX\*])([0-9]+)$/", $size, $matches)) {

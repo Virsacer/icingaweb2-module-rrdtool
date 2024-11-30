@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: icingaweb2-module-rrdtool\n"
-"POT-Creation-Date: 2024-06-23 22:44+0200\n"
-"PO-Revision-Date: 2024-06-23 22:44+0200\n"
+"POT-Creation-Date: 2024-11-30 15:44+0100\n"
+"PO-Revision-Date: 2024-11-30 15:44+0100\n"
 "Last-Translator: Virsacer <virsacer@online.de>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -10,55 +10,55 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.5\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-KeywordsList: ;translate;mt:2\n"
 "X-Poedit-SearchPath-0: ../../../..\n"
 
-#: ../../../../application/controllers/GraphController.php:150
+#: ../../../../application/controllers/GraphController.php:152
 msgid "on"
 msgstr "auf"
 
-#: ../../../../application/controllers/GraphController.php:185
+#: ../../../../application/controllers/GraphController.php:187
 msgid "Module: rrdtool"
 msgstr "Module: rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:186
+#: ../../../../application/controllers/GraphController.php:188
 #: ../../../../configuration.php:4
 msgid "Configure rrdtool"
 msgstr "Konfiguriere rrdtool"
 
-#: ../../../../application/controllers/GraphController.php:186
+#: ../../../../application/controllers/GraphController.php:188
 #: ../../../../configuration.php:5
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: ../../../../application/controllers/GraphController.php:192
+#: ../../../../application/controllers/GraphController.php:194
 #: ../../../../library/Rrdtool/Rrdtool.php:44
 msgid "Year"
 msgstr "Jahr"
 
-#: ../../../../application/controllers/GraphController.php:193
+#: ../../../../application/controllers/GraphController.php:195
 #: ../../../../library/Rrdtool/Rrdtool.php:45
 msgid "Month"
 msgstr "Monat"
 
-#: ../../../../application/controllers/GraphController.php:194
+#: ../../../../application/controllers/GraphController.php:196
 #: ../../../../library/Rrdtool/Rrdtool.php:46
 msgid "Week"
 msgstr "Woche"
 
-#: ../../../../application/controllers/GraphController.php:195
+#: ../../../../application/controllers/GraphController.php:197
 #: ../../../../library/Rrdtool/Rrdtool.php:47
 msgid "Day"
 msgstr "Tag"
 
-#: ../../../../application/controllers/GraphController.php:196
+#: ../../../../application/controllers/GraphController.php:198
 #: ../../../../library/Rrdtool/Rrdtool.php:48
 msgid "Hours"
 msgstr "Stunden"
 
-#: ../../../../application/controllers/GraphController.php:198
+#: ../../../../application/controllers/GraphController.php:200
 msgid "Custom"
 msgstr "Benutzerdefiniert"
 
@@ -217,6 +217,10 @@ msgstr "Riesig"
 msgid "Datasource"
 msgstr "Datenquelle"
 
-#: ../../../../application/views/scripts/graph/index.phtml:70
+#: ../../../../application/views/scripts/graph/index.phtml:63
+msgid "Ultra"
+msgstr "Ultra"
+
+#: ../../../../application/views/scripts/graph/index.phtml:71
 msgid "Show all"
 msgstr "Alle anzeigen"
