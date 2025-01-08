@@ -203,7 +203,7 @@ class ProcessCommand extends Command {
 		if ($rrd[0] && file_exists($path . "/" . $data['RRD'] . ".xml")) {
 			$xml = $this->xml();
 			if (!isset($old)) $old = file_get_contents($path . "/" . $data['RRD'] . ".xml");
-			$xml->writeRaw(preg_replace("/^.*<NAGIOS>(.*)\t<RRD>.*$/s", "$1", $old));
+			if (!empty($old)) $xml->writeRaw(preg_replace("/^.*<NAGIOS>(.*)\t<RRD>.*$/s", "$1", $old));
 		}
 
 		$xml->startElement("RRD");
