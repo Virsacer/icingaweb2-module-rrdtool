@@ -37,7 +37,7 @@ class ProcessCommand extends Command {
 			$files = array();
 			if (!$bulk) $runtime = hrtime(TRUE);
 			foreach (scandir($path) as $file) {
-				if ($file == "." || $file == "..") continue;
+				if ($file == "." || $file == ".." || is_dir($path . $file)) continue;
 				$files[str_replace(array("host", "service"), "", $file) . $file] = $file;
 			}
 			ksort($files);
