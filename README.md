@@ -24,8 +24,6 @@ Fast storage: Writing a lot of RRD files also requres a lot of IO.
 
 Extract this module to your Icinga Web 2 modules directory as `rrdtool` directory.
 
-Additional pnp4nagios-templates should be compatible and can be placed in the `templates` directory.
-
 ## Configuration
 
 ### Icinga2
@@ -34,7 +32,7 @@ To enable the PerfdataWriter you need to run `icinga2 feature enable perfdata`.
 
 You can set the `rotation_interval` a little lower to have less perfdata waiting for the next processing run.
 
-When you use checkcommands like `nrpe`, that actually call other commands, you can add a customvar like `rrdtool` to your services and append it to the checkcommand in your perfdata to allow differentiation:
+When you use checkcommands like `nrpe` or `by_ssh`, that actually call other commands, you can add a customvar like `rrdtool` to your services and append it to the checkcommand in your perfdata to allow differentiation:
 
     object PerfdataWriter "perfdata" {
     	rotation_interval = 10s
@@ -45,15 +43,21 @@ When you use checkcommands like `nrpe`, that actually call other commands, you c
 
 To be able to render the graphs, PHP and/or the webserver needs the permission to read the RRD and XML files. A check is included in the configuration page.
 
-After the module has been configured, you can set up a cronjob running the command `icingacli rrdtool process` every minute to generate/update the RRDs. The user needs the permission to write the RRD and XML files.
+After the module has been configured, you can set up a cronjob running the command `icingacli rrdtool process` every minute to process the perfdata-files and generate/update the RRDs. The user needs the permission to write the RRD and XML files.
 
 If you need to process lots of perfdata, you can use `icingacli rrdtool process bulk` for bulk mode. Make sure only one processing-instance is running at a time.
 
-By default all perfdata of a service is written to a single RRD. To be able to update the file, the number of datasources must not change.
+By default all perfdata of a service is written into a single RRD. Having less files to be written is better for performance, but to be able to update an RRD, the number of datasources must not change. For checks where the number of datasource might change (for example disk partitions or virtual network interfaces), each datasource can be written to a dedicated RRD.
 
-On some checks it might be expected that this number changes over time. You can configure these checkcommands to use a dedicated RRD for each datasource. This setting only effects new databases. Existing ones can be converted with `icingacli rrdtool split Host/Service.xml` or `icingacli rrdtool join Host/Service.xml`
+To do that, you have to list the checkcommands (including the value of the customvar, if you use it like suggested above) in the "Checks with multiple RRDs" setting. To prevent dataloss, this setting only effects new RRDs. Existing ones keep their "mode", but can be converted using the commands `icingacli rrdtool split Host/Service.xml` or `icingacli rrdtool join Host/Service.xml`. Keep in mind that especially joining might be time and memory intesive.
 
-Example: A check that lists all disks or partitions. When each is in a separate file they can be updated independently. So adding or removing disks/partition does not prevent the update.
+### Templates
+
+Additional pnp4nagios-templates should be compatible and can be placed in the `templates` directory.
+
+The module searches for templates named like the checkcommands (including the value of the customvar, if you use it like suggested above) with the extension `.php`.
+
+The original pnp4nagios-templates are also included as a fallback. If no file matches, the default-template `default.php` is used.
 
 ### rrdcached
 
@@ -71,4 +75,4 @@ This module also provides CLI commands. For a list of commands run `icingacli rr
 
 You can export graphs with various parameters. See `icingacli rrdtool graph --help` for details.
 
-The values for `size` and `range` are also valid in URLs. Example: `/rrdtool/graph?1500*200&host=.pnp-internal&range=2024`
+The values for `size` and `range` are also valid in URLs. Example: `/rrdtool/graph?1500*200&host=.pnp-internal&range=2025`
