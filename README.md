@@ -39,6 +39,8 @@ When you use checkcommands like `nrpe` or `by_ssh`, that actually call other com
     	service_format_template = "DATATYPE::SERVICEPERFDATA\tTIMET::$service.last_check$\tHOSTNAME::$host.name$\tSERVICEDESC::$service.name$\tSERVICEPERFDATA::$service.perfdata$\tSERVICECHECKCOMMAND::$service.check_command$$rrdtool$\tHOSTSTATE::$host.state$\tHOSTSTATETYPE::$host.state_type$\tSERVICESTATE::$service.state$\tSERVICESTATETYPE::$service.state_type$"
     }
 
+When you do this, a service definition containing for example `check_command = "by_ssh"` and `vars.rrdtool = "_zfs"` would result in `rrdtool` treating the check as if it was named `by_ssh_zfs`.
+
 ### Module
 
 To be able to render the graphs, PHP and/or the webserver needs the permission to read the RRD and XML files. A check is included in the configuration page.
