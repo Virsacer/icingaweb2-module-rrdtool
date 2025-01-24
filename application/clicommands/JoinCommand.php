@@ -26,6 +26,7 @@ class JoinCommand extends Command {
 		$file = end($params);
 		if (!file_exists($path . $file)) $this->fail("XML does not exist");
 		$xml = file_get_contents($path . $file);
+		if (strpos($xml, $path . $file) === FALSE) $this->fail("XML contains different path");
 		if (strpos($xml, "<RRD_STORAGE_TYPE>MULTIPLE") === FALSE) $this->fail("RRD is already a single file");
 		$xml = @simplexml_load_string($xml);
 		if (libxml_get_last_error() !== FALSE) $this->fail("XML is invalid");
