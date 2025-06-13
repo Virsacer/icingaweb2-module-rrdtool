@@ -50,7 +50,13 @@ if (!$this->compact) {
 	foreach ($defs as $id => $def) {
 		?>
 		<fieldset>
-			<legend><a href="<?php echo $this->href("rrdtool/graph", $params) . ($size != "image" ? "&amp;size=" . $size : "") . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>"><?php echo $this->translate("Datasource") . ": " . (!empty($ds_name[$id]) ? $ds_name[$id] : $id); ?></a></legend>
+			<legend>
+				<?php
+				if (!$datasource && count($ds_name) > 1) echo "<a href=\"" . $this->href("rrdtool/graph", $params) . ($size != "image" ? "&amp;size=" . $size : "") . "&amp;datasource=" . $id . "&amp;range=" . $range . "\">";
+				echo $this->translate("Datasource") . ": " . (!empty($ds_name[$id]) ? $ds_name[$id] : $id);
+				if (!$datasource && count($ds_name) > 1) echo "</a>";
+				?>
+			</legend>
 			<div class="graph-container">
 				<div class="graph" data-range="<?php echo $range; ?>" data-start="<?php echo $start; ?>" data-end="<?php echo $end; ?>"></div>
 				<img src="<?php echo $this->href("rrdtool/graph?" . $size, $params) . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>" alt=""/>
