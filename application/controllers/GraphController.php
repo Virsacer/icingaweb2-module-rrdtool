@@ -17,7 +17,7 @@ class GraphController extends Controller {
 			$config = $this->Config();
 			$host = $this->params->get("host", "");
 			$service = $host == ".pnp-internal" ? "runtime" : $this->params->get("service", "_HOST_");
-			$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
+			$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
 			if (file_exists($xml)) {
 				if (isset($_GET['image'])) {
 					$params = "--width=500 --height=100 ";
@@ -162,7 +162,7 @@ class GraphController extends Controller {
 		$ds_name = array();
 		$config = $this->Config();
 		if ($host == ".pnp-internal") $service = "runtime";
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
 		if (file_exists($xml)) require($this->Module()->getBaseDir() . "/library/Rrdtool/apply_template.php");
 		$datasource = $this->params->get("datasource", "");
 		if ($datasource != "") {

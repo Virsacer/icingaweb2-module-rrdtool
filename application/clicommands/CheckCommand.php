@@ -18,7 +18,7 @@ class CheckCommand extends Command {
 		$time = time();
 		$config = $this->Config();
 		$updated = array("HOST" => 0, "SERVICE" => 0, "RRDTOOL" => 0);
-		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/";
+		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/";
 
 		libxml_use_internal_errors(TRUE);
 		$files = glob($path . "*/*.xml");

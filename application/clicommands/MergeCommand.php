@@ -24,7 +24,7 @@ class MergeCommand extends Command {
 
 		$data = "";
 		$rrd = array();
-		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/";
+		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/";
 		$dest = $path . array_pop($params);
 		if (!is_writable($dest) && (file_exists($dest) || !is_writable(dirname($dest)))) $this->fail("Destination file is not writable");
 

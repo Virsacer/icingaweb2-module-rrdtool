@@ -30,7 +30,7 @@ class ProcessCommand extends Command {
 	public function main($bulk) {
 		$config = $this->Config();
 		if (!$config->get("rrdtool", "process", FALSE)) exit("Process not enabled in the config...");
-		if ($config->get("rrdtool", "logging", FALSE)) $this->logfile = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/rrdtool.log";
+		if ($config->get("rrdtool", "logging", FALSE)) $this->logfile = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/rrdtool.log";
 		if ($config->get("rrdtool", "verbose", FALSE)) $this->verbose = TRUE;
 		$path = rtrim($config->get("rrdtool", "perfdata", "/var/spool/icinga2/perfdata"), "/") . "/";
 		do {
@@ -116,7 +116,7 @@ class ProcessCommand extends Command {
 		}
 
 		$config = $this->Config();
-		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($data['HOSTNAME']);
+		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/" . Rrdtool::cleanup($data['HOSTNAME']);
 		if (!is_dir($path)) mkdir($path, 0777, TRUE);
 
 		if ($data['DATATYPE'] == "HOSTPERFDATA") {

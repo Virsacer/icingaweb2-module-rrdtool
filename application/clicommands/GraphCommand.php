@@ -46,7 +46,7 @@ class GraphCommand extends Command {
 
 		$config = $this->Config();
 		if ($host == ".pnp-internal") $service = "runtime";
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/" . Rrdtool::cleanup($host) . "/" . Rrdtool::cleanup($service) . ".xml";
 		if (!file_exists($xml)) $this->fail("XML missing");
 
 		if ($range == "datasources") {

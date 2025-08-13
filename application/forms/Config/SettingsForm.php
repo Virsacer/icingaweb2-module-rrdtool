@@ -16,11 +16,11 @@ class SettingsForm extends ConfigForm {
 		$this->addElement("text", "rrdtool_rrdpath", array(
 			"label" => $this->translate("Path to RRD and XML files"),
 			"description" => $this->translate("The path where the RRD and XML files are located."),
-			"placeholder" => "/var/lib/icinga2/rrdtool",
+			"placeholder" => "/var/lib/icingaweb2/rrdtool",
 		));
 		$this->addElement("note", "rrdpath_check", array(
 			"label" => $this->translate("Path is readable"),
-			"value" => "<i class=\"icon-" . (is_readable(rtrim(Config::module("rrdtool")->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/") ? "ok" : "cancel") . "\"></i>",
+			"value" => "<i class=\"icon-" . (is_readable(rtrim(Config::module("rrdtool")->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/") ? "ok" : "cancel") . "\"></i>",
 			"decorators" => array(
 				"Label",
 				array(array("labelWrap" => "HtmlTag"), array("tag" => "div", "class" => "control-label-group")),

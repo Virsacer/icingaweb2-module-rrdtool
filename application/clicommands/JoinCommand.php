@@ -22,7 +22,7 @@ class JoinCommand extends Command {
 		if ($return) exit("The rrdtool binary is required for this function...");
 		ob_end_clean();
 
-		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/";
+		$path = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/";
 		$file = end($params);
 		if (!file_exists($path . $file)) $this->fail("XML does not exist");
 		$xml = file_get_contents($path . $file);

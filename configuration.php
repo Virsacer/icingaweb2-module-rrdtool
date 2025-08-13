@@ -6,7 +6,7 @@ $this->provideConfigTab("settings", array(
 	"url" => "config/settings"
 ));
 
-if (file_exists(rtrim($this->getConfig()->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/.pnp-internal/runtime.xml")) {
+if (file_exists(rtrim($this->getConfig()->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/.pnp-internal/runtime.xml")) {
 	$this->provideConfigTab("stats", array(
 		"title" => $this->translate("Show statistics"),
 		"label" => $this->translate("Stats"),

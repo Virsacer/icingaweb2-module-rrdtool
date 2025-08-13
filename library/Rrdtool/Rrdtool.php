@@ -15,7 +15,7 @@ class Rrdtool {
 
 	public function graphs($host, $service) {
 		$config = Config::module("rrdtool");
-		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icinga2/rrdtool"), "/") . "/" . $this->cleanup($host) . "/" . $this->cleanup($service) . ".xml";
+		$xml = rtrim($config->get("rrdtool", "rrdpath", "/var/lib/icingaweb2/rrdtool"), "/") . "/" . $this->cleanup($host) . "/" . $this->cleanup($service) . ".xml";
 		if (file_exists($xml)) {
 			$view = Icinga::app()->getViewRenderer()->view;
 			$params = array("host" => $host);
