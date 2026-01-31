@@ -14,7 +14,7 @@ class CheckCommand extends Command {
 	 */
 	public function defaultAction() {
 		$exit = 0;
-		$echo = "";
+		$echo = array();
 		$time = time();
 		$config = $this->Config();
 		$updated = array("HOST" => 0, "SERVICE" => 0, "RRDTOOL" => 0);
@@ -38,35 +38,35 @@ class CheckCommand extends Command {
 			$messages = explode(", ", $xml->RRD->TXT);
 			$messages = preg_grep("/(conversion of .* to float|Malformed perfdata|minimum one second step)/", $messages, PREG_GREP_INVERT);
 			if (count($messages)) {
-				$echo .= "\n[CRITICAL] ";
+				$echo["1-" . $file] = "[CRITICAL] " . $file . ": " . $xml->RRD->TXT;
 				$exit = 2;
 			} else {
-				$echo .= "\n[WARNING] ";
+				$echo["2-" . $file] = "[WARNING] " . $file . ": " . $xml->RRD->TXT;
 				if (!$exit) $exit = 1;
 			}
-			$echo .= $file . ": " . $xml->RRD->TXT;
 		}
 
 		if ($time - $updated['RRDTOOL'] > 300) {
-			$echo = "\n[CRITICAL] RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['RRDTOOL']) . $echo;
+			$echo["1-!RRDTOOL"] = "[CRITICAL] RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['RRDTOOL']);
 			$exit = 2;
 		} else {
-			if ($time - $updated['SERVICE'] > 300) {
-				$echo = "\n[CRITICAL] Service RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['SERVICE']) . $echo;
+			if ($time - $updated['HOST'] > 300) {
+				$echo["1-!HOST"] = "[CRITICAL] Host RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['HOST']);
 				$exit = 2;
 			}
-			if ($time - $updated['HOST'] > 300) {
-				$echo = "\n[CRITICAL] Host RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['HOST']) . $echo;
+			if ($time - $updated['SERVICE'] > 300) {
+				$echo["1-!SERVICE"] = "[CRITICAL] Service RRDs have not been updated since " . date("Y-m-d H:i:s", $updated['SERVICE']);
 				$exit = 2;
 			}
 		}
 
-		$echo = preg_replace("/" . preg_quote($path, "/") . "/", "", rtrim($echo) . "\n");
+		ksort($echo);
+		$echo = preg_replace("/" . preg_quote($path, "/") . "/", "", "\n" . implode("\n", $echo) . "\n");
 
 		if ($exit == 2) {
-			echo "CRITICAL: " . $echo;
+			echo "CRITICAL:" . $echo;
 		} elseif ($exit == 1) {
-			echo "WARNING: " . $echo;
+			echo "WARNING:" . $echo;
 		} else {
 			echo "OK: " . count($files) . " XML files\n";
 		}
