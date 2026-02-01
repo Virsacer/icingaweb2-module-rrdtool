@@ -108,11 +108,16 @@ class ProcessCommand extends Command {
 			$perfdata = array_pop($datasource);
 			$data['DATASOURCES'][] = $datasource;
 		}
-		$data['DATASOURCES'] = array_intersect_key($data['DATASOURCES'], array_unique(array_map("json_encode", $data['DATASOURCES'])));
 		if ($perfdata) {
 			$this->stats['invalid']++;
 			$this->log("Invalid: " . $data['PERFDATA'], $data);
 			$error = "Malformed perfdata";
+		}
+		$data['DATASOURCES'] = array_intersect_key($data['DATASOURCES'], array_unique(array_map("json_encode", $data['DATASOURCES'])));
+		if (!count($data['DATASOURCES'])) {
+			$this->stats['skipped']++;
+			$this->log("Skipped: No perfdata", $data);
+			return;
 		}
 
 		$config = $this->Config();
