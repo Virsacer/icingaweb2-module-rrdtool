@@ -35,8 +35,8 @@ class rrd {
 		return $data;
 	}
 
-	public static function area($vname, $color, $text = FALSE, $stack = FALSE) {
-		return "AREA:" . $vname . $color . ":\"" . $text . "\"" . ($stack ? ":STACK " : " ");
+	public static function area($value, $color, $legend = FALSE, $stack = FALSE) {
+		return "AREA:" . $value . $color . ":\"" . $legend . "\"" . ($stack ? ":STACK " : " ");
 	}
 
 	public static function cdef($vname, $rpn) {
@@ -161,25 +161,25 @@ class rrd {
 		return $data;
 	}
 
-	public static function hrule($value, $color, $text = FALSE) {
+	public static function hrule($value, $color, $legend = FALSE) {
 		if ($value == "~") return "";
-		return "HRULE:" . $value . $color . ":\"" . $text . "\" ";
+		return "HRULE:" . $value . $color . ":\"" . $legend . "\" ";
 	}
 
-	public static function line($type, $vname, $color, $text = FALSE, $stack = FALSE) {
-		return "LINE" . $type . ":" . $vname . $color . ":\"" . $text . "\"" . ($stack ? ":STACK " : " ");
+	public static function line($width, $value, $color, $legend = FALSE, $stack = FALSE) {
+		return "LINE" . $width . ":" . $value . $color . ":\"" . $legend . "\"" . ($stack ? ":STACK " : " ");
 	}
 
-	public static function line1($vname, $color, $text = FALSE, $stack = FALSE) {
-		return rrd::line(1, $vname, $color, $text, $stack);
+	public static function line1($value, $color, $legend = FALSE, $stack = FALSE) {
+		return rrd::line(1, $value, $color, $legend, $stack);
 	}
 
-	public static function line2($vname, $color, $text = FALSE, $stack = FALSE) {
-		return rrd::line(2, $vname, $color, $text, $stack);
+	public static function line2($value, $color, $legend = FALSE, $stack = FALSE) {
+		return rrd::line(2, $value, $color, $legend, $stack);
 	}
 
-	public static function line3($vname, $color, $text = FALSE, $stack = FALSE) {
-		return rrd::line(3, $vname, $color, $text, $stack);
+	public static function line3($value, $color, $legend = FALSE, $stack = FALSE) {
+		return rrd::line(3, $value, $color, $legend, $stack);
 	}
 
 	public static function tick($vname, $color, $fraction = FALSE, $label = FALSE) {
