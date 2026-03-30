@@ -103,22 +103,28 @@ class rrd {
 		return "DEF:" . $vname . "=\"" . $rrdfile . "\":" . $ds . ":" . $cf . " ";
 	}
 
-	public static function gprint($vname, $cf = "AVERAGE", $text = "%6.2lf %s") {
-		if (is_array($cf)) return rrd::gprinta($vname, $cf, $text, "l");
-		return "GPRINT:" . $vname . ":" . $cf . ":\"" . $text . "\" ";
+	public static function gprint($vname, $cf = "AVERAGE", $format = "%6.2lf %s") {
+		if (is_array($cf)) return rrd::gprinta($vname, $cf, $format, "l");
+		$cf = strtoupper($cf);
+		if ($cf == "AVG") $cf = "AVERAGE";
+		if ($cf == "MIN" || $cf == "MAX") $cf .= "IMUM";
+		$rand = substr(sha1(rand()), 1, 4);
+		return rrd::vdef($vname . $cf . $rand, $vname . "," . $cf) . rrd::gprint2($vname . $cf . $rand, $format);
 	}
 
-	public static function gprinta($vname, $cf = "AVERAGE", $text = "%6.2lf %s", $align = "") {
+	public static function gprint2($vname, $format = "%6.2lf %s") {
+		return "GPRINT:" . $vname . ":\"" . $format . "\" ";
+	}
+
+	public static function gprinta($vname, $cf = "AVERAGE", $format = "%6.2lf %s", $align = "") {
 		if (is_array($cf)) {
 			$data = "";
 			foreach ($cf as $key => $val) {
-				$data .= "GPRINT:" . $vname . ":" . $val . ":\"" . $text . " " . ucfirst(strtolower($val));
-				if ($key == array_key_last($cf) && $align != "") $data .= "\\" . $align;
-				$data .= "\" ";
+				$data .= rrd::gprinta($vname, $val, $format . " " . $val, $key == array_key_last($cf) ? $align : "");
 			}
 			return $data;
 		}
-		return "GPRINT:" . $vname . ":" . $cf . ":\"" . $text . "\" ";
+		return rrd::gprint($vname, $cf, $format . ($align != "" ? "\\" . $align : ""));
 	}
 
 	public static function gradient($vname, $start_color = "#0000A0", $end_color = "#F0F0F0", $label = FALSE, $steps = 20, $lower = FALSE) {
