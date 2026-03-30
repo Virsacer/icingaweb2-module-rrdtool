@@ -12,15 +12,15 @@ class rrd {
 		$warn_vname = "var" . substr(sha1(rand()), 1, 4);
 		$crit_vname = "var" . substr(sha1(rand()), 1, 4);
 		if ($warning < $critical) {
-			$data = "CDEF:" . $ok_vname . "=" . $vname . "," . $warning . ",LT," . $vname . ",UNKN,IF ";
-			$data .= "CDEF:" . $comp_vname . "=" . $vname . "," . $critical . ",LT," . $vname . ",UNKN,IF ";
-			$data .= "CDEF:" . $warn_vname . "=" . $comp_vname . "," . $warning . ",GE," . $comp_vname . ",UNKN,IF ";
-			$data .= "CDEF:" . $crit_vname . "=" . $vname . "," . $critical . ",GE," . $vname . ",UNKN,IF ";
+			$data = rrd::cdef($ok_vname, $vname . "," . $warning . ",LT," . $vname . ",UNKN,IF");
+			$data .= rrd::cdef($comp_vname, $vname . "," . $critical . ",LT," . $vname . ",UNKN,IF");
+			$data .= rrd::cdef($warn_vname, $comp_vname . "," . $warning . ",GE," . $comp_vname . ",UNKN,IF");
+			$data .= rrd::cdef($crit_vname, $vname . "," . $critical . ",GE," . $vname . ",UNKN,IF");
 		} else {
-			$data = "CDEF:" . $ok_vname . "=" . $vname . "," . $warning . ",GT," . $vname . ",UNKN,IF ";
-			$data .= "CDEF:" . $comp_vname . "=" . $vname . "," . $critical . ",GE," . $vname . ",UNKN,IF ";
-			$data .= "CDEF:" . $warn_vname . "=" . $comp_vname . "," . $warning . ",LE," . $comp_vname . ",UNKN,IF ";
-			$data .= "CDEF:" . $crit_vname . "=" . $vname . "," . $critical . ",LT," . $vname . ",UNKN,IF ";
+			$data = rrd::cdef($ok_vname, $vname . "," . $warning . ",GT," . $vname . ",UNKN,IF");
+			$data .= rrd::cdef($comp_vname, $vname . "," . $critical . ",GE," . $vname . ",UNKN,IF");
+			$data .= rrd::cdef($warn_vname, $comp_vname . "," . $warning . ",LE," . $comp_vname . ",UNKN,IF");
+			$data .= rrd::cdef($crit_vname, $vname . "," . $critical . ",LT," . $vname . ",UNKN,IF");
 		}
 		if ($start_color !== FALSE) {
 			$data .= rrd::gradient($ok_vname, $start_color, $color_ok . $opacity);
@@ -137,26 +137,22 @@ class rrd {
 		$diff_color[2] = hexdec($diff_color[3] . $diff_color[3] . @$diff_color[6]) - $start_color[2];
 		$diff_color[3] = hexdec($diff_color[4] . $diff_color[4] . @$diff_color[7]) - $start_color[3];
 		if (preg_match("/^([0-9]{1,2}|100)%$/", $lower, $matches)) {
-			$data = sprintf("CDEF:%sminimum=%s,100,/,%d,* ", $vname, $vname, $matches[1]);
+			$data = rrd::cdef($vname . "minimum", $vname . ",100,/," . $matches[1] . ",*");
 		} elseif (preg_match("/^([0-9]+)$/", $lower, $matches)) {
-			$data = sprintf("CDEF:%sminimum=%s,%d,- ", $vname, $vname, $matches[1]);
+			$data = rrd::cdef($vname . "minimum", $vname . "," . $matches[1] . ",-");
 		} else {
-			$data = sprintf("CDEF:%sminimum=%s,%s,- ", $vname, $vname, $vname);
+			$data = rrd::cdef($vname . "minimum", $vname . "," . $vname . ",-");
 		}
 		$gradient_vname = "var" . substr(sha1(rand()), 1, 4);
 		for ($i = $steps; $i > 0; $i--) {
-			$data .= sprintf("CDEF:%s%d=%s,%sminimum,-,%d,/,%d,*,%sminimum,+ ", $gradient_vname, $i, $vname, $vname, $steps, $i, $vname);
+			$data .= rrd::cdef($gradient_vname . $i, $vname . "," . $vname . "minimum,-," . $steps . ",/," . $i . ",*," . $vname . "minimum,+");
 		}
 		for ($i = $steps; $i > 0; $i--) {
 			$factor = $i / $steps;
 			$r = round($start_color[1] + $diff_color[1] * $factor);
 			$g = round($start_color[2] + $diff_color[2] * $factor);
 			$b = round($start_color[3] + $diff_color[3] * $factor);
-			if ($i == $steps && $label) {
-				$data .= sprintf("AREA:%s%d#%02X%02X%02X:\"%s\" ", $gradient_vname, $i, $r, $g, $b, $label);
-			} else {
-				$data .= sprintf("AREA:%s%d#%02X%02X%02X ", $gradient_vname, $i, $r, $g, $b);
-			}
+			$data .= rrd::area($gradient_vname . $i, sprintf("#%02X%02X%02X", $r, $g, $b), ($i == $steps && $label ? $label : ""));
 		}
 		return $data;
 	}
@@ -192,11 +188,11 @@ class rrd {
 		$warn_vname = "var" . substr(sha1(rand()), 1, 4);
 		$crit_vname = "var" . substr(sha1(rand()), 1, 4);
 		$temp_vname = "var" . substr(sha1(rand()), 1, 4);
-		$data = "CDEF:" . $temp_vname . "=" . $vname . "," . $warning . ",LT," . $vname . ",UNKN,IF ";
-		$data .= "CDEF:" . $comp_vname . "=" . $vname . "," . $critical . ",LT," . $vname . ",UNKN,IF ";
-		$data .= "CDEF:" . $warn_vname . "=" . $comp_vname . "," . $warning . ",GE," . $comp_vname . ",UNKN,IF ";
-		$data .= "CDEF:" . $crit_vname . "=" . $vname . "," . $critical . ",GE," . $vname . ",UNKN,IF ";
-		$data .= "CDEF:" . $ok_vname . "=" . $temp_vname . ",0,EQ,0.000001," . $temp_vname . ",IF ";
+		$data = rrd::cdef($temp_vname, $vname . "," . $warning . ",LT," . $vname . ",UNKN,IF");
+		$data .= rrd::cdef($comp_vname, $vname . "," . $critical . ",LT," . $vname . ",UNKN,IF");
+		$data .= rrd::cdef($warn_vname, $comp_vname . "," . $warning . ",GE," . $comp_vname . ",UNKN,IF");
+		$data .= rrd::cdef($crit_vname, $vname . "," . $critical . ",GE," . $vname . ",UNKN,IF");
+		$data .= rrd::cdef($ok_vname, $temp_vname . ",0,EQ,0.000001," . $temp_vname . ",IF");
 		$data .= rrd::tick($ok_vname, $color_ok . $opacity, $fraction);
 		$data .= rrd::tick($warn_vname, $color_warn . $opacity, $fraction);
 		$data .= rrd::tick($crit_vname, $color_crit . $opacity, $fraction);
