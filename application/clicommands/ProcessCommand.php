@@ -50,7 +50,7 @@ class ProcessCommand extends Command {
 					$this->stats['rows']++;
 					$this->process($item);
 				}
-				unlink($path . $file);
+				@unlink($path . $file);
 				if ($bulk) {
 					if (hrtime(TRUE) - $runtime >= 60000000000) {
 						$this->statistics($runtime, TRUE);
