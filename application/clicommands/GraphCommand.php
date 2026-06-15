@@ -20,7 +20,8 @@ class GraphCommand extends Command {
 	 *   --file	Output
 	 *   --host	Hostname
 	 *   --range	Range: year, month, week, hours, hour,
-	 *   		[Timestamp]-[Timestamp], [YYYY]-[MM], [YYYY]-Q[1-4], [YYYY]
+	 *   		[Timestamp]-[Timestamp], [YYYY]-Q[1-4],
+	 *   		[YYYY], [YYYY]-[MM], [YYYY]-[MM]-[DD]
 	 *
 	 * OPTIONAL
 	 *

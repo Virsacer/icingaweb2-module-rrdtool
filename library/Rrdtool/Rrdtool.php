@@ -59,7 +59,7 @@ class Rrdtool {
 			$tab = "custom";
 			$start = strtotime($range . "-01-01");
 			$end = strtotime($range . "-12-31 23:59:59");
-		} elseif (preg_match("/^([1-9][0-9]+)-(Q[1-4]|[0-9]+)$/", $range, $matches)) {
+		} elseif (preg_match("/^([1-9][0-9]+)-([0-9]+|Q[1-4]|[0-9]{2}-[0-9]{2})$/", $range, $matches)) {
 			$tab = "custom";
 			if (strlen($matches[1]) == 4 && $matches[2] >= 1 && $matches[2] <= 12) {
 				$start = strtotime($matches[1] . "-" . str_pad($matches[2], 2, "0", STR_PAD_LEFT) . "-01");
@@ -67,6 +67,9 @@ class Rrdtool {
 			} elseif (strlen($matches[1]) == 4 && $matches[2][0] == "Q") {
 				$start = strtotime($matches[1] . "-" . str_replace(array("Q1", "Q2", "Q3", "Q4"), array("01", "04", "07", "10"), $matches[2]) . "-01");
 				$end = strtotime($matches[1] . "-" . str_replace(array("Q1", "Q2", "Q3", "Q4"), array("03-31", "06-30", "09-30", "12-31"), $matches[2]) . " 23:59:59");
+			} elseif (strlen($matches[1]) == 4 && strlen($matches[2]) == 5 && strtotime($matches[1] . "-" . $matches[2])) {
+				$start = strtotime($matches[1] . "-" . $matches[2]);
+				$end = strtotime($matches[1] . "-" . $matches[2] . " 23:59:59");
 			} else {
 				unset($matches[0]);
 				$start = min($matches);
