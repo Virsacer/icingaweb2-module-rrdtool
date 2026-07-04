@@ -59,7 +59,10 @@ if (!$this->compact) {
 			</legend>
 			<div class="graph-container">
 				<div class="graph" data-range="<?php echo $range; ?>" data-start="<?php echo $start; ?>" data-end="<?php echo $end; ?>"></div>
-				<img src="<?php echo $this->href("rrdtool/graph?" . $size, $params) . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>" alt=""/>
+				<picture>
+					<source srcset="<?php echo $this->href("rrdtool/graph?" . $size, $params) . "&amp;dark&amp;datasource=" . $id . "&amp;range=" . $range; ?>" media="(prefers-color-scheme: dark)"/>
+					<img src="<?php echo $this->href("rrdtool/graph?" . $size, $params) . "&amp;datasource=" . $id . "&amp;range=" . $range; ?>" alt=""/>
+				</picture>
 			</div>
 			<div class="graph-links">
 				<i aria-hidden="true" class="icon-download"></i>

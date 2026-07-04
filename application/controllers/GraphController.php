@@ -53,7 +53,9 @@ class GraphController extends Controller {
 				if (empty($return)) {
 					if (!preg_match_all("/(-v |--vertical-label)/i", $opt[$datasource], $match)) $params .= "--vertical-label=\" \" ";
 
-					if (!isset($_GET['thumb'])) {
+					if (isset($_GET['dark'])) {
+						$params .= \rrd::darkteint();
+					} elseif (!isset($_GET['thumb'])) {
 						$theme = Config::app()->get("themes", "default", StyleSheet::DEFAULT_THEME);
 						$user = $this->Auth()->getUser()->getPreferences();
 						$theme = $user->getValue("icingaweb", "theme", $theme);
