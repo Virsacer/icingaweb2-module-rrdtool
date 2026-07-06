@@ -12,7 +12,7 @@
 		onRendered: function(event) {
 			$("div.graph").each(function() {
 				var current = $(this);
-				$.ajax({url: current.next().attr("src").replace("range=" + current.attr("data-range"), "meta"), cache: true, success: function(data) {
+				$.ajax({url: current.next().find("img").attr("src").replace("range=" + current.attr("data-range"), "meta"), cache: true, success: function(data) {
 						data = data.split(/[x:]/);
 						if (data.length === 4) {
 							data[3] = parseInt(data[3]) + 2;
